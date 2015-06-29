@@ -1,31 +1,11 @@
 var express = require('express');
 var app = express();
-var io = require('io')(app);
-var mongoose = require('mongoose');
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 var settings = require('../settings');
 var Log = require('../lib/log')('[server-web]');
 
-mongoose.connect(settings.mongodb, {
-    db: {
-        native_parser: true
-    },
-    server: {
-        poolSize: 10,
-        socketOptions: {
-            keepAlive: 1
-        }
-    },
-    replset: {
-        socketOptions: {
-            keepAlive: 1
-        }
-    }
-});
-var db = mongoose.connection;
-db.on('error', Log.e.bind(Log, 'connection error'));
-
 exports.start = function() {
-    var server = require('http').createServer(app);
     var port = settings.listen || 3000;
     app.set('port', port);
     server.listen(port);

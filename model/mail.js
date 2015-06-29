@@ -2,10 +2,22 @@ var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
 var MailSchema = new schema({
-    from: { type: String },
-    to: [{ type: String }],
-    cc: [{ type: String }],
-    bcc: [{ type: String }],
+    from: [{
+        address: String,
+        name: String
+    }],
+    to: [{
+        address: String,
+        name: String
+    }],
+    cc: [{
+        address: String,
+        name: String
+    }],
+    bcc: [{
+        address: String,
+        name: String
+    }],
     replyTo: { type: String },
     inReplyTo: { type: String },
     subject: { type: String },

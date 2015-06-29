@@ -3,6 +3,7 @@ var settings = require('../settings');
 var Mail = require('../model').mail;
 var Session = require('../model').session;
 var fs = require('fs');
+var path = require('path');
 var Log = require('../lib/log')('[server-receive');
 
 var mailListener = new MailListener({
@@ -27,11 +28,12 @@ process.on('exit', function() {
 });
 
 mailListener.on('error', function(err){
-    console.error(err);
+    Log.e(err);
 });
 
 mailListener.on('mail', function(_mail, seqno, attributes){
     mailListener.imap.seq.setFlags(seqno, ['Seen'], function() {});
+    console.log(_mail.from);
     var mail = {
         from: _mail.from,
         to: _mail.to,

@@ -14,6 +14,26 @@ if(cluster.isMaster) {
         Threads[i].send('web');
     }
 } else {
+    var mongoose = require('mongoose');
+    var settings = require('./settings');
+
+    mongoose.connect(settings.mongodb, {
+        db: {
+            native_parser: true
+        },
+        server: {
+            poolSize: 10,
+            socketOptions: {
+                keepAlive: 1
+            }
+        },
+        replset: {
+            socketOptions: {
+                keepAlive: 1
+            }
+        }
+    });
+
     process.on('message', function(msg) {
         switch(msg) {
             case 'web':
