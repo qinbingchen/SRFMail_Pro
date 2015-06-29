@@ -5,9 +5,22 @@ var UserSchema = new schema({
     username: { type: String },
     password: { type: String },
     name: { type: String },
-    sex: { type: Number },
+    gender: { type: Number },
     role: { type: Number },
-    defaultChecker: { type: schema.ObjectId, ref: 'User' }
+    defaultReviewer: { type: schema.ObjectId, ref: 'User' }
 });
 
 exports.model = mongoose.model('User', UserSchema);
+
+exports.Gender = {
+    Unspecified: 0,
+    Male: 1,
+    Female: 2
+};
+
+exports.Role = {
+    System: 0,
+    Dispatcher: 1,
+    Worker: 2,
+    Reviewer: 3
+};
