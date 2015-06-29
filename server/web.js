@@ -44,3 +44,6 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+app.use('/api', require('../controller'));
+app.use('/', express.static(path.join(__dirname, 'web')));

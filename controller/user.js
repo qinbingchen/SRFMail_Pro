@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
+var router = new require('express').Router();
 
 var login = function(req, res, next) {
     User.model.findOne({
@@ -40,3 +41,6 @@ var logout = function(req, res, next) {
         message: 'success'
     });
 };
+
+router.route('/login').post(login);
+router.route('/logout').post(logout);

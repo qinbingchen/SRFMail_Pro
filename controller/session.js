@@ -2,8 +2,9 @@ var mongoose = require('mongoose');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
+var router = new require('express').Router();
 
-exports.detail = function(req, res, next) {
+var detail = function(req, res, next) {
     var id = req.query.id;
     if(!mongoose.Types.ObjectId.isValid(id)) {
         return res.json({
@@ -44,3 +45,23 @@ exports.detail = function(req, res, next) {
             res.json(session);
         });
 };
+
+router.use(function(req, res, next) {
+    if(!req.session.user) {
+        return res.json({
+            code: 123,
+            message: 'asdf'
+        });
+    }
+    User.model.findById(mongoose.Types.ObjectId(req.session.user), function(err, user) {
+        if(err) {
+            return res.json({
+                code: 123,
+                message: 'asdf'
+            });
+        }
+        req.session.user = user;
+        next();
+    });
+});
+router.route('/get_detail').get(detail);
