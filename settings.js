@@ -9,7 +9,19 @@ exports = module.exports = {
         host: 'localhost',
         port: 6379
     },
-    listen: 8888
+    listen: 8888,
+    mail: {
+        imap: {
+            host: '',
+            port: ''
+        },
+        smtp: {
+            host: '',
+            port: ''
+        },
+        username: '',
+        password: ''
+    }
 };
 
 // Hard code will be deprecated when system module finished
