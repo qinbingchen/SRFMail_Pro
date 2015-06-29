@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="SRFMailProApp">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="node_modules/angular-cookies/angular-cookies.min.js"></script>
+
+    <!-- http://socket.io -->
+    <script src="js/socket.io-1.3.4.js"></script>
+
+    <!-- http://necolas.github.io/normalize.css -->
+    <link href="node_modules/normalize.css/normalize.css" rel="stylesheet" media="all">
+
+    <!-- http://fortawesome.github.io/Font-Awesome/ -->
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="all">
+
+    <!-- http://codeseven.github.io/toastr -->
+    <link href="node_modules/toastr/toastr.min.css" rel="stylesheet" media="all"/>
+    <script src="node_modules/toastr/toastr.min.js"></script>
+
+    <!-- https://select2.github.io -->
+    <link href="node_modules/select2/select2.css" rel="stylesheet" media="all">
+    <script src="node_modules/select2/select2.min.js"></script>
+    <script src="node_modules/select2/select2_locale_zh-CN.js"></script>
+
+    <script src="constants.js"></script>
+    <script src="app.js"></script>
+    <script src="controllers/GlobalController.js"></script>
+    <script src="controllers/SideBarController.js"></script>
+    <script src="controllers/MailListController.js"></script>
+    <script src="controllers/MailController.js"></script>
+
+    <link href="css/global.css" rel="stylesheet" media="all">
+    <link href="css/side-bar.css" rel="stylesheet" media="all">
+    <link href="css/mail-list.css" rel="stylesheet" media="all">
+    <link href="css/mail.css" rel="stylesheet" media="all">
+
+    <title>SRF Mail Pro</title>
+</head>
+
+<body ng-controller="GlobalController">
+
+<ng-include src="'partial/side-bar.html'">
+</ng-include><ng-include src="'partial/mail-list.html'">
+</ng-include><ng-include src="'partial/mail.html'"></ng-include>
+
+</body>
+</html>

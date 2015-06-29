@@ -1,0 +1,54 @@
+@font-face {
+    font-family: "Open Sans";
+    src: url(../Open_Sans/OpenSans-Regular.ttf);
+}
+
+@font-face {
+    font-family: "Open Sans Light";
+    src: url(../Open_Sans/OpenSans-Light.ttf);
+}
+
+@font-face {
+    font-family: "Open Sans Semibold";
+    src: url(../Open_Sans/OpenSans-Semibold.ttf);
+}
+
+@font-face {
+    font-family: "Open Sans Bold";
+    src: url(../Open_Sans/OpenSans-Bold.ttf);
+}
+
+body {
+    font-family: "Open Sans Light", "Helvetica", "Arial",
+    "Hiragino Sans GB", "冬青黑体简体中文",
+    "STXihei", "华文细黑",
+    "Microsoft YaHei", "微软雅黑",
+    sans-serif;
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+    outline: none;
+}
+
+div {
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}

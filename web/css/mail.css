@@ -1,0 +1,47 @@
+.mail-section {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 555px);
+    height: 100vh;
+}
+
+.mail-section .header {
+    height: 44px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #a6c4db;
+}
+
+.toolbar {
+    height: 44px;
+    padding-top: 8px;
+}
+
+.toolbar button {
+    margin-left: 25px;
+    border: none;
+    background: none;
+    color: #2674ff;
+}
+
+.toolbar button:not(:disabled):hover {
+    cursor: pointer;
+    color: #1d5fcc;
+}
+
+.toolbar button:disabled {
+    color: #bbd3fd;
+}
+.title_style,.time_style,.sender_style{
+    margin-left: 20px;
+
+}
+.title_style{
+    margin-top:25px;
+    font-weight: bold;
+    font-size: 25px;
+}
+.time_style{
+    margin-top: 20px;
+    font-size: 15px;
+    color: #006666;
+}
