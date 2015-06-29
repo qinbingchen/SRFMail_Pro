@@ -17,20 +17,34 @@ var SessionSchema = new schema({
         receiver: { type: schema.ObjectId, ref: 'User' },
         current: { type: Boolean }
     }],
-    status: { type: Number }
+    status: { type: Number },
+    isRejected: { type: Boolean },
+    isRedirected: { type: Boolean }
 });
 
 exports.model = mongoose.model('Session', SessionSchema);
 
 exports.Status = {
-    WaitForDistribute: 0,
-    Distributed: 1,
-    Returned: -1,
-    Redirected: -2,
-    Read: 2, // For readonly
-    WaitForCheck: 3,
-    CheckFailed: -3,
-    Sending: 4,
-    SendFailed: -4,
-    SendSuccess: 5
+    New: 0,
+    Dispatched: 1,
+    WaitingForReview: 2,
+    WaitingForSending: 3,
+    Success: 4,
+    PermError: 5,
+    TempError: 6
+};
+
+exports.Type = {
+    NotAnOperation: 0,
+    Dispatch: 1,
+    Redirect: 2,
+    SubmitForReview: 3,
+    Reject: 4,
+    Pass: 5,
+    SubmitForSend: 6,
+    Retry: 7,
+    Abort: 8,
+    Send: 9,
+    MarkFailed: 10,
+    MarkSuccess: 11
 };
