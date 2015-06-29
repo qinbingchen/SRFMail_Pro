@@ -4,6 +4,10 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var settings = require('../settings');
 var Log = require('../lib/log')('[server-web]');
+var bodyParser = require('body-parser');
+var compression = require('compression');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 
 exports.start = function() {
     var port = settings.listen || 3000;
@@ -30,3 +34,13 @@ exports.start = function() {
         console.log('Server listening on ' + port);
     });
 };
+
+app.use(compression());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(session({
+    secret: 'aldnesm89csvjk',
+    store: new RedisStore(settings.redis),
+    resave: false,
+    saveUninitialized: false
+}));

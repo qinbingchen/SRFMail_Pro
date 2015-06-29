@@ -53,7 +53,8 @@ mailListener.on('mail', function(_mail, seqno, attributes){
             path: row.contentId ? path.join(__dirname, '../attachments', row.contentId) : undefined,
             cid: row.cid,
             content: row.content,
-            encoding: row.encoding
+            encoding: row.encoding,
+            id: row.contentId
         });
     });
     mail = new Mail.model(mail);
