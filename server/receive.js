@@ -3,6 +3,7 @@ var settings = require('../settings');
 var Mail = require('../model').mail;
 var Session = require('../model').session;
 var fs = require('fs');
+var Log = require('../lib/log')('[server-receive');
 
 var mailListener = new MailListener({
     username: settings.mail.username,

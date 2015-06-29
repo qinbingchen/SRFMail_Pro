@@ -3,7 +3,7 @@ var settings = require('../settings');
 var Mail = require('../model/mail');
 var mongoose = require('mongoose');
 var MailSender = require('../lib/mail');
-var Log = require('../lib/log');
+var Log = require('../lib/log')('[server-send]');
 
 var client = redis.createClient(settings.redis.port, settings.redis.host);
 

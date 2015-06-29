@@ -1,10 +1,5 @@
 exports = module.exports = {
-    mysql: {
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: 'root'
-    },
+    mongodb: 'mongodb://localhost/SRFMail',
     redis: {
         host: 'localhost',
         port: 6379
