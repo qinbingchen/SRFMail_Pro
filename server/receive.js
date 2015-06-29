@@ -1,4 +1,4 @@
-var MailListener = require('mail-listener2');
+var MailListener = require('../lib/mail-listener2');
 var settings = require('../settings');
 var Mail = require('../model').mail;
 var Session = require('../model').session;
@@ -21,8 +21,6 @@ var mailListener = new MailListener({
     }
 });
 
-mailListener.start();
-
 process.on('exit', function() {
     mailListener.stop();
 });
@@ -42,14 +40,17 @@ mailListener.on('mail', function(_mail, seqno, attributes){
         text: _mail.text,
         html: _mail.html,
         attachments: [],
-        time: new Date()
+        time: new Date(),
+        messageId: _mail.messageId
     };
     _mail.attachments.forEach(function(row) {
         mail.attachments.push({
             contentType: row.contentType,
             filename: row.filename,
-            path: path.join(__dirname, '../attachments', row.contentId),
-            cid: row.cid
+            path: row.contentId ? path.join(__dirname, '../attachments', row.contentId) : undefined,
+            cid: row.cid,
+            content: row.content,
+            encoding: row.encoding
         });
     });
     mail = new Mail.model(mail);
@@ -69,3 +70,5 @@ mailListener.on('attachment', function(attachment) {
     var stream = fs.createWriteStream(path.join(__dirname, '../attachments', attachment.contentId));
     attachment.stream.pipe(stream);
 });
+
+exports.start = mailListener.start.bind(mailListener);
