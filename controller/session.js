@@ -3,6 +3,7 @@ var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
 var router = new require('express').Router();
+var Log = require('../lib/Log')('[controller-session]');
 
 var detail = function(req, res, next) {
     var id = req.query.id;
@@ -24,6 +25,7 @@ var detail = function(req, res, next) {
         .populate('operations.mail')
         .exec(function(err, session) {
             if(err) {
+                Log.e({req: req}, err);
                 return res.json({
                     code: 123,
                     message: 'asdf'
@@ -88,6 +90,7 @@ var list = function(req, res, next){
         .populate('income')
         .exec(function(err, sessions){
             if (err) {
+                Log.e({req: req}, err);
                 return res.json({
                     code: 123,
                     message: 'asdf'
@@ -127,6 +130,7 @@ router.use(function(req, res, next) {
     }
     User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
         if(err) {
+            Log.e({req: req}, err);
             return res.json({
                 code: 123,
                 message: 'asdf'
