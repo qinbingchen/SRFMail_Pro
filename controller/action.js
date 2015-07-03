@@ -11,13 +11,6 @@ var dispatcher_dispatch = function(req, res, next) {
     var readreply = req.body.readreply;
     var userId = req.session.user;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.json({
-            code: 123,
-            message: 'asdf'
-        });
-    }
-
     var readonlyWorkers = JSON.parse(readonly);
     var readreplyWorkers = JSON.parse(readreply);
     var originalSession, currentUser;
