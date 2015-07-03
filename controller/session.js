@@ -98,9 +98,9 @@ var list = function(req, res, next){
                 var list_element = {
                     id: session._id,
                     readonly: session.readonly,
-                    dispatcher: session.dispatcher.username,
-                    worker: session.worker.username,
-                    reviewer: session.reviewer.username,
+                    dispatcher: session.dispatcher ? session.dispatcher.username : undefined,
+                    worker: session.worker ? session.worker.username : undefined,
+                    reviewer: session.reviewer ? session.reviewer.username : undefined,
                     status: session.status,
                     isRejected: session.isRejected,
                     isRedirected: session.isRedirected,
