@@ -31,18 +31,20 @@ var detail = function(req, res, next) {
                     message: 'asdf'
                 });
             }
-            session.dispatcher = session.dispatcher.username;
-            session.worker = session.worker.username;
-            session.reviewer = session.reviewer.username;
+            session.dispatcher = session.dispatcher ? session.dispatcher.username : undefined;
+            session.worker = session.worker ? session.worker.username : undefined;
+            session.reviewer = session.reviewer ? session.reviewer.username : undefined;
             session.operations.forEach(function(row) {
                 row.operator = row.operator.username;
                 row.receiver = row.receiver.username;
-                row.mail.attachments.forEach(function(attachment, index) {
-                    row.mail.attachments[index] = {
-                        title: attachment.filename,
-                        id: attachment.id
-                    };
-                });
+                if(row.mail.attachments) {
+                    row.mail.attachments.forEach(function(attachment, index) {
+                        row.mail.attachments[index] = {
+                            title: attachment.filename,
+                            id: attachment.id
+                        };
+                    });
+                }
             });
             res.json(session);
         });
