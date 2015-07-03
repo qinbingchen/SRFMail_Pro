@@ -47,6 +47,10 @@ var detail = function(req, res, next) {
 };
 
 var list = function(req, res, next){
+    var ret = {
+        count: 0,
+        sessions: []
+    }
     var query_dispatcher_user_name = req.query.dispatcherUserName;
     var query_worker_user_name = req.query.workerUserName;
     var query_readonly = req.query.readonly;
@@ -92,7 +96,7 @@ var list = function(req, res, next){
             ret.count = sessions.length;
             sessions.forEach(function (session, index){
                 var list_element = {
-                    id: session.id,
+                    id: session._id,
                     readonly: session.readonly,
                     dispatcher: session.dispatcher.username,
                     worker: session.worker.username,
