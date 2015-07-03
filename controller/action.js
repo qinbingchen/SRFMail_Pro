@@ -7,12 +7,10 @@ var router = new require('express').Router();
 
 var dispatcher_dispatch = function(req, res, next) {
     var sessionId = req.body.id;
-    var readonly = req.body.readonly;
-    var readreply = req.body.readreply;
+    var readonlyWorkers = req.body.readonly;
+    var readreplyWorkers = req.body.readreply;
     var userId = req.session.user;
 
-    var readonlyWorkers = JSON.parse(readonly);
-    var readreplyWorkers = JSON.parse(readreply);
     var originalSession, currentUser;
 
     async.parallel([
