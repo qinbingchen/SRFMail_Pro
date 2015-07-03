@@ -52,3 +52,107 @@ textarea {
 .right {
     float: right;
 }
+
+/* button begin */
+
+.btn {
+    padding: 0;
+    color: #2674ff;
+    border: none;
+    background: none;
+}
+
+.btn:not(:disabled):hover {
+    cursor: pointer;
+    color: #1d5fcc;
+}
+
+.btn:disabled {
+    color: #bbd3fd;
+}
+
+/* button end */
+
+/* modal begin */
+
+.modal-background {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.0);
+    transition: background-color linear 0.15s, visibility linear 0.15s;
+}
+
+.modal-background.show {
+    visibility: visible;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal {
+    margin: 40px auto 100px;
+    height: calc(100vh - 200px);
+    min-height: 300px;
+    width: 630px;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.5) 0 5px 15px 0;
+    opacity: 0;
+    transition: opacity ease 0.5s, margin-top ease 0.5s;
+}
+
+.modal.show {
+    opacity: 1;
+    margin-top: 100px;
+}
+
+.modal .header {
+    height: 44px;
+    line-height: 44px;
+    padding: 0 15px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #a6c4db;
+}
+
+.modal .header .close:hover {
+    color: #c6c6c6;
+}
+
+.modal .header .title {
+
+}
+
+.modal .body .input-group {
+    height: 33px;
+    line-height: 33px;
+    padding: 0 15px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.modal .body .input-group .prompt {
+    color: #a9a9a9;
+}
+
+.modal .body .input-group input {
+    display: inline-block;
+    border: none;
+}
+
+.modal .body .input-group input#receiver {
+    width: 531px;
+}
+
+.modal .body .input-group input#subject {
+    width: 547px;
+}
+
+.modal .body textarea {
+    padding: 15px;
+    height: calc(100vh - 310px);
+    width: 100%;
+    border: none;
+    resize: none;
+}
+
+/* modal end */
