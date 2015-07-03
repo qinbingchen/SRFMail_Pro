@@ -21,7 +21,7 @@ var login = function(req, res, next) {
                 message: 'asdf'
             });
         }
-        req.session.user = user._id.toString();
+        req.session.user = user;
         res.json({
             code: 0,
             message: 'success',

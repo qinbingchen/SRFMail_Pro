@@ -121,7 +121,7 @@ router.use(function(req, res, next) {
             message: 'asdf'
         });
     }
-    User.model.findById(mongoose.Types.ObjectId(req.session.user), function(err, user) {
+    User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
         if(err) {
             return res.json({
                 code: 123,
