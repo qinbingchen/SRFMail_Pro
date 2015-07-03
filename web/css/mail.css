@@ -47,3 +47,38 @@
     font-size: 15px;
     color: #006666;
 }
+
+.mail-section .bubble .tri{
+    display:block;
+    bottom: 100%;
+    left: calc(50% - 15px);
+    position:absolute;
+    height:0px;
+    width:0px;
+    border-width:15px;
+    border-style:solid;
+    border-color:transparent  transparent  #a9a9a9 transparent;
+}
+
+.mail-section .bubble .tri-inner{
+    display:block;
+    bottom: 100%;
+    left: calc(49.8% - 14px);
+    position:absolute;
+    height:0px;
+    width:0px;
+    border-width:14px;
+    border-style:solid;
+    border-color:transparent  transparent  #ffffff transparent;
+}
+
+.mail-section .bubble{
+    overflow: visible;
+    position: relative;
+    top: 20px;
+    display:inline-block;
+    padding:5px 10px;
+    background-color: #ffffff;
+    border: 1px solid #a9a9a9;
+    box-shadow: rgba(0, 0, 0, 0.5) 0 1px 3px 0;
+}
