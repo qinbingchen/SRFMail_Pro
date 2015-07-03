@@ -115,39 +115,89 @@ textarea {
     border-bottom: 1px solid #a6c4db;
 }
 
-.modal .header .close:hover {
-    color: #c6c6c6;
-}
-
 .modal .header .title {
 
 }
 
-.modal .body .input-group {
+#modal-login .modal {
+    background: transparent;
+    box-shadow: none;
+}
+
+#modal-login .modal .body .title {
+    margin-top: calc((100vh - 180px) / 2 - 150px);
+    margin-bottom: 25px;
+    text-align: center;
+    font-family: "Open Sans Semibold";
+    font-size: 39px;
+    color: #fff;
+}
+
+#modal-login .modal .body input {
+    display: block;
+    width: 324px;
+    height: 48px;
+    margin: 0 auto;
+    padding: 15px 10px;
+    border: 1px solid rgba(26, 26, 26, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#modal-login .modal .body input:focus {
+    border-color: #1780fb;
+}
+
+#modal-login .modal .body input#username {
+    border-bottom: none;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+#modal-login .modal .body input#username:after {
+    height: 1px;
+    width: 324px;
+    background-color: rgba(26, 26, 26, 0.8);
+}
+
+#modal-login .modal .body input#password {
+    border-top: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+#modal-login .modal .body input#username:focus {
+    border-bottom: 1px solid #1780fb;
+}
+
+#modal-login .modal .body input#password:focus {
+    border-top: 1px solid #1780fb;
+}
+
+#modal-compose .modal .body .input-group {
     height: 33px;
     line-height: 33px;
     padding: 0 15px;
     border-bottom: 1px solid #eaeaea;
 }
 
-.modal .body .input-group .prompt {
+#modal-compose .modal .body .input-group .prompt {
     color: #a9a9a9;
 }
 
-.modal .body .input-group input {
+#modal-compose .modal .body .input-group input {
     display: inline-block;
     border: none;
 }
 
-.modal .body .input-group input#receiver {
+#modal-compose .modal .body .input-group input#recipient {
     width: 531px;
 }
 
-.modal .body .input-group input#subject {
+#modal-compose .modal .body .input-group input#subject {
     width: 547px;
 }
 
-.modal .body textarea {
+#modal-compose .modal .body textarea {
     padding: 15px;
     height: calc(100vh - 310px);
     width: 100%;

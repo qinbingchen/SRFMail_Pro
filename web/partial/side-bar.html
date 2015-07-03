@@ -1,11 +1,16 @@
 <div class="side-bar-section" ng-controller="SideBarController">
     <div class="header">SRF Mail Pro</div>
     <div class="body">
-        <ul class="mail-category-list">
-            <li class="mail-category before-selected"><i class="fa fa-inbox fa-lg"></i>收件箱</li>
-            <li class="mail-category selected"><i class="fa fa-inbox fa-lg"></i>收件箱</li>
-            <li class="mail-category"><i class="fa fa-inbox fa-lg"></i>收件箱</li>
-            <li class="mail-category"><i class="fa fa-inbox fa-lg"></i>收件箱</li>
+        <!--<ul class="mail-category-list">-->
+            <!--<li class="mail-category before-selected"><i class="fa fa-inbox fa-lg"></i>收件箱</li>-->
+            <!--<li class="mail-category selected"><i class="fa fa-inbox fa-lg"></i>收件箱</li>-->
+            <!--<li class="mail-category"><i class="fa fa-inbox fa-lg"></i>收件箱</li>-->
+            <!--<li class="mail-category"><i class="fa fa-inbox fa-lg"></i>收件箱</li>-->
+        <!--</ul>-->
+
+        <ul class="mail-category-list" ng-repeat="user_type in category_list" ng-if="current_user_type == user_type.user_type">
+            <li class="mail-category" ng-repeat="category in user_type.category"><i class="fa fa-inbox fa-lg"></i>{{category.display_name}}</li>
         </ul>
+
     </div>
 </div>

@@ -1,6 +1,6 @@
 <div ng-controller="ModalController">
     <div ng-controller="ComposeModalController">
-        <div id="modal-compose" class="modal-background" ng-click="dismiss_modal()">
+        <div id="modal-compose" class="modal-background">
             <div class="modal" ng-click="prevent_dismiss($event)">
                 <div class="header">
                     <button class="btn" ng-click="dismiss_modal()">取消</button>
@@ -9,13 +9,13 @@
                 <div class="body">
                     <div class="input-group">
                         <span class="prompt">收件人：</span>
-                        <input id="receiver" type="email" />
+                        <input id="recipient" type="email" ng-model="recipient" />
                     </div>
                     <div class="input-group">
                         <span class="prompt" id="title">主题：</span>
-                        <input id="subject" type="text" />
+                        <input id="subject" type="text" ng-model="subject" />
                     </div>
-                    <textarea></textarea>
+                    <textarea ng-model="content"></textarea>
                 </div>
             </div>
         </div>

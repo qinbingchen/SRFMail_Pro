@@ -12,11 +12,24 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $(".modal-background").removeClass("show");
         };
 
-        $scope.current_user_type = CONSTANTS.USER_TYPE.ADMIN;
+        $scope.show_compose = function () {
+            $scope.$broadcast("show_compose")
+        };
+
+        $scope.show_reply = function () {
+            $scope.$broadcast("show_reply")
+        };
+
+        $scope.show_edit = function () {
+            $scope.$broadcast("show_edit")
+        };
+
+        $scope.category_list = CATEGORY_LIST;
+
+        $scope.current_user_type = USER_TYPE.DISPATCHER;
         $scope.current_user_id = 0;
         $scope.current_user_name = "";
 
-        $scope.category_list = [];
         $scope.mail_list = [
             {
                 sender: "啊啊啊啊啊啊啊",
@@ -31,6 +44,8 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             }
         ];
         $scope.selected_mail = {};
+
+        $scope.show_modal("login");
     }]);
 
 SRFMailProControllers.controller("ModalController", ["$scope", "$http", "$cookies",
@@ -40,7 +55,22 @@ SRFMailProControllers.controller("ModalController", ["$scope", "$http", "$cookie
         };
     }]);
 
-SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "$cookies",
+SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$cookies",
     function ($scope, $http, $cookies) {
 
+    }]);
+
+SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "$cookies",
+    function ($scope, $http, $cookies) {
+        $scope.$on("show_compose", function () {
+
+        });
+
+        $scope.$on("show_reply", function () {
+
+        });
+
+        $scope.$on("show_edit", function () {
+
+        });
     }]);
