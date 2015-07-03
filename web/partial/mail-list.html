@@ -7,25 +7,14 @@
     </div>
     <div class="body">
         <ul class="mail-list">
-            <li class="mail">
+            <li class="mail" ng-repeat="mail in mail_list">
                 <p class="first-row">
-                    <a class="sender">我是一个人</a>
-                    <a class="date">2015/6/29</a>
+                    <a class="sender">{{mail.sender}}</a>
+                    <a class="date">{{mail.date}}</a>
                 </p>
-                <p class="mail_title">的的</p>
-                <p class="text_preview">哈哈哈哈哈哈哈哈哈</p>
-
+                <p class="mail-title">{{mail.title}}</p>
+                <p class="text-preview">{{mail.content}}</p>
             </li>
-
-            <li class="mail">
-                <p class="first-row">
-                    <a class="sender">我是一个人</a>
-                    <a class="date">2015/6/29</a>
-                </p>
-                <p class="mail_title">我是一个人</p>
-                <p class="text_preview">我是一个人</p>
-
-            </li>
-        </ul>
+          </ul>
     </div>
 </div>
