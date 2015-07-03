@@ -35,7 +35,7 @@ var dispatcher_dispatch = function(req, res, next) {
                     session = new Session.model(session);
                     session.dispatcher = currentUser._id;
                     session.worker = designatedWorker._id;
-                    session.readonly = (readonlyWorkers.indexOf(designatedWorker) > -1);
+                    session.readonly = (readonlyWorkers.indexOf(worker) > -1);
                     session.operations.push({
                         type: 1,
                         operator: currentUser._id,
