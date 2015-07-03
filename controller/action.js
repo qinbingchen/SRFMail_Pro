@@ -10,9 +10,9 @@ var dispatcher_dispatch = function(req, res, next) {
     var sessionId = req.body.id;
     var readonlyWorkers = req.body.readonly;
     var readreplyWorkers = req.body.readreply;
-    var userId = req.session.user;
+    var currentUser = req.session.user;
 
-    var originalSession, currentUser;
+    var originalSession;
 
     async.parallel([
         // populate originalSession & currentUser
@@ -20,11 +20,6 @@ var dispatcher_dispatch = function(req, res, next) {
             Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, _originalSession) {
                 originalSession = _originalSession;
                 callback(err, 'get original session');
-            });
-        }, function(callback) {
-            Session.model.findById(mongoose.Types.ObjectId(userId), function(err, _currentUser) {
-                currentUser = _currentUser;
-                callback(err, 'get current user');
             });
         }
     ], function() {
