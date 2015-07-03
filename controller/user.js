@@ -44,3 +44,5 @@ var logout = function(req, res, next) {
 
 router.route('/login').post(login);
 router.route('/logout').post(logout);
+
+exports = module.exports = router;

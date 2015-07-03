@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var compression = require('compression');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
+var path = require('path');
 
 exports.start = function() {
     var port = settings.listen || 3000;
