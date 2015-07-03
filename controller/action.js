@@ -3,6 +3,7 @@ var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
 var _ = require('lodash');
+var async = require('async');
 var router = new require('express').Router();
 
 var dispatcher_dispatch = function(req, res, next) {
