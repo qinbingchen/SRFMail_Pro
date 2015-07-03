@@ -26,27 +26,29 @@ var dispatcher_dispatch = function(req, res, next) {
         // spawn sessions iteratively
         var workers = readonlyWorkers.concat(readreplyWorkers);
         workers.forEach(function(worker) {
-            User.model.find({
+            User.model.findOne({
                 username: worker
             }, function(err, designatedWorker) {
-                var session = _.cloneDeep(originalSession);
-                delete session._id;
-                session = new Session.model(session);
-                session.dispatcher = currentUser._id;
-                session.worker = designatedWorker._id;
-                session.readonly = (readonlyWorkers.indexOf(designatedWorker) > -1);
-                session.operations.push({
-                    type: 1,
-                    operator: currentUser._id,
-                    receiver: designatedWorker._id,
-                    time: new Date()
-                });
-                session.status = 1;
-                session.isRejected = false;
-                session.isRedirected = false;
-                session.save(function(err) {
-                    // oh.
-                });
+                if (designatedWorker) {
+                    var session = _.cloneDeep(originalSession);
+                    delete session._id;
+                    session = new Session.model(session);
+                    session.dispatcher = currentUser._id;
+                    session.worker = designatedWorker._id;
+                    session.readonly = (readonlyWorkers.indexOf(designatedWorker) > -1);
+                    session.operations.push({
+                        type: 1,
+                        operator: currentUser._id,
+                        receiver: designatedWorker._id,
+                        time: new Date()
+                    });
+                    session.status = 1;
+                    session.isRejected = false;
+                    session.isRedirected = false;
+                    session.save(function(err) {
+                        // oh.
+                    });
+                }
             });
         });
 
@@ -74,7 +76,7 @@ var worker_submit = function(req, res, next) {
                 callback(err, 'get operating user');
             });
         }, function(callback) {
-            User.model.find({ username: reviewerUsername }, function(err, _reviewer) {
+            User.model.findOne({ username: reviewerUsername }, function(err, _reviewer) {
                 reviewer = _reviewer;
                 callback(err, 'get designated reviewer');
             });
@@ -133,10 +135,7 @@ var reviewer_pass = function(req, res, next) {
             });
         },
         function(callback) {
-            Session.model
-                .findById(mongoose.Types.ObjectId(sessionId))
-                .populate('reply', 'reply')
-                .exec(function(err, _session) {
+            Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, _session) {
                 session = _session;
                 callback(err, 'get session');
             });
