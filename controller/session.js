@@ -59,10 +59,18 @@ var list = function(req, res, next){
     var query_worker_user_name = req.query.workerUserName;
     var query_readonly = req.query.readonly;
     var query_reviewer_user_name = req.query.reviewer;
-    var find_key = {
-        status: req.query.status,
-        isRejected: req.query.isRejected,
-        isRedirected: req.query.isRedirected
+    var query_status = req.query.status;
+    var query_is_rejected = req.query.isRejected;
+    var query_is_redirected = req.query.isRedirected;
+    var find_key = {}
+    if(query_status){
+        find_key.status = query_status
+    }
+    if(query_is_rejected){
+        find_key.isRejected = query_is_rejected;
+    }
+    if(query_is_redirected){
+        find_key.isRedirected = query_is_redirected;
     }
     if(query_readonly){
         find_key.readonly = query_readonly
