@@ -9,7 +9,7 @@
     <script src="node_modules/angular-cookies/angular-cookies.min.js"></script>
 
     <!-- http://socket.io -->
-    <script src="js/socket.io-1.3.4.js"></script>
+    <script src="node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script>
 
     <!-- http://necolas.github.io/normalize.css -->
     <link href="node_modules/normalize.css/normalize.css" rel="stylesheet" media="all">
@@ -28,7 +28,7 @@
 
     <script src="constants.js"></script>
     <script src="app.js"></script>
-    <script src="controllers/GlobalController.js"></script>
+    <script src="controllers/controllers.js"></script>
     <script src="controllers/SideBarController.js"></script>
     <script src="controllers/MailListController.js"></script>
     <script src="controllers/MailController.js"></script>
@@ -45,7 +45,9 @@
 
 <ng-include src="'partial/side-bar.html'">
 </ng-include><ng-include src="'partial/mail-list.html'">
-</ng-include><ng-include src="'partial/mail.html'"></ng-include>
+</ng-include><ng-include src="'partial/mail.html'">
+
+</ng-include><ng-include src="'partial/modals/modal-compose.html'"></ng-include>
 
 </body>
 </html>
