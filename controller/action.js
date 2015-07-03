@@ -33,6 +33,7 @@ var dispatcher_dispatch = function(req, res, next) {
                     var session = _.cloneDeep(originalSession);
                     delete session._id;
                     session = new Session.model(session);
+                    session.income = originalSession.income;
                     session.dispatcher = currentUser._id;
                     session.worker = designatedWorker._id;
                     session.readonly = (readonlyWorkers.indexOf(worker) > -1);
