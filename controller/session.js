@@ -3,7 +3,7 @@ var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
 var router = new require('express').Router();
-var Log = require('../lib/Log')('[controller-session]');
+var Log = require('../lib/log')('[controller-session]');
 
 var detail = function(req, res, next) {
     var id = req.query.id;
