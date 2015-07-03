@@ -30,22 +30,22 @@ var dispatcher_dispatch = function(req, res, next) {
                 username: worker
             }, function(err, designatedWorker) {
                 if (designatedWorker) {
-                    var session = _.cloneDeep(originalSession);
-                    delete session._id;
-                    session = new Session.model(session);
-                    session.income = originalSession.income;
-                    session.dispatcher = currentUser._id;
-                    session.worker = designatedWorker._id;
-                    session.readonly = (readonlyWorkers.indexOf(worker) > -1);
+                    var session = new Session.model({
+                        income: originalSession.income,
+                        dispatcher: currentUser._id,
+                        worker: designatedWorker._id,
+                        readonly: (readonlyWorkers.indexOf(worker) > -1),
+                        operations: originalSession.operations,
+                        status: 1,
+                        isRejected: false,
+                        isRedirected: false
+                    });
                     session.operations.push({
                         type: 1,
                         operator: currentUser._id,
                         receiver: designatedWorker._id,
                         time: new Date()
                     });
-                    session.status = 1;
-                    session.isRejected = false;
-                    session.isRedirected = false;
                     session.save(function(err) {
                         // oh.
                     });
