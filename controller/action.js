@@ -37,3 +37,5 @@ router.use(function(req, res, next) {
 router.route('/dispatcher/dispatch').post(dispatcher_dispatch);
 router.route('/worker/submit').post(worker_submit);
 router.route('/reviewer/pass').post(reviewer_pass);
+
+module.exports = router;
