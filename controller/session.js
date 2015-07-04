@@ -27,8 +27,8 @@ var detail = function(req, res, next) {
             if(err) {
                 Log.e({req: req}, err);
                 return res.json({
-                    code: 123,
-                    message: 'asdf'
+                    code: 1,
+                    message: 'Failed to fetch result'
                 });
             }
             session.dispatcher = session.dispatcher ? session.dispatcher.username : undefined;
@@ -54,7 +54,7 @@ var list = function(req, res, next){
     var ret = {
         count: 0,
         sessions: []
-    }
+    };
     var query_dispatcher_user_name = req.query.dispatcherUserName;
     var query_worker_user_name = req.query.workerUserName;
     var query_readonly = req.query.readonly;
@@ -62,7 +62,7 @@ var list = function(req, res, next){
     var query_status = req.query.status;
     var query_is_rejected = req.query.isRejected;
     var query_is_redirected = req.query.isRedirected;
-    var find_key = {}
+    var find_key = {};
     if(query_status){
         find_key.status = query_status
     }
@@ -102,8 +102,8 @@ var list = function(req, res, next){
             if (err) {
                 Log.e({req: req}, err);
                 return res.json({
-                    code: 123,
-                    message: 'asdf'
+                    code: 1,
+                    message: 'Failed to fetch result'
                 });
             }
             ret.count = sessions.length;
@@ -128,22 +128,21 @@ var list = function(req, res, next){
             });
             res.json(ret);
     })
-}
+};
 
 
 router.use(function(req, res, next) {
     if(!req.session.user) {
         return res.json({
-            code: 123,
-            message: 'asdf'
+            code: 1,
+            message: 'You are not yet logged in'
         });
     }
     User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
         if(err) {
-            Log.e({req: req}, err);
             return res.json({
-                code: 123,
-                message: 'asdf'
+                code: 1,
+                message: 'Invalid user id'
             });
         }
         req.session.user = user;

@@ -42,7 +42,40 @@ var logout = function(req, res, next) {
     });
 };
 
+var list_reviewers = function(req, res, next) {
+    var list = {
+        reviewers: []
+    };
+    User.model.find({
+        role: 3
+    }, function(err, reviewers) {
+        reviewers.forEach(function(reviewer) {
+            list.reviewers.push(reviewer.username);
+        });
+
+        res.json(list);
+    });
+};
+
+var list_workers = function(req, res, next) {
+    var list = {
+        workers: []
+    };
+    User.model.find({
+        role: 2
+    }, function(err, workers) {
+        workers.forEach(function(worker) {
+            list.workers.push(worker.username);
+        });
+
+        res.json(list);
+    });
+};
+
+
 router.route('/login').post(login);
 router.route('/logout').post(logout);
+router.route('/list_reviewers').get(list_reviewers);
+router.route('/list_workers').get(list_workers);
 
 exports = module.exports = router;

@@ -5,6 +5,7 @@ var User = require('../model').user;
 var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
+var Log = require('../lib/log')('[controller-session]');
 
 var dispatcher_dispatch = function(req, res, next) {
     var sessionId = req.body.id;
@@ -25,11 +26,13 @@ var dispatcher_dispatch = function(req, res, next) {
     ], function() {
         // spawn sessions iteratively
         var workers = readonlyWorkers.concat(readreplyWorkers);
-        workers.forEach(function(worker) {
+        async.each(workers, function(worker, callback) {
             User.model.findOne({
                 username: worker
             }, function(err, designatedWorker) {
-                if (designatedWorker) {
+                if (!designatedWorker) {
+                    callback();
+                } else {
                     var session = new Session.model({
                         income: originalSession.income,
                         dispatcher: currentUser._id,
@@ -40,43 +43,42 @@ var dispatcher_dispatch = function(req, res, next) {
                         isRejected: false,
                         isRedirected: false
                     });
-                    session.operations.push({
+                    var operationDict = {
                         type: 1,
                         operator: currentUser._id,
                         receiver: designatedWorker._id,
                         time: new Date()
+                    };
+                    Log.e({
+                        opDict: operationDict
                     });
+                    session.operations.push(operationDict);
                     session.save(function(err) {
-                        // oh.
+                        callback();
                     });
                 }
             });
-        });
-
-        res.json({
-            "code": 0,
-            "message": "Success"
+        }, function(err) {
+            res.json({
+                "code": 0,
+                "message": "Success"
+            });
         });
     });
 };
 
 var worker_submit = function(req, res, next) {
     var sessionId = req.body.id;
-    var userId = req.session.user;
+    var user = req.session.user;
     var subject = req.body.subject;
     var html = req.body.html;
-    var needReview = req.body.needReview;
+    var needReview = req.body.needReview == 'true';
     var reviewerUsername = req.body.reviewer;
 
-    var user, reviewer, session, incomeMail;
+    var reviewer, session, incomeMail;
 
     async.series([
         function(callback) {
-            User.model.findById(mongoose.Types.ObjectId(userId), function(err, _user) {
-                user = _user;
-                callback(err, 'get operating user');
-            });
-        }, function(callback) {
             User.model.findOne({ username: reviewerUsername }, function(err, _reviewer) {
                 reviewer = _reviewer;
                 callback(err, 'get designated reviewer');
@@ -102,39 +104,37 @@ var worker_submit = function(req, res, next) {
             html: html,
             time: new Date()
         });
-        var operationDict = {
-            type: needReview ? 3 : 6,
-            operator: user._id,
-            time: new Date(),
-            mail: repliedMail._id
-        };
-        if (needReview) {
-            operationDict['receiver'] = reviewer._id;
-        }
-        session.status = needReview ? 2 : 3;
-        session.reply = repliedMail._id;
-        session.reviewer = reviewer._id;
-        session.operations.push(operationDict);
+        repliedMail.save(function(err) {
+            var operationDict = {
+                type: needReview ? 3 : 6,
+                operator: user._id,
+                time: new Date(),
+                mail: repliedMail._id
+            };
+            if (needReview) {
+                operationDict['receiver'] = reviewer._id;
+            }
+            session.status = needReview ? 2 : 3;
+            session.reply = repliedMail._id;
+            session.reviewer = reviewer._id;
+            session.operations.push(operationDict);
 
-        res.json({
-            "code": 0,
-            "message": "Success"
+            session.save(function(err) {
+                res.json({
+                    "code": 0,
+                    "message": "Success"
+                });
+            });
         });
     });
 };
 
 var reviewer_pass = function(req, res, next) {
     var sessionId = req.body.id;
-    var userId = req.session.user;
-    var user, session, mail;
+    var user = req.session.user;
+    var session, mail;
 
     async.series([
-        function(callback) {
-            User.model.findById(mongoose.Types.ObjectId(userId), function(err, _user) {
-                user = _user;
-                callback(err, 'get operating user');
-            });
-        },
         function(callback) {
             Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, _session) {
                 session = _session;
@@ -157,9 +157,11 @@ var reviewer_pass = function(req, res, next) {
         session.status = 3;
         session.operations.push(operationDict);
 
-        res.json({
-            "code": 0,
-            "message": "Success"
+        session.save(function(err) {
+            res.json({
+                "code": 0,
+                "message": "Success"
+            });
         });
     });
 };
@@ -167,15 +169,15 @@ var reviewer_pass = function(req, res, next) {
 router.use(function(req, res, next) {
     if(!req.session.user) {
         return res.json({
-            code: 123,
-            message: 'asdf'
+            code: 1,
+            message: 'You are not yet logged in'
         });
     }
     User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
         if(err) {
             return res.json({
-                code: 123,
-                message: 'asdf'
+                code: 1,
+                message: 'Invalid user id'
             });
         }
         req.session.user = user;
