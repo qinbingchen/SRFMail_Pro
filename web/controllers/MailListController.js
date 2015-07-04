@@ -8,7 +8,7 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         };
 
         $scope.changeClass=function(mail){
-            if(mail.id==selected_mail)
+            if(mail.id==$scope.selected_mail)
                 return 'mail selected';
             else
                 return 'mail';
