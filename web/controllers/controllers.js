@@ -76,7 +76,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.show_edit = function () {
             $scope.$broadcast("show_edit")
         };
-<<<<<<< HEAD
 
         $scope.partial_load_status = {
             side_bar: false,
