@@ -2,6 +2,17 @@ var SRFMailProControllers = angular.module("SRFMailProControllers", []);
 
 SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cookies",
     function ($scope, $http, $cookies) {
+        $scope.login = function () {
+            $http.post(ROOT_URL + "/api/user/login", {
+                user: "test0",
+                password: "test0"
+            }).success(function (data, status, headers, config) {
+               
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
+
         $scope.show_modal = function (name) {
             $("#modal-" + name).addClass("show");
             $("#modal-" + name + " .modal").addClass("show");
