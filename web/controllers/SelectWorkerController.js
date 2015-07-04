@@ -26,7 +26,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
                 readonly+="]"
             }
 
-            var url = "http://123.57.64.46" + "/api/action/dispatcher/dispatch";
+            var url = ROOT_URL + "/api/action/dispatcher/dispatch";
             $http.post(url, {
                 id: sessionID,
                 readonly: readonly,
@@ -39,7 +39,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
-        }    
+        };
 
         var url = "http://123.57.64.46" + "/api/user/list_workers";
         $http.get(url).success(function (data) {
