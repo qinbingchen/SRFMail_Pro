@@ -111,9 +111,11 @@ var worker_submit = function(req, res, next) {
         session.reviewer = reviewer._id;
         session.operations.push(operationDict);
 
-        res.json({
-            "code": 0,
-            "message": "Success"
+        session.save(function(err) {
+            res.json({
+                "code": 0,
+                "message": "Success"
+            });
         });
     });
 };
@@ -146,9 +148,11 @@ var reviewer_pass = function(req, res, next) {
         session.status = 3;
         session.operations.push(operationDict);
 
-        res.json({
-            "code": 0,
-            "message": "Success"
+        session.save(function(err) {
+            res.json({
+                "code": 0,
+                "message": "Success"
+            });
         });
     });
 };
