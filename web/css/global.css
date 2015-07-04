@@ -1,208 +1,147 @@
+@charset "UTF-8";
 @font-face {
-    font-family: "Open Sans";
-    src: url(../Open_Sans/OpenSans-Regular.ttf);
-}
+  font-family: "Open Sans";
+  src: url(../Open_Sans/OpenSans-Regular.ttf); }
 
 @font-face {
-    font-family: "Open Sans Light";
-    src: url(../Open_Sans/OpenSans-Light.ttf);
-}
+  font-family: "Open Sans Light";
+  src: url(../Open_Sans/OpenSans-Light.ttf); }
 
 @font-face {
-    font-family: "Open Sans Semibold";
-    src: url(../Open_Sans/OpenSans-Semibold.ttf);
-}
+  font-family: "Open Sans Semibold";
+  src: url(../Open_Sans/OpenSans-Semibold.ttf); }
 
 @font-face {
-    font-family: "Open Sans Bold";
-    src: url(../Open_Sans/OpenSans-Bold.ttf);
-}
+  font-family: "Open Sans Bold";
+  src: url(../Open_Sans/OpenSans-Bold.ttf); }
 
 body {
-    font-family: "Open Sans Light", "Helvetica", "Arial",
-    "Hiragino Sans GB", "冬青黑体简体中文",
-    "STXihei", "华文细黑",
-    "Microsoft YaHei", "微软雅黑",
-    sans-serif;
-    overflow: hidden;
-}
+  font-family: "Open Sans Light", "Helvetica", "Arial",   "Hiragino Sans GB", "冬青黑体简体中文",   "STXihei", "华文细黑",   "Microsoft YaHei", "微软雅黑",   sans-serif;
+  overflow: hidden; }
 
 * {
-    box-sizing: border-box;
-    outline: none;
-}
+  box-sizing: border-box;
+  outline: none; }
 
 div {
-    overflow: hidden;
-}
+  overflow: hidden; }
 
 a {
-    text-decoration: none;
-    color: inherit;
-}
+  text-decoration: none;
+  color: inherit; }
 
 textarea {
-    resize: vertical;
-}
+  resize: vertical; }
 
 .left {
-    float: left;
-}
+  float: left; }
 
 .right {
-    float: right;
-}
+  float: right; }
 
 /* button begin */
-
 .btn {
-    padding: 0;
-    color: #2674ff;
-    border: none;
-    background: none;
-}
+  padding: 0;
+  color: #2674ff;
+  border: none;
+  background: none; }
 
 .btn:not(:disabled):hover {
-    cursor: pointer;
-    color: #1d5fcc;
-}
+  cursor: pointer;
+  color: #1d5fcc; }
 
 .btn:disabled {
-    color: #bbd3fd;
-}
+  color: #bbd3fd; }
 
 /* button end */
-
 /* modal begin */
-
 .modal-background {
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    visibility: hidden;
-    background-color: rgba(0, 0, 0, 0.0);
-    transition: background-color linear 0.15s, visibility linear 0.15s;
-}
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  visibility: hidden;
+  background-color: transparent;
+  transition: background-color linear 0.15s, visibility linear 0.15s; }
 
 .modal-background.show {
-    visibility: visible;
-    background-color: rgba(0, 0, 0, 0.6);
-}
+  visibility: visible;
+  background-color: rgba(0, 0, 0, 0.6); }
 
 .modal {
-    margin: 40px auto 100px;
-    height: calc(100vh - 200px);
-    min-height: 300px;
-    width: 630px;
-    background-color: #ffffff;
-    box-shadow: rgba(0, 0, 0, 0.5) 0 5px 15px 0;
-    opacity: 0;
-    transition: opacity ease 0.5s, margin-top ease 0.5s;
-}
-
-.modal.show {
-    opacity: 1;
-    margin-top: 100px;
-}
-
-.modal .header {
+  margin: 40px auto 100px;
+  height: calc(100vh - 200px);
+  min-height: 300px;
+  width: 630px;
+  background-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 5px 15px 0;
+  opacity: 0;
+  transition: opacity ease 0.5s, margin-top ease 0.5s; }
+  .modal .header {
     height: 44px;
     line-height: 44px;
     padding: 0 15px;
     background-color: #f9f9f9;
-    border-bottom: 1px solid #a6c4db;
-}
+    border-bottom: 1px solid #a6c4db; }
 
-.modal .header .title {
-
-}
+.modal.show {
+  opacity: 1;
+  margin-top: 100px; }
 
 #modal-login .modal {
-    background: transparent;
-    box-shadow: none;
-}
-
-#modal-login .modal .body .title {
+  background: transparent;
+  box-shadow: none; }
+  #modal-login .modal .body .title {
     margin-top: calc((100vh - 180px) / 2 - 150px);
     margin-bottom: 25px;
     text-align: center;
     font-family: "Open Sans Semibold";
     font-size: 39px;
-    color: #fff;
-}
-
-#modal-login .modal .body input {
+    color: #fff; }
+  #modal-login .modal .body input {
     display: block;
     width: 324px;
     height: 48px;
     margin: 0 auto;
     padding: 15px 10px;
     border: 1px solid rgba(26, 26, 26, 0.8);
-    background-color: rgba(255, 255, 255, 0.8);
-}
-
-#modal-login .modal .body input:focus {
-    border-color: #1780fb;
-}
-
-#modal-login .modal .body input#username {
+    background-color: rgba(255, 255, 255, 0.8); }
+  #modal-login .modal .body input:focus {
+    border-color: #1780fb; }
+  #modal-login .modal .body input#username {
     border-bottom: none;
     border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
-
-#modal-login .modal .body input#username:after {
-    height: 1px;
-    width: 324px;
-    background-color: rgba(26, 26, 26, 0.8);
-}
-
-#modal-login .modal .body input#password {
+    border-top-right-radius: 6px; }
+  #modal-login .modal .body input#username:focus {
+    border-bottom: 1px solid #1780fb; }
+  #modal-login .modal .body input#password {
     border-top: none;
     border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
-#modal-login .modal .body input#username:focus {
-    border-bottom: 1px solid #1780fb;
-}
-
-#modal-login .modal .body input#password:focus {
-    border-top: 1px solid #1780fb;
-}
+    border-bottom-right-radius: 6px; }
+  #modal-login .modal .body input#password:focus {
+    border-top: 1px solid #1780fb; }
 
 #modal-compose .modal .body .input-group {
-    height: 33px;
-    line-height: 33px;
-    padding: 0 15px;
-    border-bottom: 1px solid #eaeaea;
-}
-
-#modal-compose .modal .body .input-group .prompt {
-    color: #a9a9a9;
-}
-
-#modal-compose .modal .body .input-group input {
+  height: 33px;
+  line-height: 33px;
+  padding: 0 15px;
+  border-bottom: 1px solid #eaeaea; }
+  #modal-compose .modal .body .input-group .prompt {
+    color: #a9a9a9; }
+  #modal-compose .modal .body .input-group input {
     display: inline-block;
-    border: none;
-}
-
-#modal-compose .modal .body .input-group input#recipient {
-    width: 531px;
-}
-
-#modal-compose .modal .body .input-group input#subject {
-    width: 547px;
-}
+    border: none; }
+  #modal-compose .modal .body .input-group input#recipient {
+    width: 531px; }
+  #modal-compose .modal .body .input-group input#subject {
+    width: 547px; }
 
 #modal-compose .modal .body textarea {
-    padding: 15px;
-    height: calc(100vh - 310px);
-    width: 100%;
-    border: none;
-    resize: none;
-}
+  padding: 15px;
+  height: calc(100vh - 310px);
+  width: 100%;
+  border: none;
+  resize: none; }
 
 /* modal end */

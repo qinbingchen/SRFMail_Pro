@@ -3,11 +3,34 @@ var SRFMailProControllers = angular.module("SRFMailProControllers", []);
 SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cookies",
     function ($scope, $http, $cookies) {
         $scope.login = function () {
-            $http.post(ROOT_URL + "/api/user/login", {
+            //$http.post(ROOT_URL + "/api/user/login", {
+            //    user: "test0",
+            //    password: "test0"
+            //}).success(function (data, status, headers, config) {
+            //    console.log(data);
+            //    console.log(status);
+            //    console.log(headers());
+            //}).error(function (data, status, headers, config) {
+            //    console.log(data);
+            //});
+
+            $.post(ROOT_URL + "/api/user/login", {
+                user: "test0",
+                password: "test0"
+            }, function() {
+                
+            })
+
+        };
+
+        $scope.test_list = function () {
+            $http.get(ROOT_URL + "/api/session/get_list", {
                 user: "test0",
                 password: "test0"
             }).success(function (data, status, headers, config) {
-               
+                console.log(data);
+                console.log(status);
+                console.log(headers());
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
