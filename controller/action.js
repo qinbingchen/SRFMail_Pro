@@ -25,7 +25,14 @@ var dispatcher_dispatch = function(req, res, next) {
         }
     ], function() {
         // spawn sessions iteratively
+        Log.e({
+            readonlyWorkers: readonlyWorkers,
+            readreplyWorkers: readreplyWorkers
+        });
         var workers = readonlyWorkers.concat(readreplyWorkers);
+        Log.e({
+            workers: workers
+        });
         async.each(workers, function(worker, callback) {
             User.model.findOne({
                 username: worker
@@ -38,10 +45,13 @@ var dispatcher_dispatch = function(req, res, next) {
                         dispatcher: currentUser._id,
                         worker: designatedWorker._id,
                         readonly: (readonlyWorkers.indexOf(worker) > -1),
-                        operations: originalSession.operations,
+                        operations: [],
                         status: 1,
                         isRejected: false,
                         isRedirected: false
+                    });
+                    originalSession.operations.forEach(function(row) {
+                        session.operations.push(row);
                     });
                     var operationDict = {
                         type: 1,
