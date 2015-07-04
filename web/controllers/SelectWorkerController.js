@@ -41,7 +41,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             });
         };
 
-        var url = "http://123.57.64.46" + "/api/user/list_workers";
+        var url = ROOT_URL + "/api/user/list_workers";
         $http.get(url).success(function (data) {
             if (data.code == 0) {
                 $scope.workers=data.reviewers;
