@@ -25,11 +25,13 @@ var dispatcher_dispatch = function(req, res, next) {
     ], function() {
         // spawn sessions iteratively
         var workers = readonlyWorkers.concat(readreplyWorkers);
-        workers.forEach(function(worker) {
+        async.each(workers, function(worker, callback) {
             User.model.findOne({
                 username: worker
             }, function(err, designatedWorker) {
-                if (designatedWorker) {
+                if (!designatedWorker) {
+                    callback();
+                } else {
                     var session = new Session.model({
                         income: originalSession.income,
                         dispatcher: currentUser._id,
@@ -40,22 +42,26 @@ var dispatcher_dispatch = function(req, res, next) {
                         isRejected: false,
                         isRedirected: false
                     });
-                    session.operations.push({
+                    var operationDict = {
                         type: 1,
                         operator: currentUser._id,
                         receiver: designatedWorker._id,
                         time: new Date()
+                    };
+                    Log.e({
+                        opDict: operationDict
                     });
+                    session.operations.push(operationDict);
                     session.save(function(err) {
-                        // oh.
+                        callback();
                     });
                 }
             });
-        });
-
-        res.json({
-            "code": 0,
-            "message": "Success"
+        }, function(err) {
+            res.json({
+                "code": 0,
+                "message": "Success"
+            });
         });
     });
 };
