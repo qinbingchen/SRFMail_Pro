@@ -5,6 +5,7 @@ var User = require('../model').user;
 var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
+var Log = require('../lib/log')('[controller-session]');
 
 var dispatcher_dispatch = function(req, res, next) {
     var sessionId = req.body.id;
