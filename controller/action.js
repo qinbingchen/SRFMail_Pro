@@ -65,7 +65,7 @@ var worker_submit = function(req, res, next) {
     var user = req.session.user;
     var subject = req.body.subject;
     var html = req.body.html;
-    var needReview = req.body.needReview;
+    var needReview = req.body.needReview == 'true';
     var reviewerUsername = req.body.reviewer;
 
     var reviewer, session, incomeMail;
@@ -97,24 +97,26 @@ var worker_submit = function(req, res, next) {
             html: html,
             time: new Date()
         });
-        var operationDict = {
-            type: needReview ? 3 : 6,
-            operator: user._id,
-            time: new Date(),
-            mail: repliedMail._id
-        };
-        if (needReview) {
-            operationDict['receiver'] = reviewer._id;
-        }
-        session.status = needReview ? 2 : 3;
-        session.reply = repliedMail._id;
-        session.reviewer = reviewer._id;
-        session.operations.push(operationDict);
+        repliedMail.save(function(err) {
+            var operationDict = {
+                type: needReview ? 3 : 6,
+                operator: user._id,
+                time: new Date(),
+                mail: repliedMail._id
+            };
+            if (needReview) {
+                operationDict['receiver'] = reviewer._id;
+            }
+            session.status = needReview ? 2 : 3;
+            session.reply = repliedMail._id;
+            session.reviewer = reviewer._id;
+            session.operations.push(operationDict);
 
-        session.save(function(err) {
-            res.json({
-                "code": 0,
-                "message": "Success"
+            session.save(function(err) {
+                res.json({
+                    "code": 0,
+                    "message": "Success"
+                });
             });
         });
     });
