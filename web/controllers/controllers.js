@@ -50,11 +50,12 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.$broadcast("show_edit")
         };
 
-        $scope.category_list = CATEGORY_LIST;
-
         $scope.current_user_type = USER_TYPE.DISPATCHER;
         $scope.current_user_id = 0;
         $scope.current_user_name = "";
+
+        $scope.category_list = CATEGORY_LIST;
+        $scope.selected_category = CATEGORY_LIST[$scope.current_user_type].category[0];
 
         $scope.mail_list = [
             {
@@ -69,6 +70,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 content: "ooooooooo"
             }
         ];
+        $scope.filtered_mail_list = [];
         $scope.selected_mail = {};
 
         $scope.show_modal("login");

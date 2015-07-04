@@ -35,20 +35,23 @@ var USER_TYPE = {
 
 var CATEGORY_LIST = [
     {
+        user_type: USER_TYPE.ADMIN,
+        category: []
+    }, {
         user_type: USER_TYPE.DISPATCHER,
         category: [
             {
-                name: "inbox",
-                display_name: "收件箱",
+                name: "pending",
+                display_name: "待分发",
                 before: null
             }, {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "dispatched",
+                display_name: "已分发",
+                before: "pending"
             }, {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "processed",
+                display_name: "已处理",
+                before: "dispatched"
             }
         ]
     }, {
