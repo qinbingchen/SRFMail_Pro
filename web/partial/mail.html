@@ -18,11 +18,11 @@
             <!--<div>helloasd asdasdasdasdasdasdasdasdassda </div>-->
         <!--</div>-->
 
-        <div class="mail-title-style">{{mail_title}}</div>
-        <div class="mail-time-style">{{time}}</div>
-        <div class ="mail-sender-style">{{sender}}</div>
+        <div class="mail-title-style">{{mail_title || "hello liu"}}</div>
+        <div class="mail-time-style">{{time || "2015-04-20"}}</div>
+        <div class ="mail-sender-style">{{sender|| "flyliu@163.com"}}</div>
         <hr/>
-        <div class="mail-content-style">{{content}}</div>
+        <div class="mail-content-style">{{content || "hello"}}</div>
 
 
     </div>
