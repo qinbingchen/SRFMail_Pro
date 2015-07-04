@@ -32,21 +32,6 @@
     color: #bbd3fd;
 }
 
-.title_style,.time_style,.sender_style {
-    margin-left: 20px;
-}
-
-.title_style {
-    margin-top: 25px;
-    font-weight: bold;
-    font-size: 25px;
-}
-
-.time_style{
-    margin-top: 20px;
-    font-size: 15px;
-    color: #006666;
-}
 
 .mail-section .bubble .tri{
     display:block;
@@ -81,4 +66,44 @@
     background-color: #ffffff;
     border: 1px solid #a9a9a9;
     box-shadow: rgba(0, 0, 0, 0.5) 0 1px 3px 0;
+}
+.mail-title-style,.mail-time-style,.mail-sender-style,.mail-content-style{
+    margin-left: 20px;
+
+}
+.mail-title-style{
+    margin-top:10px;
+    font-weight: bold;
+    font-size: 25px;
+}
+.mail-time-style{
+    margin-top: 6px;
+    font-size: 14px;
+    color: #939397;
+}
+.mail-sender-style{
+    margin-top: 6px;
+    font-size:14px;
+
+}
+.sender_id_style{
+    margin-top: 6px;
+    font-size:14px;
+    color: #5e8db4;
+}
+.mail-section hr{
+    margin-left:20px;
+    margin-right: 20px;
+    background-color: #cfcfd3;
+    height: 1px;
+    border: 0;
+}
+.mail-content-style{
+    font-weight:bold;
+    margin-left:20px;
+    border-color: red;
+}
+.mail-section .body{
+    height: calc(100vh - 44px);
+    overflow: scroll;
 }
