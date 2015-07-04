@@ -8,8 +8,12 @@ var Log = require('../lib/log')('[server-send]');
 var client = redis.createClient(settings.redis.port, settings.redis.host);
 
 exports.start = function() {
+    FetchAndSend();
+};
+
+function FetchAndSend() {
     client.BRPOP(['MailQueue', 0], function(err, data) {
-        Mail.model.findById(mongoose.Types.ObjectId(data.toString()), function(err, mail) {
+        Mail.model.findById(mongoose.Types.ObjectId(data[1].toString()), function(err, mail) {
             if(err) {
                 return Log.e(err);
             }
@@ -31,12 +35,13 @@ exports.start = function() {
             //        cid: file.cid
             //    })
             //});
-            MailSender.realSendMail(mail[1], function(err, info) {
+            MailSender.realSendMail(mail, function(err, info) {
                 if(err) {
-                    return Log.e(err);
+                    return Log.e(err)
                 }
+                FetchAndSend()
             })
         })
     })
-};
+}
 
