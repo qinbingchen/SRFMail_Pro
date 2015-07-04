@@ -25,7 +25,14 @@ var dispatcher_dispatch = function(req, res, next) {
         }
     ], function() {
         // spawn sessions iteratively
+        Log.e({
+            readonlyWorkers: readonlyWorkers,
+            readreplyWorkers: readreplyWorkers
+        });
         var workers = readonlyWorkers.concat(readreplyWorkers);
+        Log.e({
+            workers: workers
+        });
         async.each(workers, function(worker, callback) {
             User.model.findOne({
                 username: worker
