@@ -27,8 +27,8 @@ var detail = function(req, res, next) {
             if(err) {
                 Log.e({req: req}, err);
                 return res.json({
-                    code: 123,
-                    message: 'asdf'
+                    code: 1,
+                    message: 'Failed to fetch result'
                 });
             }
             session.dispatcher = session.dispatcher ? session.dispatcher.username : undefined;
@@ -102,8 +102,8 @@ var list = function(req, res, next){
             if (err) {
                 Log.e({req: req}, err);
                 return res.json({
-                    code: 123,
-                    message: 'asdf'
+                    code: 1,
+                    message: 'Failed to fetch result'
                 });
             }
             ret.count = sessions.length;
@@ -134,16 +134,15 @@ var list = function(req, res, next){
 router.use(function(req, res, next) {
     if(!req.session.user) {
         return res.json({
-            code: 123,
-            message: 'asdf'
+            code: 1,
+            message: 'You are not yet logged in'
         });
     }
     User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
         if(err) {
-            Log.e({req: req}, err);
             return res.json({
-                code: 123,
-                message: 'asdf'
+                code: 1,
+                message: 'Invalid user id'
             });
         }
         req.session.user = user;

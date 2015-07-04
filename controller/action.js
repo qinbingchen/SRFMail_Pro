@@ -167,15 +167,15 @@ var reviewer_pass = function(req, res, next) {
 router.use(function(req, res, next) {
     if(!req.session.user) {
         return res.json({
-            code: 123,
-            message: 'asdf'
+            code: 1,
+            message: 'You are not yet logged in'
         });
     }
     User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
         if(err) {
             return res.json({
-                code: 123,
-                message: 'asdf'
+                code: 1,
+                message: 'Invalid user id'
             });
         }
         req.session.user = user;
