@@ -64,7 +64,7 @@ mailListener.on('mail', function(_mail, seqno, attributes){
         }
         var session = new Session.model({
             income: mail._id,
-            status: Session.Status.WaitForDistribute
+            status: Session.Status.New
         });
         session.save(function(err) {});
     });

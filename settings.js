@@ -7,15 +7,15 @@ exports = module.exports = {
     listen: 8888,
     mail: {
         imap: {
-            host: 'imap.qq.com',
+            host: 'imap.163.com',
             port: 993
         },
         smtp: {
-            host: 'smtp.qq.com',
+            host: 'smtp.163.com',
             port: 465
         },
-        username: '',
-        password: ''
+        username: '15652915887@163.com',
+        password: 'tmytmsftpkkflzhm'
     }
 };
 

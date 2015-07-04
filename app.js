@@ -5,13 +5,32 @@ if(cluster.isMaster) {
     var os = require('os');
     var ThreadNum = os.cpus.length > 3 ? os.cpus.length : 3;
     var Threads = [];
+    var Log = require('./lib/log')('[APP]');
     for(i = 0; i < ThreadNum; i++) {
-        Threads.push(cluster.fork())
+        var worker = cluster.fork();
+        Threads.push(worker);
+        setAutoRestart(worker);
     }
     Threads[0].send('receive');
     Threads[1].send('send');
     for(i = 2; i < ThreadNum; i++) {
         Threads[i].send('web');
+    }
+    function setAutoRestart(worker) {
+        worker.on('exit', function (code, signal) {
+            if (signal) {
+                Log.e("worker was killed by signal: " + signal);
+            } else if (code !== 0) {
+                Log.e("worker exited with error code: " + code);
+            } else {
+                Log.d("worker success!");
+            }
+            Threads.slice(Threads.indexOf(worker), 1);
+            worker = cluster.fork();
+            Threads.push(worker);
+            setAutoRestart(worker);
+            worker.send('web');
+        });
     }
 } else {
     var mongoose = require('mongoose');

@@ -47,4 +47,4 @@ app.use(session({
 }));
 
 app.use('/api', require('../controller'));
-app.use('/', express.static(path.join(__dirname, 'web')));
+app.use('/', express.static(path.join(__dirname, '..', 'web')));
