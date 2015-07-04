@@ -1,7 +1,7 @@
 <div class="mail-section" ng-controller="MailController">
     <div class="header">
         <div class="toolbar">
-            <button><i class="fa fa-reply fa-lg"></i></button>
+            <button ng-click="show_dispatch()"><i class="fa fa-reply fa-lg"></i></button>
             <button ng-click="test_list()"><i class="fa fa-flag-o fa-lg"></i></button>
             <button ng-click="login()"><i class="fa fa-trash-o fa-lg"></i></button>
             <button ng-click="show_modal('login')"><i class="fa fa-folder-o fa-lg"></i></button>
@@ -13,18 +13,18 @@
 
     <div class="body">
 
-        <!--<div class="bubble">-->
+       <div class="bubble">
 
-            <!--<div class="tri"></div>-->
-            <!--<div class="tri-inner"></div>-->
-            <!--<div>helloasd asdasdasdasdasdasdasdasdassda </div>-->
-        <!--</div>-->
+            <div class="tri"></div>
+            <div class="tri-inner"></div>
+            <ng-include src="'partial/select-worker.html'"></ng-include>
+        </div>
 
-        <div class="mail-title-style">{{mail_title}}</div>
-        <div class="mail-time-style">{{time}}</div>
-        <div class ="mail-sender-style">{{sender}}</div>
+        <div class="mail-title-style">{{mail_title || "hello liu"}}</div>
+        <div class="mail-time-style">{{time || "2015-04-20"}}</div>
+        <div class ="mail-sender-style">{{sender|| "flyliu@163.com"}}</div>
         <hr/>
-        <div class="mail-content-style">{{content}}</div>
+        <div class="mail-content-style">{{content || "hello"}}</div>
 
 
     </div>

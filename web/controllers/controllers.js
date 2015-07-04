@@ -76,6 +76,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.show_edit = function () {
             $scope.$broadcast("show_edit")
         };
+<<<<<<< HEAD
 
         $scope.partial_load_status = {
             side_bar: false,
@@ -94,6 +95,14 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.ready();
         };
 
+        $scope.show_dispatch=function (){
+            if($(".bubble").css("display")=="none")
+                $(".bubble").show();
+            else
+                $(".bubble").hide();
+        };
+        
+
         $scope.current_user_type = USER_TYPE.DISPATCHER;
         $scope.current_user_id = 0;
         $scope.current_user_name = "";
@@ -101,17 +110,27 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.category_list = CATEGORY_LIST;
         $scope.selected_category = $scope.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[$scope.current_user_type].category[0];
 
-        $scope.mail_list = [
+        $scope.mail_list = [];
+        $scope.mail_list=[
             {
-                sender: "啊啊啊啊啊啊啊",
-                date: "2015/6/29 18:06",
-                title: "操作系统后天考",
-                content: "不想考操作系统"
-            }, {
-                sender: "zuoian",
-                date: "hello",
-                title: "lll",
-                content: "ooooooooo"
+                "id":"123456",
+                "date": "2015/7/4 23:46",
+                "income":{
+                    "from":{
+                        "name":"Susan"
+                    },
+                    "subject": "hello"
+                }
+            },
+            {
+                "id":"123457",
+                "date": "2015/7/4 23:47",
+                "income":{
+                    "from":{
+                        "name":"Flavia"
+                    },
+                    "subject": "Guten Tag"
+                }
             }
         ];
         $scope.filtered_mail_list = [];

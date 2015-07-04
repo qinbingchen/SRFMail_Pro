@@ -7,13 +7,13 @@
     </div>
     <div class="body">
         <ul class="mail-list">
-            <li class="mail" ng-repeat="mail in mail_list">
+            <li class="mail" ng-repeat="mail in mail_list"   ng-class="changeClass(mail)" ng-click="selectMail(mail)">
                 <p class="first-row">
-                    <a class="sender">{{mail.sender}}</a>
+                    <a class="sender">{{mail.income.from.name}}</a>
                     <a class="date">{{mail.date}}</a>
                 </p>
-                <p class="mail-title">{{mail.title}}</p>
-                <p class="text-preview">{{mail.content}}</p>
+                <p class="mail-title">{{mail.income.subject}}</p>
+                <!--<p class="text-preview">{{mail.content}}</p>-->
                 
             </li>
             
