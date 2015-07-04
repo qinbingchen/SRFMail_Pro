@@ -2,17 +2,44 @@ var SRFMailProControllers = angular.module("SRFMailProControllers", []);
 
 SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cookies",
     function ($scope, $http, $cookies) {
-        $scope.login = function () {
+        $scope.ready = function () {
+            setTimeout(function () {
+                if ($cookies.get("connect.sid") == null) {
+                    $scope.show_modal("login");
+                    console.log("123");
+                } else {
+                    console.log("456");
+                    $http.get(ROOT_URL + "/api/session/get_list")
+                        .success(function (data, status, headers, config) {
+                            $scope.mail_list = data["sessions"];
+                            $scope.dismiss_modal();
+                        }).error(function (data, status, headers, config) {
+                            console.log(data);
+                        });
+                }
+            }, 0);
+        };
+
+        $scope.login = function (username, password) {
             $http.post(ROOT_URL + "/api/user/login", {
-                user: "test0",
-                password: "test0"
+                user: username,
+                password: password
             }).success(function (data, status, headers, config) {
-                console.log(data);
-                console.log(status);
-                console.log(headers());
+                $http.get(ROOT_URL + "/api/session/get_list")
+                    .success(function (data, status, headers, config) {
+                        $scope.mail_list = data["sessions"];
+                        $scope.dismiss_modal();
+                    }).error(function (data, status, headers, config) {
+                        console.log(data);
+                    });
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
+        };
+
+        $scope.logout = function () {
+           $cookies.remove("connect.sid");
+           location.reload()
         };
 
         $scope.test_list = function () {
@@ -50,12 +77,29 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.$broadcast("show_edit")
         };
 
+        $scope.partial_load_status = {
+            side_bar: false,
+            mail_list: false,
+            mail: false,
+            modal_login: false,
+            modal_compose: false
+        };
+
+        $scope.check_partial_load_status = function () {
+            for (var i in $scope.partial_load_status) {
+                if ($scope.partial_load_status[i] == false) {
+                    return;
+                }
+            }
+            $scope.ready();
+        };
+
         $scope.current_user_type = USER_TYPE.DISPATCHER;
         $scope.current_user_id = 0;
         $scope.current_user_name = "";
 
         $scope.category_list = CATEGORY_LIST;
-        $scope.selected_category = CATEGORY_LIST[$scope.current_user_type].category[0];
+        $scope.selected_category = $scope.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[$scope.current_user_type].category[0];
 
         $scope.mail_list = [
             {
@@ -71,9 +115,10 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             }
         ];
         $scope.filtered_mail_list = [];
-        $scope.selected_mail = {};
+        $scope.selected_mail = "";
 
-        $scope.show_modal("login");
+
+
     }]);
 
 SRFMailProControllers.controller("ModalController", ["$scope", "$http", "$cookies",
@@ -85,11 +130,19 @@ SRFMailProControllers.controller("ModalController", ["$scope", "$http", "$cookie
 
 SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$cookies",
     function ($scope, $http, $cookies) {
+        $scope.partial_load_status.modal_login = true;
+        $scope.check_partial_load_status();
 
+        $scope.submit = function () {
+            $scope.login(username, password)
+        }
     }]);
 
 SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "$cookies",
     function ($scope, $http, $cookies) {
+        $scope.partial_load_status.modal_compose = true;
+        $scope.check_partial_load_status();
+
         $scope.$on("show_compose", function () {
 
         });

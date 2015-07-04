@@ -6,6 +6,8 @@
             <button ng-click="login()"><i class="fa fa-trash-o fa-lg"></i></button>
             <button ng-click="show_modal('login')"><i class="fa fa-folder-o fa-lg"></i></button>
             <button ng-click="show_modal('compose')"><i class="fa fa-edit fa-lg"></i></button>
+            <span class="right">{{current_user_name}}</span>
+            <button class="right" ng-click="logout()">登出</button>
         </div>
     </div>
 

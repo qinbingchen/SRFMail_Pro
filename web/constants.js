@@ -42,50 +42,41 @@ var CATEGORY_LIST = [
         category: [
             {
                 name: "pending",
-                display_name: "待分发",
-                before: null
+                display_name: "待分发"
             }, {
                 name: "dispatched",
-                display_name: "已分发",
-                before: "pending"
+                display_name: "已分发"
             }, {
                 name: "processed",
-                display_name: "已处理",
-                before: "dispatched"
+                display_name: "已处理"
             }
         ]
     }, {
         user_type: USER_TYPE.WORKER,
         category: [
             {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "pending",
+                display_name: "未处理"
             }, {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "waiting_for_review",
+                display_name: "已提交审核"
             }, {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "success",
+                display_name: "已处理"
             }
         ]
     }, {
         user_type: USER_TYPE.REVIEWER,
         category: [
             {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "pending",
+                display_name: "未审核"
             }, {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "sent",
+                display_name: "已发送"
             }, {
-                name: "inbox",
-                display_name: "收件箱",
-                before: "inbox"
+                name: "rejected",
+                display_name: "已退回"
             }
         ]
     }

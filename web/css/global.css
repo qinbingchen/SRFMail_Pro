@@ -105,8 +105,8 @@ textarea {
     height: 48px;
     margin: 0 auto;
     padding: 15px 10px;
-    border: 1px solid rgba(26, 26, 26, 0.8);
-    background-color: rgba(255, 255, 255, 0.8); }
+    border: 1px solid rgba(26, 26, 26, 0.7);
+    background-color: rgba(255, 255, 255, 0.7); }
   #modal-login .modal .body input:focus {
     border-color: #1780fb; }
   #modal-login .modal .body input#username {
@@ -121,6 +121,13 @@ textarea {
     border-bottom-right-radius: 6px; }
   #modal-login .modal .body input#password:focus {
     border-top: 1px solid #1780fb; }
+  #modal-login .modal .body button {
+    position: relative;
+    left: 430px;
+    top: -42px;
+    background: none;
+    border: none;
+    color: rgba(26, 26, 26, 0.7); }
 
 #modal-compose .modal .body .input-group {
   height: 33px;
