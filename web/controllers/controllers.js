@@ -49,7 +49,14 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.show_edit = function () {
             $scope.$broadcast("show_edit")
         };
-
+        
+        $scope.show_dispatch=function (){
+            if($(".bubble").css("display")=="none")
+                $(".bubble").show();
+            else
+                $(".bubble").hide();
+        }
+        
         $scope.category_list = CATEGORY_LIST;
 
         $scope.current_user_type = USER_TYPE.DISPATCHER;
