@@ -62,21 +62,16 @@ var dispatcher_dispatch = function(req, res, next) {
 
 var worker_submit = function(req, res, next) {
     var sessionId = req.body.id;
-    var userId = req.session.user;
+    var user = req.session.user;
     var subject = req.body.subject;
     var html = req.body.html;
     var needReview = req.body.needReview;
     var reviewerUsername = req.body.reviewer;
 
-    var user, reviewer, session, incomeMail;
+    var reviewer, session, incomeMail;
 
     async.series([
         function(callback) {
-            User.model.findById(mongoose.Types.ObjectId(userId), function(err, _user) {
-                user = _user;
-                callback(err, 'get operating user');
-            });
-        }, function(callback) {
             User.model.findOne({ username: reviewerUsername }, function(err, _reviewer) {
                 reviewer = _reviewer;
                 callback(err, 'get designated reviewer');
@@ -125,16 +120,10 @@ var worker_submit = function(req, res, next) {
 
 var reviewer_pass = function(req, res, next) {
     var sessionId = req.body.id;
-    var userId = req.session.user;
-    var user, session, mail;
+    var user = req.session.user;
+    var session, mail;
 
     async.series([
-        function(callback) {
-            User.model.findById(mongoose.Types.ObjectId(userId), function(err, _user) {
-                user = _user;
-                callback(err, 'get operating user');
-            });
-        },
         function(callback) {
             Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, _session) {
                 session = _session;
