@@ -42,7 +42,23 @@ var logout = function(req, res, next) {
     });
 };
 
+var list_reviewers = function(req, res, next) {
+    var list = {
+        reviewers: []
+    };
+    User.model.find({
+        role: 3
+    }, function(err, reviewers) {
+        reviewers.forEach(function(reviewer) {
+            list.reviewers.push(reviewer.username);
+        });
+
+        res.json(list);
+    });
+};
+
 router.route('/login').post(login);
 router.route('/logout').post(logout);
+router.route('/list_reviewers').get(list_reviewers);
 
 exports = module.exports = router;

@@ -54,7 +54,7 @@ var list = function(req, res, next){
     var ret = {
         count: 0,
         sessions: []
-    }
+    };
     var query_dispatcher_user_name = req.query.dispatcherUserName;
     var query_worker_user_name = req.query.workerUserName;
     var query_readonly = req.query.readonly;
@@ -62,7 +62,7 @@ var list = function(req, res, next){
     var query_status = req.query.status;
     var query_is_rejected = req.query.isRejected;
     var query_is_redirected = req.query.isRedirected;
-    var find_key = {}
+    var find_key = {};
     if(query_status){
         find_key.status = query_status
     }
@@ -128,7 +128,7 @@ var list = function(req, res, next){
             });
             res.json(ret);
     })
-}
+};
 
 
 router.use(function(req, res, next) {
