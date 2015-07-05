@@ -3,6 +3,7 @@ var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
 var router = new require('express').Router();
+var Log = require('../lib/log')('[controller-user]');
 
 var login = function(req, res, next) {
     User.model.findOne({
@@ -10,15 +11,16 @@ var login = function(req, res, next) {
         password: req.body.password
     }).populate('defaultReviewer', 'username').exec(function(err, user) {
         if(err) {
+            Log.e({req: req}, err);
             return res.json({
                 code: 123,
-                message: 'asdf'
+                message: 'Internal error'
             });
         }
         if(!user) {
             return res.json({
                 code: 123,
-                message: 'asdf'
+                message: 'Invalid username or password'
             });
         }
         req.session.user = user;
