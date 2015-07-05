@@ -11,7 +11,11 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
                 {
                     readreply+=",\""+readreply_selected[i]+"\"";
                 }
-                readreply+="]"
+                readreply+="]";
+            }
+            else
+            {
+                readreply="[]";
             }
 
             var readonly_selected = $("#readonly").select2("val");
@@ -22,9 +26,13 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
                 {
                     readonly+=",\""+readonly_selected[i]+"\"";
                 }
-                readonly+="]"
+                readonly+="]";
             }
-
+            else
+            {
+                readonly="[]";
+            }
+            
             var url = ROOT_URL + "/api/action/dispatcher/dispatch";
             $http.post(url, {
                 id: $scope.$parent.$parent.selected_mail,
