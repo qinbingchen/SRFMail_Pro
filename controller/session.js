@@ -37,7 +37,7 @@ var detail = function(req, res, next) {
             session.operations.forEach(function(row) {
                 row.operator = row.operator.username;
                 row.receiver = row.receiver.username;
-                if(row.mail.attachments) {
+                if(row.mail && row.mail.attachments) {
                     row.mail.attachments.forEach(function(attachment, index) {
                         row.mail.attachments[index] = {
                             title: attachment.filename,
