@@ -55,41 +55,41 @@ var list = function(req, res, next){
         count: 0,
         sessions: []
     };
-    var query_dispatcher_user_name = req.query.dispatcherUserName;
-    var query_worker_user_name = req.query.workerUserName;
-    var query_readonly = req.query.readonly;
-    var query_reviewer_user_name = req.query.reviewer;
-    var query_status = req.query.status;
-    var query_is_rejected = req.query.isRejected;
-    var query_is_redirected = req.query.isRedirected;
+    var queryDispatcherUserName = req.query.dispatcherUserName;
+    var queryWorkerUserName = req.query.workerUserName;
+    var queryReadonly = req.query.readonly;
+    var queryReviewerUserName = req.query.reviewer;
+    var queryStatus = req.query.status;
+    var queryIsRejected = req.query.isRejected;
+    var queryIsRedirected = req.query.isRedirected;
     var find_key = {};
-    if(query_status){
-        find_key.status = query_status
+    if(queryStatus){
+        find_key.status = queryStatus
     }
-    if(query_is_rejected){
-        find_key.isRejected = query_is_rejected;
+    if(queryIsRejected){
+        find_key.isRejected = queryIsRejected;
     }
-    if(query_is_redirected){
-        find_key.isRedirected = query_is_redirected;
+    if(queryIsRedirected){
+        find_key.isRedirected = queryIsRedirected;
     }
-    if(query_readonly){
-        find_key.readonly = query_readonly
+    if(queryReadonly){
+        find_key.readonly = queryReadonly
     }
-    if(query_dispatcher_user_name) {
+    if(queryDispatcherUserName) {
         find_key.dispatcher = User.model.findOne({
-            username: query_dispatcher_user_name,
+            username: queryDispatcherUserName,
             role: User.Role.Dispatcher
         })._id
     }
-    if(query_worker_user_name){
+    if(queryWorkerUserName){
         find_key.worker = User.model.findOne({
-            username: query_worker_user_name,
+            username: queryWorkerUserName,
             role: User.Role.Worker
         })._id
     }
-    if(query_reviewer_user_name){
+    if(queryReviewerUserName){
         find_key.reviewer = User.model.findOne({
-            username: query_reviewer_user_name,
+            username: queryReviewerUserName,
             role: User.Role.Reviewer
         })._id
     }
@@ -127,6 +127,9 @@ var list = function(req, res, next){
                 };
                 ret.sessions.push(list_element);
             });
+            ret.sort(function(a, b){
+                return a.income.time.getTime() < b.income.time.getTime();
+            })
             res.json(ret);
     })
 };
