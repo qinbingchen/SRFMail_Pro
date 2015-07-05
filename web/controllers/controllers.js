@@ -76,7 +76,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.show_edit = function () {
             $scope.$broadcast("show_edit")
         };
-
+        
+        
+       
         $scope.partial_load_status = {
             side_bar: false,
             mail_list: false,
@@ -95,13 +97,10 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         };
 
         $scope.show_dispatch=function (){
-            if($(".bubble").css("display")=="none")
-                $(".bubble").show();
-            else
-                $(".bubble").hide();
+            dispatch_show=!dispatch_show;
         };
         
-
+        $scope.dispatch_show=false;
         $scope.current_user_type = USER_TYPE.DISPATCHER;
         $scope.current_user_id = 0;
         $scope.current_user_name = "";
@@ -130,7 +129,9 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
         $scope.check_partial_load_status();
 
         $scope.submit = function () {
-            $scope.login(username, password)
+            console.log("username: " + $scope.username);
+            console.log("password: " + $scope.password);
+            $scope.login($scope.username, $scope.password)
         }
     }]);
 
