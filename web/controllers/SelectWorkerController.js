@@ -41,9 +41,23 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             });
         };
 
-        var url = ROOT_URL + "/api/user/list_workers";
-        $http.get(url).success(function (data) {
-                $scope.workers=data.reviewers;
+        var url_workers = ROOT_URL + "/api/user/list_workers";
+        $http.get(url_workers).success(function (data) {
+            if (data.code == 0) {
+                $scope.workers=data.workers;
+            } else {
+                console.log(data);
+            }
+        }).error(function (data, status, headers, config) {
+            console.log(data);
+    });
+
+        var url_reviewers = ROOT_URL + "/api/user/list_reviewers";
+        $http.get(url_reviewers).success(function (data) {
+            if (data.code == 0) {
+                $scope.reviewers=data.reviewers;
+            } else {
+                console.log(data);
             }
         }).error(function (data, status, headers, config) {
             console.log(data);
