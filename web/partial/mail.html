@@ -21,11 +21,11 @@
             <ng-include src="'partial/select-worker.html'"></ng-include>
         </div>
 
-        <div class="mail-title-style">{{mail_title}}</div>
-        <div class="mail-time-style">{{time}}</div>
-        <div class ="mail-sender-style">{{sender}}</div>
+        <div class="mail-title-style">{{mail.income.subject}}</div>
+        <div class="mail-time-style">{{mail.income.time}}</div>
+        <div class ="mail-sender-style">{{mail.income.from[0].address}}</div>
         <hr/>
-        <div class="mail-content-style">{{content}}</div>
+        <div class="mail-content-style">{{mail.income.html}}</div>
 
 
     </div>
