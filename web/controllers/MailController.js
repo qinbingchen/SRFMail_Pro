@@ -26,6 +26,11 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     //$scope.content=mail.mail.html;
 
                     $scope.mail=data;
+                    console.log("data is"+data);
+                    console.log(data.income.subject);
+                    console.log(data.income.time);
+                    console.log(data.income.from[0].address);
+                    console.log(data.income.html);
 
                 } else {
                     console.log("code is "+data.code);
