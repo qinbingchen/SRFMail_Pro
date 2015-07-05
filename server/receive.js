@@ -78,8 +78,25 @@ mailListener.on('mail', function(_mail, seqno, attributes){
 });
 
 mailListener.on('attachment', function(attachment) {
+    var p = attachment.contentId.split(path.sep).slice(0, -1).join(path.sep);
+    if(p.length > 0) {
+        mkdirs(p);
+    }
     var stream = fs.createWriteStream(path.join(__dirname, '../attachments', attachment.contentId));
     attachment.stream.pipe(stream);
 });
+
+var mkdirs = function (dirpath, mode, callback) {
+    fs.exists(dirpath, function(exists) {
+        if(exists) {
+            callback(dirpath);
+        } else {
+            //尝试创建父目录，然后再创建当前目录
+            mkdirs(path.dirname(dirpath), mode, function(){
+                fs.mkdir(dirpath, mode, callback);
+            });
+        }
+    });
+};
 
 exports.start = mailListener.start.bind(mailListener);
