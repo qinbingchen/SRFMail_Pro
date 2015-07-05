@@ -32,6 +32,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
                 readreply: readreply
             }).success(function (data, status, headers, config) {
                 if (data.status == 0) {
+                    location.reload();
                 } else {
                     console.log(data);
                 }
