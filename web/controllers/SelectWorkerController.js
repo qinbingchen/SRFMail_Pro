@@ -39,11 +39,6 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
-            alert({
-                id: $scope.$parent.$parent.selected_mail,
-                readonly: readonly,
-                readreply: readreply
-            }.toString());
         };
 
         
