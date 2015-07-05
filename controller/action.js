@@ -48,6 +48,13 @@ var dispatcher_dispatch = function(req, res, next) {
             });
         }
 
+        if (!originalSession) {
+            return res.json({
+                code: 1,
+                message: "Session with ID not found"
+            });
+        }
+
         if (originalSession.status != 0) {
             return res.json({
                 code: 1,
