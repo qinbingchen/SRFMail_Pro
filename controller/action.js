@@ -107,18 +107,17 @@ var dispatcher_dispatch = function(req, res, next) {
                 });
             } else {
                 Session.model.findByIdAndRemove(mongoose.Types.ObjectId(sessionId), function(err) {
-                    if(err) {
-                        Log.e(err);
-                        res.json({
+                    if (err) {
+                        return res.json({
                             code: 1,
                             message: err.toString()
                         });
-                        return;
+                    } else {
+                        return res.json({
+                            code: 0,
+                            message: "Success; Workers " + effectiveWorkers.join(", ") + " designated."
+                        });
                     }
-                    res.json({
-                        code: 0,
-                        message: "Success; Workers " + effectiveWorkers.join(", ") + " designated."
-                    });
                 });
             }
         });
@@ -280,14 +279,15 @@ var worker_pass = function(req, res, next) {
         }, function(err) {
             if (err) {
                 return res.json({
-                    code: 0,
+                    code: 1,
                     message: err.toString()
                 })
+            } else {
+                return res.json({
+                    code: 0,
+                    message: 'success'
+                })
             }
-            res.json({
-                code: 0,
-                message: 'success'
-            })
         })
     });
 };
@@ -375,7 +375,7 @@ router.use(function(req, res, next) {
         if (err || !user) {
             return res.json({
                 code: 1,
-                message: 'Invalid user id ' + req.session.user._id
+                message: "Couldn't find user with ID " + req.session.user._id
             });
         }
         req.session.user = user;
