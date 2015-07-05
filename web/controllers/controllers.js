@@ -42,8 +42,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
            location.reload()
         };
 
-        $scope.$on("mail_selected", function () {
-            $scope.$broadcast("mail_selected");
+        $scope.$on("emit_mail_selected", function () {
+            console.log("dispatch mail selected");
+            $scope.$broadcast("broadcast_mail_selected");
         });
 
         $scope.show_modal = function (name) {

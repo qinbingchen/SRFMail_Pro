@@ -12,7 +12,8 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         //$scope.sender = $scope.selected_mail.from.address;
         //$scope.content=$scope.selected_mail.html;
 
-        $scope.$on("mail_selected", function () {
+        $scope.$on("broadcast_mail_selected", function () {
+            console.log("received mail selected");
             var url = ROOT_URL + "/api/session/get_detail" + "?id=" + $scope.selected_mail;
             $http.get(url).success(function (data) {
                 if (data.code == 0) {
@@ -21,7 +22,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     $scope.mail_title =mail.mail.subject;
                     $scope.time=mail.time;
                     $scope.sender=mail.operator;
-                    $scope.content=mail.mail.html
+                    $scope.content=mail.mail.html;
                 } else {
                     console.log(data);
 

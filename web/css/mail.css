@@ -50,8 +50,9 @@
 
 .mail-section .bubble {
   overflow: visible;
-  position: relative;
-  top: 20px;
+  position: fixed;
+  top: 50px;
+  width:355px;
   display: inline-block;
   padding: 5px 10px;
   background-color: #ffffff;
