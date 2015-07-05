@@ -59,7 +59,7 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
             });
 
             $scope.$parent.filtered_mail_list = $scope.filtered_mail_list;
-            $scope.$rootScope.filtered_mail_list = $scope.filtered_mail_list;
+            //$scope.$rootScope.filtered_mail_list = $scope.filtered_mail_list;
 
             console.log($scope.$rootScope.filtered_mail_list);
             console.log($scope.$parent.filtered_mail_list);
