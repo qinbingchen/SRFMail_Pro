@@ -40,7 +40,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
                 }
             }).error(function (data, status, headers, config) {
-                console.log(data);
+                console.log("error is"+data);
 
             });
         });
