@@ -1,5 +1,5 @@
-SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies",
-    function ($scope, $http, $cookies) {
+SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies", "$sanitize",
+    function ($scope, $http, $cookies, $sanitize) {
         $scope.partial_load_status.mail = true;
         $scope.check_partial_load_status();
 

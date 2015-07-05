@@ -1,5 +1,6 @@
 var SRFMailProApp = angular.module("SRFMailProApp", [
     "ngCookies",
+    "ngSanitize",
     "SRFMailProControllers"
 ]);
 
