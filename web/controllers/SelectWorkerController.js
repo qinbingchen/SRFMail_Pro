@@ -2,7 +2,6 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
     function ($scope, $http, $cookies) {
 
         $scope.sendDispatch=function(){
-            var sessionID=1;
 
             var readreply_selected = $("#readreply").select2("val");
             if(readreply_selected.length>0)
@@ -28,7 +27,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
 
             var url = ROOT_URL + "/api/action/dispatcher/dispatch";
             $http.post(url, {
-                id: sessionID,
+                id: $scope.selected_mail,
                 readonly: readonly,
                 readreply: readreply
             }).success(function (data, status, headers, config) {
