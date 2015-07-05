@@ -27,7 +27,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
 
             var url = ROOT_URL + "/api/action/dispatcher/dispatch";
             $http.post(url, {
-                id: $scope.selected_mail,
+                id: $scope.$parent.$parent.selected_mail,
                 readonly: readonly,
                 readreply: readreply
             }).success(function (data, status, headers, config) {
