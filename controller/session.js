@@ -51,6 +51,12 @@ var detail = function(req, res, next) {
                 income: session.income,
                 reply: session.reply
             };
+            if(!ret.income.html) {
+                ret.income.html = '<p>' + ret.income.text + '</p>'
+            }
+            if(ret.reply && !ret.reply.html) {
+                ret.reply.html = '<p>' + ret.income.text + '</p>'
+            }
             session.operations.forEach(function(row) {
                 var op = {
                     operator: row.operator.username,
@@ -151,15 +157,17 @@ var list = function(req, res, next){
                         labels: session.income.labels,
                         deadline: session.income.deadline,
                         time: session.income.time
-                    },
-                    reply: {
+                    }
+                };
+                if(session.reply) {
+                    list_element.reply = {
                         subject: session.reply.subject,
                         from: session.reply.from,
                         labels: session.reply.labels,
                         deadline: session.reply.deadline,
                         time: session.reply.time
                     }
-                };
+                }
                 ret.sessions.push(list_element);
             });
             ret.sessions.sort(function (a, b){
