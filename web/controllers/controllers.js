@@ -48,7 +48,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.$on("emit_category_selected", function() {
             console.log($scope.filtered_mail_list);
             $scope.$broadcast("broadcast_category_selected");
-        };
+        });
 
         $scope.$on("emit_mail_selected", function () {
             console.log("dispatch mail selected");
