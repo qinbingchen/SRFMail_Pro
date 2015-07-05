@@ -10,7 +10,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                     $http.get(ROOT_URL + "/api/session/get_list")
                         .success(function (data, status, headers, config) {
                             $scope.mail_list = data["sessions"];
-                            $scope.dismiss_modal();
+                            $scope.reload_mail();
                         }).error(function (data, status, headers, config) {
                             console.log(data);
                         });
@@ -23,19 +23,15 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 user: username,
                 password: password
             }).success(function (data, status, headers, config) {
-                $cookies.put("user_type", data.role);
-                $cookies.put("user_id", data.id);
-                $cookies.put("user_name", data.name);
-                $scope.current_user_type = data.role;
-                $scope.current_user_id = data.id;
-                $scope.current_user_name = data.name;
-                $http.get(ROOT_URL + "/api/session/get_list")
-                    .success(function (data, status, headers, config) {
-                        $scope.mail_list = data["sessions"];
-                        $scope.dismiss_modal();
-                    }).error(function (data, status, headers, config) {
-                        console.log(data);
-                    });
+                if (data.code == 0) {
+                    $cookies.put("user_type", data.role);
+                    $cookies.put("user_id", data.id);
+                    $cookies.put("user_name", data.name);
+                    $scope.current_user_type = data.role;
+                    $scope.current_user_id = data.id;
+                    $scope.current_user_name = data.name;
+                    $scope.reload_mail();
+                }
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
@@ -47,6 +43,17 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $cookies.remove("user_id");
             $cookies.remove("user_name");
             location.reload()
+        };
+
+        $scope.reload_mail = function () {
+            $http.get(ROOT_URL + "/api/session/get_list")
+                .success(function (data, status, headers, config) {
+                    $scope.mail_list = data["sessions"];
+                    $scope.$broadcast("reload_mail");
+                    $scope.dismiss_modal();
+                }).error(function (data, status, headers, config) {
+                    console.log(data);
+                });
         };
 
         $scope.$on("emit_category_selected", function() {
@@ -86,7 +93,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $http.post(ROOT_URL + "/api/action/worker/pass", {
                 id: $scope.selected_mail
             }).success(function (data, status, headers, config) {
-
+                $scope.reload_mail();
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });

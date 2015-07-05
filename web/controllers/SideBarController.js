@@ -59,13 +59,10 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
             });
 
             $scope.$parent.$parent.filtered_mail_list = filtered_mail_list;
-
-            //$scope.$parent.filtered_mail_list = filtered_mail_list;
-            //$scope.filtered_mail_list = filtered_mail_list;
-            //$scope.$rootScope.filtered_mail_list = $scope.filtered_mail_list;
-
-            //console.log($scope.$rootScope.filtered_mail_list);
-            console.log($scope);
             $scope.$emit("emit_category_selected");
-        }
+        };
+
+        $scope.$on("reload_mail", function () {
+            $scope.select_category($scope.selected_category);
+        })
     }]);
