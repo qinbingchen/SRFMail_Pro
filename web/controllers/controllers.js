@@ -4,9 +4,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
     function ($scope, $http, $cookies) {
         $scope.ready = function () {
             setTimeout(function () {
-                if ($cookies.get("connect.sid") == null) {
-                    console.log("no cookie");
-                    console.log($cookies.get("connect.sid"));
+                if ($cookies.get("user_type") == null) {
                     $scope.show_modal("login");
                 } else {
                     $http.get(ROOT_URL + "/api/session/get_list")
@@ -25,6 +23,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 user: username,
                 password: password
             }).success(function (data, status, headers, config) {
+                $cookies.put("user_type", data.role);
+                $cookies.put("user_id", data.id);
+                $cookies.put("user_name", data.name);
                 $scope.current_user_type = data.role;
                 $scope.current_user_id = data.id;
                 $scope.current_user_name = data.name;
@@ -41,8 +42,11 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         };
 
         $scope.logout = function () {
-           $cookies.remove("connect.sid");
-           location.reload()
+            $cookies.remove("connect.sid");
+            $cookies.remove("user_type");
+            $cookies.remove("user_id");
+            $cookies.remove("user_name");
+            location.reload()
         };
 
         $scope.$on("emit_category_selected", function() {
@@ -80,7 +84,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
 
         $scope.check = function () {
             $http.post(ROOT_URL + "/api/action/worker/pass", {
-                id: $scope.selected_mail,
+                id: $scope.selected_mail
             }).success(function (data, status, headers, config) {
 
             }).error(function (data, status, headers, config) {
