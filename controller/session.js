@@ -47,7 +47,9 @@ var detail = function(req, res, next) {
                 status: session.status,
                 isRejected: session.isRejected,
                 isRedirected: session.isRedirected,
-                readonly: session.readonly
+                readonly: session.readonly,
+                income: session.income,
+                reply: session.reply
             };
             session.operations.forEach(function(row) {
                 var op = {
@@ -123,6 +125,7 @@ var list = function(req, res, next){
         .populate('worker', 'username')
         .populate('reviewer', 'username')
         .populate('income')
+        .populate('reply')
         .exec(function(err, sessions){
             if (err) {
                 Log.e({req: req}, err);
@@ -148,6 +151,13 @@ var list = function(req, res, next){
                         labels: session.income.labels,
                         deadline: session.income.deadline,
                         time: session.income.time
+                    },
+                    reply: {
+                        subject: session.reply.subject,
+                        from: session.reply.from,
+                        labels: session.reply.labels,
+                        deadline: session.reply.deadline,
+                        time: session.reply.time
                     }
                 };
                 ret.sessions.push(list_element);
