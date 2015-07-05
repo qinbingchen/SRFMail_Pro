@@ -4,8 +4,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.check_partial_load_status();
 
         $scope.$on("broadcast_mail_selected", function () {
-            console.log("received mail selected");
-            console.log($scope.$parent.$parent.selected_mail);
             var url = ROOT_URL + "/api/session/get_detail" + "?id=" + $scope.$parent.$parent.selected_mail;
             $http.get(url)
                 .success(function (data,status, headers, config) {

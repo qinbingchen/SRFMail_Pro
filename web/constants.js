@@ -1,4 +1,4 @@
-var ROOT_URL = "http://123.57.64.46:8888";
+var ROOT_URL = "/";
 
 var STATUS = {
     NEW: 0,

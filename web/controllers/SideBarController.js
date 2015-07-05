@@ -6,11 +6,7 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
         $scope.select_category = function (category) {
             $scope.selected_category = category;
 
-            console.log("user type:" + $scope.current_user_type);
-            console.log("selected: " + $scope.selected_category);
-
-            var filtered_mail_list = $scope.mail_list.filter(function (mail) {
-                console.log(mail);
+            $scope.$parent.$parent.filtered_mail_list = $scope.mail_list.filter(function (mail) {
                 switch ($scope.current_user_type) {
                     case USER_TYPE.DISPATCHER:
                         switch ($scope.selected_category.name) {
@@ -66,6 +62,8 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
         };
 
         $scope.$on("reload_mail", function () {
-            $scope.select_category($scope.selected_category);
+            if ($scope.select_category != null) {
+                $scope.select_category($scope.selected_category);
+            }
         })
     }]);
