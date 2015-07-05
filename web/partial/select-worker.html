@@ -3,12 +3,10 @@
 		<select placeholder="选择处理人" class="select-workers" id="readreply" multiple="multiple">
 				<option value="{{worker}}" ng-repeat="worker in workers">{{worker}}</option>
 		</select>
-
 		<select placeholder="选择查看人" class="select-workers" id="readonly" multiple="multiple">
 			<option value="{{worker}}" ng-repeat="worker in workers">{{worker}}</option>
 		</select>
-
-		<a class="btn">取消</a>
+		<a class="btn" ng-click="show_dispatch()">取消</a>
 		<a class="btn" ng-click="sendDispatch()">确认</a>
 	</div>
 </div>
