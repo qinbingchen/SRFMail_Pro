@@ -6,6 +6,10 @@
     "type": "git",
     "url": "git://github.com/qinbingchen/SRFMail_Pro.git"
   },
+  "scripts": {
+    "localstart": "node localapp.js",
+    "start": "node app.js"
+  },
   "dependencies": {
     "async": "^1.2.1",
     "body-parser": "^1.13.1",
