@@ -12,6 +12,8 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         //$scope.sender = $scope.selected_mail.from.address;
         //$scope.content=$scope.selected_mail.html;
 
+        $
+
         $scope.$on("broadcast_mail_selected", function () {
             console.log("received mail selected");
             console.log($scope.$parent.$parent.selected_mail);
@@ -24,6 +26,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     $scope.time=mail.time;
                     $scope.sender=mail.operator;
                     $scope.content=mail.mail.html;
+                    console.log($scope);
                 } else {
                     console.log(data);
 
