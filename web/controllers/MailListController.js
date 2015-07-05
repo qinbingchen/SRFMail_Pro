@@ -7,6 +7,7 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
             console.log(mail);
             console.log(mail.id);
             $scope.selected_mail = mail.id;
+            $scope.$emit("mail_selected");
         };
 
         $scope.changeClass=function(mail){

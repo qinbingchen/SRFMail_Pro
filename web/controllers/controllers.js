@@ -42,18 +42,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
            location.reload()
         };
 
-        $scope.test_list = function () {
-            $http.get(ROOT_URL + "/api/session/get_list", {
-                user: "test0",
-                password: "test0"
-            }).success(function (data, status, headers, config) {
-                console.log(data);
-                console.log(status);
-                console.log(headers());
-            }).error(function (data, status, headers, config) {
-                console.log(data);
-            });
-        };
+        $scope.$on("mail_selected", function () {
+            $scope.$broadcast("mail_selected");
+        });
 
         $scope.show_modal = function (name) {
             $("#modal-" + name).addClass("show");

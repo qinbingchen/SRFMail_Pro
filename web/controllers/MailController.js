@@ -12,23 +12,25 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         //$scope.sender = $scope.selected_mail.from.address;
         //$scope.content=$scope.selected_mail.html;
 
+        $scope.$on("mail_selected", function () {
+            var url = ROOT_URL + "/api/session/get_detail" + "?id=" + $scope.selected_mail;
+            $http.get(url).success(function (data) {
+                if (data.code == 0) {
+                    var length = data.operations.length;
+                    var mail = data.operations[length - 1];
+                    $scope.mail_title =mail.mail.subject;
+                    $scope.time=mail.time;
+                    $scope.sender=mail.operator;
+                    $scope.content=mail.mail.html
+                } else {
+                    console.log(data);
 
-
-        var url = ROOT_URL + "/api/session/get_detail" + "?id=" + $scope.selected_mail;
-        $http.get(url).success(function (data) {
-            if (data.code == 0) {
-                var length = data.operations.length;
-                var mail = data.operations[length - 1];
-                $scope.mail_title =mail.mail.subject;
-                $scope.time=mail.time;
-                $scope.sender=mail.operator;
-                $scope.content=mail.mail.html
-            } else {
+                }
+            }).error(function (data, status, headers, config) {
                 console.log(data);
 
-            }
-        }).error(function (data, status, headers, config) {
-            console.log(data);
-
+            });
         });
+
+
     }]);
