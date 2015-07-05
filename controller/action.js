@@ -88,9 +88,19 @@ var dispatcher_dispatch = function(req, res, next) {
                     message: err.toString()
                 });
             } else {
-                res.json({
-                    code: 0,
-                    message: "Success; Workers " + effectiveWorkers.join(", ") + " designated."
+                Session.model.findByIdAndRemove(mongoose.Types.ObjectId(sessionId), function(err) {
+                    if(err) {
+                        Log.e(err);
+                        res.json({
+                            code: -1,
+                            message: 'internal error'
+                        });
+                        return;
+                    }
+                    res.json({
+                        code: 0,
+                        message: "Success; Workers " + effectiveWorkers.join(", ") + " designated."
+                    });
                 });
             }
         });
