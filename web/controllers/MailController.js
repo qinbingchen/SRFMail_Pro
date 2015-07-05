@@ -12,7 +12,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         //$scope.sender = $scope.selected_mail.from.address;
         //$scope.content=$scope.selected_mail.html;
 
-        $
 
         $scope.$on("broadcast_mail_selected", function () {
             console.log("received mail selected");
