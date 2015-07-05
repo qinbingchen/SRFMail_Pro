@@ -31,28 +31,48 @@ var detail = function(req, res, next) {
                     message: 'Failed to fetch result'
                 });
             }
-            session.dispatcher = session.dispatcher ? session.dispatcher.username : undefined;
-            session.worker = session.worker ? session.worker.username : undefined;
-            session.reviewer = session.reviewer ? session.reviewer.username : undefined;
+            if(!session) {
+                return res.json({
+                    code: 1,
+                    message: "Couldn't find session with ID " + id
+                })
+            }
+            var ret = {
+                code: 0,
+                message: 'success',
+                operations: [],
+                dispatcher: session.dispatcher ? session.dispatcher.username : undefined,
+                worker: session.worker ? session.worker.username : undefined,
+                reviewer: session.reviewer ? session.reviewer.username : undefined,
+                status: session.status,
+                isRejected: session.isRejected,
+                isRedirected: session.isRedirected,
+                readonly: session.readonly,
+                income: session.income,
+                reply: session.reply
+            };
             session.operations.forEach(function(row) {
-                row.operator = row.operator.username;
-                row.receiver = row.receiver.username;
+                var op = {
+                    operator: row.operator.username,
+                    receiver: row.receiver.username,
+                    type: row.type,
+                    message: row.message,
+                    time: row.time
+                };
                 if(row.mail && row.mail.attachments) {
-                    row.mail.attachments.forEach(function(attachment, index) {
-                        row.mail.attachments[index] = {
+                    op.mail = row.mail;
+                    op.mail.attachments.forEach(function(attachment, index) {
+                        op.mail.attachments[index] = {
                             title: attachment.filename,
                             id: attachment.id
                         };
                     });
                 }
+                ret.operations.push(op);
             });
-            var ret = {
-                code: 0,
-                message: 'success'
-            };
-            for(var key in session) {
-                ret[key] = session[key]
-            }
+            ret.operations.sort(function (a, b){
+                return a.time.getTime() < b.time.getTime();
+            });
             res.json(ret);
         });
 };
@@ -105,6 +125,7 @@ var list = function(req, res, next){
         .populate('worker', 'username')
         .populate('reviewer', 'username')
         .populate('income')
+        .populate('reply')
         .exec(function(err, sessions){
             if (err) {
                 Log.e({req: req}, err);
@@ -130,6 +151,13 @@ var list = function(req, res, next){
                         labels: session.income.labels,
                         deadline: session.income.deadline,
                         time: session.income.time
+                    },
+                    reply: {
+                        subject: session.reply.subject,
+                        from: session.reply.from,
+                        labels: session.reply.labels,
+                        deadline: session.reply.deadline,
+                        time: session.reply.time
                     }
                 };
                 ret.sessions.push(list_element);
