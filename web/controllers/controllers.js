@@ -57,12 +57,10 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         };
 
         $scope.$on("emit_category_selected", function() {
-            console.log($scope.filtered_mail_list);
             $scope.$broadcast("broadcast_category_selected");
         });
 
         $scope.$on("emit_mail_selected", function () {
-            console.log("dispatch mail selected");
             $scope.$broadcast("broadcast_mail_selected");
         });
 
@@ -87,7 +85,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.show_edit = function () {
             $scope.$broadcast("show_edit")
         };
-        
 
         $scope.check = function () {
             $http.post(ROOT_URL + "/api/action/worker/pass", {
@@ -98,7 +95,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 console.log(data);
             });
         };
-
        
         $scope.partial_load_status = {
             side_bar: false,
@@ -117,14 +113,11 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.ready();
         };
 
-        $scope.show_dispatch=function (){
-            $scope.dispatch_show=!$scope.dispatch_show;
+        $scope.show_dispatch=function () {
+            $scope.dispatch_show = !$scope.dispatch_show;
         };
         
-        $scope.dispatch_show=false;
-        $scope.current_user_type = USER_TYPE.DISPATCHER;
-        $scope.current_user_id = 0;
-        $scope.current_user_name = "";
+        $scope.dispatch_show = false;
 
         $scope.category_list = CATEGORY_LIST;
         $scope.selected_category = $scope.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[$scope.current_user_type].category[0];
@@ -132,9 +125,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.mail_list = [];
         $scope.filtered_mail_list = [];
         $scope.selected_mail = "";
-
-
-
     }]);
 
 SRFMailProControllers.controller("ModalController", ["$scope", "$http", "$cookies",
