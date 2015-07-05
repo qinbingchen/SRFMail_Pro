@@ -51,6 +51,12 @@ var detail = function(req, res, next) {
                 income: session.income,
                 reply: session.reply
             };
+            if(!ret.income.html) {
+                ret.income.html = '<p>' + ret.income.text + '</p>'
+            }
+            if(!ret.reply.html) {
+                ret.reply.html = '<p>' + ret.income.text + '</p>'
+            }
             session.operations.forEach(function(row) {
                 var op = {
                     operator: row.operator.username,
