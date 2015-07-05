@@ -28,6 +28,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     mail=data;
 
                 } else {
+                    console.log("code is "+data.code);
                     console.log(data);
 
                 }
