@@ -57,9 +57,9 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
                         return false;
                 }
             });
-            filtered_mail_list.sort(function (a, b){
-                return a.income.time.getTime() < b.income.time.getTime();
-            });
+            //filtered_mail_list.sort(function (a, b) {
+            //   // return a.income.time.getTime() < b.income.time.getTime();
+            //});
 
             $scope.$parent.$parent.filtered_mail_list = filtered_mail_list;
             $scope.$emit("emit_category_selected");
