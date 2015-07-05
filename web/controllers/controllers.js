@@ -25,11 +25,11 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 user: username,
                 password: password
             }).success(function (data, status, headers, config) {
+                $scope.current_user_type = data.role;
+                $scope.current_user_id = data.id;
+                $scope.current_user_name = data.name;
                 $http.get(ROOT_URL + "/api/session/get_list")
                     .success(function (data, status, headers, config) {
-                        $scope.current_user_type = data.role;
-                        $scope.current_user_id = data.id;
-                        $scope.current_user_name = data.name;
                         $scope.mail_list = data["sessions"];
                         $scope.dismiss_modal();
                     }).error(function (data, status, headers, config) {
