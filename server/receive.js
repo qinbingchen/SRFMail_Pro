@@ -31,6 +31,11 @@ mailListener.on('error', function(err){
     Log.e(err);
 });
 
+mailListener.on('close', function() {
+    Log.d('IMAP connection closed!');
+    mailListener.start();
+});
+
 mailListener.on('mail', function(_mail, seqno, attributes){
     mailListener.imap.seq.setFlags(seqno, ['Seen'], function() {});
     console.log(_mail.from);
