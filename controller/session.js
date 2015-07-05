@@ -151,15 +151,17 @@ var list = function(req, res, next){
                         labels: session.income.labels,
                         deadline: session.income.deadline,
                         time: session.income.time
-                    },
-                    reply: {
+                    }
+                };
+                if(session.reply) {
+                    list_element.reply = {
                         subject: session.reply.subject,
                         from: session.reply.from,
                         labels: session.reply.labels,
                         deadline: session.reply.deadline,
                         time: session.reply.time
                     }
-                };
+                }
                 ret.sessions.push(list_element);
             });
             ret.sessions.sort(function (a, b){
