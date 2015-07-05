@@ -127,9 +127,9 @@ var list = function(req, res, next){
                 };
                 ret.sessions.push(list_element);
             });
-            ret.sort(function(a, b){
+            ret.sessions.sort(function (a, b){
                 return a.income.time.getTime() < b.income.time.getTime();
-            })
+            });
             res.json(ret);
     })
 };

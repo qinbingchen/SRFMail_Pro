@@ -39,13 +39,14 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
-        };
-
-        alert({
+            alert({
                 id: $scope.$parent.$parent.selected_mail,
                 readonly: readonly,
                 readreply: readreply
-            });
+            }.toString());
+        };
+
+        
 
         var url_workers = ROOT_URL + "/api/user/list_workers";
         $http.get(url_workers).success(function (data) {
