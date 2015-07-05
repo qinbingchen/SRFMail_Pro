@@ -2,12 +2,13 @@
     <div class="header">
         <div class="toolbar">
             <button ng-click="show_dispatch()"><i class="fa fa-reply fa-lg"></i></button>
-            <button ng-click="test_list()"><i class="fa fa-flag-o fa-lg"></i></button>
-            <button ng-click="login()"><i class="fa fa-trash-o fa-lg"></i></button>
-            <button ng-click="show_modal('login')"><i class="fa fa-folder-o fa-lg"></i></button>
-            <button ng-click="show_modal('compose')"><i class="fa fa-edit fa-lg"></i></button>
+            <button><i class="fa fa-flag-o fa-lg"></i></button>
+            <button><i class="fa fa-trash-o fa-lg"></i></button>
+            <button><i class="fa fa-folder-o fa-lg"></i></button>
+            <button><i class="fa fa-edit fa-lg"></i></button>
+            <button ng-click="check()"><i class="fa fa-check-circle-o fa-lg"></i></button>
+            <button ng-show="" class="right" ng-click="logout()">登出</button>
             <span class="right">{{current_user_name}}</span>
-            <button class="right" ng-click="logout()">登出</button>
         </div>
     </div>
 
