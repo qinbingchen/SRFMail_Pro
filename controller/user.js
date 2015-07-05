@@ -13,13 +13,13 @@ var login = function(req, res, next) {
         if(err) {
             Log.e({req: req}, err);
             return res.json({
-                code: 123,
+                code: 1,
                 message: 'Internal error'
             });
         }
         if(!user) {
             return res.json({
-                code: 123,
+                code: 1,
                 message: 'Invalid username or password'
             });
         }
