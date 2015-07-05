@@ -51,8 +51,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
         }).error(function (data, status, headers, config) {
             console.log(data);
     });
-    
-        $scope.workers=["hello","nihao","bonjour"];    	
+        	
 
     	setTimeout(function() {
     			$(".select-workers").select2();
