@@ -1,12 +1,12 @@
 var SRFMailProControllers = angular.module("SRFMailProControllers", []);
 
-SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cookies",
-    function ($scope, $http, $cookies) {
+SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cookieStore",
+    function ($scope, $http, $cookieStore) {
         $scope.ready = function () {
             setTimeout(function () {
-                if ($cookies.get("connect.sid") == null) {
+                if ($cookieStore.get("connect.sid") == null) {
                     console.log("no cookie");
-                    console.log($cookies.get("connect.sid"));
+                    console.log($cookieStore.get("connect.sid"));
                     $scope.show_modal("login");
                 } else {
                     $http.get(ROOT_URL + "/api/session/get_list")
