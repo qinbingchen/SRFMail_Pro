@@ -20,12 +20,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 .success(function (data,status, headers, config) {
                     console.log(data);
                     if (data.code == 0) {
-                        //var length = data.operations.length;
-                        //var mail = data.operations[length - 1];
-                        //$scope.mail_title =mail.mail.subject;
-                        //$scope.time=mail.time;
-                        //$scope.sender=mail.operator;
-                        //$scope.content=mail.mail.html;
 
 
                         $scope.mail = data;
