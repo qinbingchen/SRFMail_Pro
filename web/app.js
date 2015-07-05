@@ -4,6 +4,8 @@ var SRFMailProApp = angular.module("SRFMailProApp", [
     "SRFMailProControllers"
 ]);
 
+SRFMailProApp.service()
+
 toastr.options = {
     "newestOnTop": true,
     "timeOut": "3000"
