@@ -23,64 +23,74 @@ var dispatcher_dispatch = function(req, res, next) {
                 callback(err, 'get original session');
             });
         }
-    ], function() {
-        // ensure that the dispatching session's status equals 0 (new, not dispatched)
-        if (originalSession.status == 0) {
-            // spawn sessions iteratively
-            var workers = readonlyWorkers.concat(readreplyWorkers);
-            var effectiveWorkers = [];
-            async.each(workers, function(worker, callback) {
-                User.model.findOne({
-                    username: worker
-                }, function(err, designatedWorker) {
-                    if (!designatedWorker) {
-                        callback();
-                    } else {
-                        effectiveWorkers.push(worker);
-                        var session = new Session.model({
-                            income: originalSession.income,
-                            dispatcher: currentUser._id,
-                            worker: designatedWorker._id,
-                            readonly: (readonlyWorkers.indexOf(worker) > -1),
-                            operations: [],
-                            status: 1,
-                            isRejected: false,
-                            isRedirected: false
-                        });
-                        originalSession.operations.forEach(function(row) {
-                            session.operations.push(row);
-                        });
-                        var operationDict = {
-                            type: 1,
-                            operator: currentUser._id,
-                            receiver: designatedWorker._id,
-                            time: new Date()
-                        };
-                        session.operations.push(operationDict);
-                        session.save(function(err) {
-                            callback(err);
-                        });
-                    }
-                });
-            }, function(err) {
-                if (err) {
-                    res.json({
-                        "code": 1,
-                        "message": err.toString()
-                    });
-                } else {
-                    res.json({
-                        "code": 0,
-                        "message": "Success; Workers " + effectiveWorkers.join(", ") + "designated."
-                    });
-                }
+    ], function(err) {
+        if (err) {
+            res.json({
+                "code": 1,
+                "message": err.toString()
             });
-        } else {
+
+            return;
+        }
+
+        if (originalSession.status != 0) {
             res.json({
                 "code": 1,
                 "message": "The session's status is " + originalSession.status + " therefore couldn't be dispatched. Aborting."
             });
+
+            return;
         }
+
+        // spawn sessions iteratively
+        var workers = readonlyWorkers.concat(readreplyWorkers);
+        var effectiveWorkers = [];
+        async.each(workers, function(worker, callback) {
+            User.model.findOne({
+                username: worker
+            }, function(err, designatedWorker) {
+                if (!designatedWorker) {
+                    callback();
+                } else {
+                    effectiveWorkers.push(worker);
+                    var session = new Session.model({
+                        income: originalSession.income,
+                        dispatcher: currentUser._id,
+                        worker: designatedWorker._id,
+                        readonly: (readonlyWorkers.indexOf(worker) > -1),
+                        operations: [],
+                        status: 1,
+                        isRejected: false,
+                        isRedirected: false
+                    });
+                    originalSession.operations.forEach(function(row) {
+                        session.operations.push(row);
+                    });
+                    var operationDict = {
+                        type: 1,
+                        operator: currentUser._id,
+                        receiver: designatedWorker._id,
+                        time: new Date()
+                    };
+                    session.operations.push(operationDict);
+                    session.save(function(err) {
+                        callback(err);
+                    });
+                }
+            });
+        }, function(err) {
+            if (err) {
+                res.json({
+                    "code": 1,
+                    "message": err.toString()
+                });
+            } else {
+                res.json({
+                    "code": 0,
+                    "message": "Success; Workers " + effectiveWorkers.join(", ") + " designated."
+                });
+            }
+        });
     });
 };
 
@@ -111,7 +121,16 @@ var worker_submit = function(req, res, next) {
                 callback(err, 'get income mail');
             });
         }
-    ], function() {
+    ], function(err) {
+        if (err) {
+            res.json({
+                "code": 1,
+                "message": err.toString()
+            });
+
+            return;
+        }
+
         var repliedMail = new Mail.model({
             to: [{
                 address: incomeMail.to[0].address,
