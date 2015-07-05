@@ -25,7 +25,7 @@
         <div class="mail-time-style">{{mail.income.time}}</div>
         <div class ="mail-sender-style">{{mail.income.from[0].address}}</div>
         <hr/>
-        <div class="mail-content-style" ng-bind-html="mail.income.html"></div>
+        <div class="mail-content-style" ng-bind-html-unsafe="mail.income.html"></div>
 
 
     </div>
