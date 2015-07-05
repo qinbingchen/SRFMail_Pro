@@ -31,6 +31,12 @@ var detail = function(req, res, next) {
                     message: 'Failed to fetch result'
                 });
             }
+            if(!session) {
+                return res.json({
+                    code: 1,
+                    message: "Couldn't find session with ID " + id
+                })
+            }
             var ret = {
                 code: 0,
                 message: 'success',
@@ -46,7 +52,10 @@ var detail = function(req, res, next) {
             session.operations.forEach(function(row) {
                 var op = {
                     operator: row.operator.username,
-                    receiver: row.receiver.username
+                    receiver: row.receiver.username,
+                    type: row.type,
+                    message: row.message,
+                    time: row.time
                 };
                 if(row.mail && row.mail.attachments) {
                     op.mail = row.mail;
@@ -58,6 +67,9 @@ var detail = function(req, res, next) {
                     });
                 }
                 ret.operations.push(op);
+            });
+            ret.operations.sort(function (a, b){
+                return a.time.getTime() < b.time.getTime();
             });
             res.json(ret);
         });
