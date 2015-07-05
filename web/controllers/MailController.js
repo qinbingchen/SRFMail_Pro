@@ -14,7 +14,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
 
 
-        var url = "http://123.57.64.46" + "/api/session/get_detail" + "?id=" + $scope.selected_mail;
+        var url = ROOT_URL + "/api/session/get_detail" + "?id=" + $scope.selected_mail;
         $http.get(url).success(function (data) {
             if (data.code == 0) {
                 var length = data.operations.length;
@@ -23,8 +23,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 $scope.time=mail.time;
                 $scope.sender=mail.operator;
                 $scope.content=mail.mail.html
-
-
             } else {
                 console.log(data);
 
