@@ -2,6 +2,7 @@ var redis = require('redis');
 var settings = require('../settings');
 var Mail = require('../model/mail');
 var mongoose = require('mongoose');
+var Session = require('../model').session;
 var MailSender = require('../lib/mail');
 var Log = require('../lib/log')('[server-send]');
 
@@ -39,6 +40,15 @@ function FetchAndSend() {
                 if(err) {
                     return Log.e(err)
                 }
+                Session.findOneAndUpdate({
+                    reply: mongoose.Types.ObjectId(data[1].toString())
+                }, {
+                    status: Session.Status.Success
+                }, function(err) {
+                    if(err) {
+                        Log.e(err)
+                    }
+                });
                 FetchAndSend()
             })
         })

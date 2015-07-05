@@ -195,6 +195,54 @@ var worker_submit = function(req, res, next) {
     });
 };
 
+var worker_pass = function(req, res, next) {
+    var sessionId = req.body.id;
+    var user = req.session.user;
+
+    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid Session ID'
+        });
+    }
+
+    sessionId = mongoose.Types.ObjectId(sessionId);
+
+    Session.model.findById(sessionId, function(err, session) {
+        if(err) {
+            Log.e(err);
+            return res.json({
+                code: -1,
+                message: 'internal error'
+            })
+        }
+        Session.model.findByIdAndUpdate(sessionId, {
+            status: Session.Status.Success,
+            $push: {
+                operation: {
+                    type: Session.Type.MarkSuccess,
+                    operator: user._id,
+                    receiver: user._id,
+                    time: new Date(),
+                    mail: session.income
+                }
+            }
+        }, function(err) {
+            if(err) {
+                Log.e(err);
+                return res.json({
+                    code: -1,
+                    message: 'internal error'
+                })
+            }
+            res.json({
+                code: 0,
+                message: 'success'
+            })
+        })
+    });
+};
+
 var reviewer_pass = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
@@ -273,6 +321,7 @@ router.use(function(req, res, next) {
 });
 router.route('/dispatcher/dispatch').post(dispatcher_dispatch);
 router.route('/worker/submit').post(worker_submit);
+router.route('/worker/pass').post(worker_pass);
 router.route('/reviewer/pass').post(reviewer_pass);
 
 module.exports = router;
