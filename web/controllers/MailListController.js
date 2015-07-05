@@ -6,9 +6,9 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         $scope.selectMail = function(mail){
             console.log(mail);
             console.log(mail.id);
-            $scope.selected_mail = mail.id;
+            $scope.$parent.selected_mail = mail.id;
             console.log("emit mail selected");
-            console.log($scope.selected_mail);
+            console.log($scope.$parent.selected_mail);
             $scope.$emit("emit_mail_selected");
         };
 
