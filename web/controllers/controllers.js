@@ -130,6 +130,8 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
         $scope.check_partial_load_status();
 
         $scope.submit = function () {
+            console.log("username: " + username);
+            console.log("password: " + password);
             $scope.login(username, password)
         }
     }]);
