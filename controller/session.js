@@ -9,8 +9,8 @@ var detail = function(req, res, next) {
     var id = req.query.id;
     if(!mongoose.Types.ObjectId.isValid(id)) {
         return res.json({
-            code: 123,
-            message: 'asdf'
+            code: 1,
+            message: 'Invalid ID'
         });
     }
     id = mongoose.Types.ObjectId(id);

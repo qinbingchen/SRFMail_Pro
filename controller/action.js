@@ -15,6 +15,13 @@ var dispatcher_dispatch = function(req, res, next) {
 
     var originalSession;
 
+    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid Session ID'
+        });
+    }
+
     async.parallel([
         // populate originalSession & currentUser
         function(callback) {
@@ -25,21 +32,17 @@ var dispatcher_dispatch = function(req, res, next) {
         }
     ], function(err) {
         if (err) {
-            res.json({
-                "code": 1,
-                "message": err.toString()
+            return res.json({
+                code: 1,
+                message: err.toString()
             });
-
-            return;
         }
 
         if (originalSession.status != 0) {
-            res.json({
-                "code": 1,
-                "message": "The session's status is " + originalSession.status + " therefore couldn't be dispatched. Aborting."
+            return res.json({
+                code: 1,
+                message: "The session's status is " + originalSession.status + " therefore couldn't be dispatched. Aborting."
             });
-
-            return;
         }
 
         // spawn sessions iteratively
@@ -81,13 +84,13 @@ var dispatcher_dispatch = function(req, res, next) {
         }, function(err) {
             if (err) {
                 res.json({
-                    "code": 1,
-                    "message": err.toString()
+                    code: 1,
+                    message: err.toString()
                 });
             } else {
                 res.json({
-                    "code": 0,
-                    "message": "Success; Workers " + effectiveWorkers.join(", ") + " designated."
+                    code: 0,
+                    message: "Success; Workers " + effectiveWorkers.join(", ") + " designated."
                 });
             }
         });
@@ -103,6 +106,13 @@ var worker_submit = function(req, res, next) {
     var reviewerUsername = req.body.reviewer;
 
     var reviewer, session, incomeMail;
+
+    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid Session ID'
+        });
+    }
 
     async.series([
         function(callback) {
@@ -123,12 +133,17 @@ var worker_submit = function(req, res, next) {
         }
     ], function(err) {
         if (err) {
-            res.json({
-                "code": 1,
-                "message": err.toString()
+            return res.json({
+                code: 1,
+                message: err.toString()
             });
+        }
 
-            return;
+        if (session.status != 1) {
+            return res.json({
+                code: 1,
+                message: "The session's status is " + session.status + " therefore couldn't be submitted. Aborting."
+            });
         }
 
         var repliedMail = new Mail.model({
@@ -140,7 +155,15 @@ var worker_submit = function(req, res, next) {
             html: html,
             time: new Date()
         });
+
         repliedMail.save(function(err) {
+            if (err) {
+                return res.json({
+                    code: 1,
+                    message: err.toString()
+                });
+            }
+
             var operationDict = {
                 type: needReview ? 3 : 6,
                 operator: user._id,
@@ -156,10 +179,17 @@ var worker_submit = function(req, res, next) {
             session.operations.push(operationDict);
 
             session.save(function(err) {
-                res.json({
-                    "code": 0,
-                    "message": "Success"
-                });
+                if (err) {
+                    res.json({
+                        code: 1,
+                        message: err.toString()
+                    });
+                } else {
+                    res.json({
+                        "code": 0,
+                        "message": "Success"
+                    });
+                }
             });
         });
     });
@@ -169,6 +199,13 @@ var reviewer_pass = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
     var session, mail;
+
+    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid Session ID'
+        });
+    }
 
     async.series([
         function(callback) {
@@ -184,6 +221,13 @@ var reviewer_pass = function(req, res, next) {
             });
         }
     ],function() {
+        if (session.status != 2) {
+            return res.json({
+                code: 1,
+                message: "The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."
+            });
+        }
+
         var operationDict = { 
             type: 5, 
             operator:  user._id,
@@ -194,10 +238,17 @@ var reviewer_pass = function(req, res, next) {
         session.operations.push(operationDict);
 
         session.save(function(err) {
-            res.json({
-                "code": 0,
-                "message": "Success"
-            });
+            if (err) {
+                res.json({
+                    code: 1,
+                    message: err.toString()
+                });
+            } else {
+                res.json({
+                    "code": 0,
+                    "message": "Success"
+                });
+            }
         });
     });
 };
