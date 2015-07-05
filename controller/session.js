@@ -46,9 +46,14 @@ var detail = function(req, res, next) {
                     });
                 }
             });
-            session.code = 0;
-            session.message = 'success';
-            res.json(session);
+            var ret = {
+                code: 0,
+                message: 'success'
+            };
+            for(var key in session) {
+                ret[key] = session[key]
+            }
+            res.json(ret);
         });
 };
 
