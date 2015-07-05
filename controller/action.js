@@ -9,8 +9,8 @@ var Log = require('../lib/log')('[controller-session]');
 
 var dispatcher_dispatch = function(req, res, next) {
     var sessionId = req.body.id;
-    var readonlyWorkers = req.body.readonly;
-    var readreplyWorkers = req.body.readreply;
+    var readonlyWorkers = JSON.parse(req.body.readonly);
+    var readreplyWorkers = JSON.parse(req.body.readreply);
     var currentUser = req.session.user;
 
     var originalSession;
