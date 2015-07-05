@@ -121,7 +121,8 @@ var list = function(req, res, next){
                         subject: session.income.subject,
                         from: session.income.from,
                         labels: session.income.labels,
-                        deadline: session.income.deadline
+                        deadline: session.income.deadline,
+                        time: session.income.time
                     }
                 };
                 ret.sessions.push(list_element);

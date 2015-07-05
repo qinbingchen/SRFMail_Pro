@@ -37,7 +37,7 @@
   margin: 0;
 }
 
-.mail{
+.mail {
   height: 100px;
   line-height: 20px;
   padding-top: 10px;
@@ -45,7 +45,11 @@
   border-bottom: 1px solid #d6d6d6;
 }
 
-.first-row{
+.mail.selected {
+  background-color: #ddeefb;
+}
+
+.first-row {
   margin: 0;
   padding-right: 10px;
   height: 20px;

@@ -4,7 +4,10 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         $scope.check_partial_load_status();
 
         $scope.selectMail = function(mail){
+            console.log(mail);
+            console.log(mail.id);
             $scope.selected_mail = mail.id;
+            $scope.$emit("mail_selected");
         };
 
         $scope.changeClass=function(mail){

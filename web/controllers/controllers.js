@@ -42,18 +42,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
            location.reload()
         };
 
-        $scope.test_list = function () {
-            $http.get(ROOT_URL + "/api/session/get_list", {
-                user: "test0",
-                password: "test0"
-            }).success(function (data, status, headers, config) {
-                console.log(data);
-                console.log(status);
-                console.log(headers());
-            }).error(function (data, status, headers, config) {
-                console.log(data);
-            });
-        };
+        $scope.$on("mail_selected", function () {
+            $scope.$broadcast("mail_selected");
+        });
 
         $scope.show_modal = function (name) {
             $("#modal-" + name).addClass("show");
@@ -76,7 +67,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.show_edit = function () {
             $scope.$broadcast("show_edit")
         };
-
+        
+        
+       
         $scope.partial_load_status = {
             side_bar: false,
             mail_list: false,
@@ -95,13 +88,10 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         };
 
         $scope.show_dispatch=function (){
-            if($(".bubble").css("display")=="none")
-                $(".bubble").show();
-            else
-                $(".bubble").hide();
+            dispatch_show=!dispatch_show;
         };
         
-
+        $scope.dispatch_show=false;
         $scope.current_user_type = USER_TYPE.DISPATCHER;
         $scope.current_user_id = 0;
         $scope.current_user_name = "";
@@ -110,28 +100,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.selected_category = $scope.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[$scope.current_user_type].category[0];
 
         $scope.mail_list = [];
-        $scope.mail_list=[
-            {
-                "id":"123456",
-                "date": "2015/7/4 23:46",
-                "income":{
-                    "from":{
-                        "name":"Susan"
-                    },
-                    "subject": "hello"
-                }
-            },
-            {
-                "id":"123457",
-                "date": "2015/7/4 23:47",
-                "income":{
-                    "from":{
-                        "name":"Flavia"
-                    },
-                    "subject": "Guten Tag"
-                }
-            }
-        ];
         $scope.filtered_mail_list = [];
         $scope.selected_mail = "";
 
@@ -152,7 +120,9 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
         $scope.check_partial_load_status();
 
         $scope.submit = function () {
-            $scope.login(username, password)
+            console.log("username: " + $scope.username);
+            console.log("password: " + $scope.password);
+            $scope.login($scope.username, $scope.password)
         }
     }]);
 
