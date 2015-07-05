@@ -54,7 +54,7 @@ var detail = function(req, res, next) {
             if(!ret.income.html) {
                 ret.income.html = '<p>' + ret.income.text + '</p>'
             }
-            if(!ret.reply.html) {
+            if(ret.reply && !ret.reply.html) {
                 ret.reply.html = '<p>' + ret.income.text + '</p>'
             }
             session.operations.forEach(function(row) {
