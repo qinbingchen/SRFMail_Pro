@@ -58,5 +58,6 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
                 }
             });
             console.log($scope.$parent.filtered_mail_list);
+            $scope.$emit("emit_category_selected");
         }
     }]);
