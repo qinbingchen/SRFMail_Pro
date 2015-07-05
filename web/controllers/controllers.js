@@ -6,6 +6,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             setTimeout(function () {
                 if ($cookieStore.get("connect.sid") == null) {
                     console.log("no cookie");
+                    console.log(document.cookie);
                     console.log($cookieStore.get("connect.sid"));
                     $scope.show_modal("login");
                 } else {
@@ -80,7 +81,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
 
         $scope.check = function () {
             $http.post(ROOT_URL + "/api/action/worker/pass", {
-                id: $scope.selected_mail,
+                id: $scope.selected_mail
             }).success(function (data, status, headers, config) {
 
             }).error(function (data, status, headers, config) {
