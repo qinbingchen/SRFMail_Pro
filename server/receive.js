@@ -46,17 +46,19 @@ mailListener.on('mail', function(_mail, seqno, attributes){
         time: new Date(),
         messageId: _mail.messageId
     };
-    _mail.attachments.forEach(function(row) {
-        mail.attachments.push({
-            contentType: row.contentType,
-            filename: row.filename,
-            path: row.contentId ? path.join(__dirname, '../attachments', row.contentId) : undefined,
-            cid: row.cid,
-            content: row.content,
-            encoding: row.encoding,
-            id: row.contentId
+    if(_mail.attachments) {
+        _mail.attachments.forEach(function(row) {
+            mail.attachments.push({
+                contentType: row.contentType,
+                filename: row.filename,
+                path: row.contentId ? path.join(__dirname, '../attachments', row.contentId) : undefined,
+                cid: row.cid,
+                content: row.content,
+                encoding: row.encoding,
+                id: row.contentId
+            });
         });
-    });
+    }
     mail = new Mail.model(mail);
     mail.save(function(err) {
         if(err) {
