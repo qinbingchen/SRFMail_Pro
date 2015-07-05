@@ -5,10 +5,10 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.ready = function () {
             setTimeout(function () {
                 if ($cookies.get("connect.sid") == null) {
+                    console.log("no cookie");
+                    console.log($cookies.get("connect.sid"));
                     $scope.show_modal("login");
-                    console.log("123");
                 } else {
-                    console.log("456");
                     $http.get(ROOT_URL + "/api/session/get_list")
                         .success(function (data, status, headers, config) {
                             $scope.mail_list = data["sessions"];
@@ -77,7 +77,17 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.$broadcast("show_edit")
         };
         
-        
+
+        $scope.check = function () {
+            $http.post(ROOT_URL + "/api/action/worker/pass", {
+                id: $scope.selected_mail,
+            }).success(function (data, status, headers, config) {
+
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
+
        
         $scope.partial_load_status = {
             side_bar: false,
