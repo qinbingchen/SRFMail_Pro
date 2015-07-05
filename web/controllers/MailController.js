@@ -18,7 +18,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             var url = ROOT_URL + "/api/session/get_detail" + "?id=" + $scope.$parent.$parent.selected_mail;
             $http.get(url)
                 .success(function (data,status, headers, config) {
-                    console.log("code is" + data.code );
+                    console.log(data);
                     if (data.code == 0) {
                         //var length = data.operations.length;
                         //var mail = data.operations[length - 1];
