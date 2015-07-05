@@ -41,11 +41,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             });
         };
 
-        alert({
-                id: $scope.$parent.$parent.selected_mail,
-                readonly: readonly,
-                readreply: readreply
-            });
+        
 
         var url_workers = ROOT_URL + "/api/user/list_workers";
         $http.get(url_workers).success(function (data) {

@@ -37,7 +37,7 @@ var detail = function(req, res, next) {
             session.operations.forEach(function(row) {
                 row.operator = row.operator.username;
                 row.receiver = row.receiver.username;
-                if(row.mail.attachments) {
+                if(row.mail && row.mail.attachments) {
                     row.mail.attachments.forEach(function(attachment, index) {
                         row.mail.attachments[index] = {
                             title: attachment.filename,
@@ -46,7 +46,14 @@ var detail = function(req, res, next) {
                     });
                 }
             });
-            res.json(session);
+            var ret = {
+                code: 0,
+                message: 'success'
+            };
+            for(var key in session) {
+                ret[key] = session[key]
+            }
+            res.json(ret);
         });
 };
 
@@ -127,9 +134,9 @@ var list = function(req, res, next){
                 };
                 ret.sessions.push(list_element);
             });
-            ret.sort(function(a, b){
+            ret.sessions.sort(function (a, b){
                 return a.income.time.getTime() < b.income.time.getTime();
-            })
+            });
             res.json(ret);
     })
 };
