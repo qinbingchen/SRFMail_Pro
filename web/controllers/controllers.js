@@ -89,7 +89,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         };
 
         $scope.show_dispatch=function (){
-            dispatch_show=!dispatch_show;
+            $scope.dispatch_show=!$scope.dispatch_show;
         };
         
         $scope.dispatch_show=false;

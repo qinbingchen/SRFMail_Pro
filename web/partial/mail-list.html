@@ -5,7 +5,7 @@
     </div>
     <div class="body">
         <ul class="mail-list">
-            <li class="mail" ng-repeat="mail in mail_list"   ng-class="changeClass(mail)" ng-click="selectMail(mail)">
+            <li class="mail" ng-repeat="mail in filtered_mail_list"   ng-class="changeClass(mail)" ng-click="selectMail(mail)">
                 <p class="first-row">
                     <a class="sender">{{mail.income.from[0].name}}</a>
                     <a class="date">{{mail.income.time}}</a>
