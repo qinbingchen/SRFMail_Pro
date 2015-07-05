@@ -18,6 +18,11 @@ var dispatcher_dispatch = function(req, res, next) {
     var readreplyWorkers = JSON.parse(req.body.readreply);
     var currentUser = req.session.user;
 
+    Log.e({
+        readonly: readonlyWorkers,
+        readreply: readreplyWorkers
+    });
+
     var originalSession;
 
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
