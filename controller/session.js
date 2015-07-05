@@ -46,6 +46,8 @@ var detail = function(req, res, next) {
                     });
                 }
             });
+            session.code = 0;
+            session.message = 'success';
             res.json(session);
         });
 };
