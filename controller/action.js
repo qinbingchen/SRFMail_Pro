@@ -8,27 +8,28 @@ var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
 var dispatcher_dispatch = function(req, res, next) {
-    Log.e({
-        readonly: req.body.readonly,
-        readreply: req.body.readreply
-    });
-
     var sessionId = req.body.id;
-    var readonlyWorkers = JSON.parse(req.body.readonly);
-    var readreplyWorkers = JSON.parse(req.body.readreply);
+    var readonlyWorkers, readreplyWorkers;
+    try {
+        readonlyWorkers = JSON.parse(req.body.readonly);
+        readreplyWorkers = JSON.parse(req.body.readreply);
+    } catch (e) {
+        return res.json({
+            code: 1,
+            message: 'Invalid JSON received, please ensure that readonly & readreply is valid JSON string representation.'
+            + ' Reason: ' + e.toString()
+            + ' ReadonlyWorkers: ' + req.body.readonly
+            + ' ReadreplyWorkers: ' + req.body.readreply
+        });
+    }
+
     var currentUser = req.session.user;
-
-    Log.e({
-        readonly: readonlyWorkers,
-        readreply: readreplyWorkers
-    });
-
     var originalSession;
 
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
         return res.json({
             code: 1,
-            message: 'Invalid Session ID'
+            message: 'Invalid session ID ' + sessionId
         });
     }
 
@@ -51,7 +52,7 @@ var dispatcher_dispatch = function(req, res, next) {
         if (!originalSession) {
             return res.json({
                 code: 1,
-                message: "Session with ID not found"
+                message: "Couldn't find session with ID " + sessionId
             });
         }
 
@@ -109,8 +110,8 @@ var dispatcher_dispatch = function(req, res, next) {
                     if(err) {
                         Log.e(err);
                         res.json({
-                            code: -1,
-                            message: 'internal error'
+                            code: 1,
+                            message: err.toString()
                         });
                         return;
                     }
@@ -137,7 +138,7 @@ var worker_submit = function(req, res, next) {
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
         return res.json({
             code: 1,
-            message: 'Invalid Session ID'
+            message: 'Invalid session ID ' + sessionId
         });
     }
 
@@ -153,16 +154,39 @@ var worker_submit = function(req, res, next) {
                 callback(err, 'get session');
             });
         }, function(callback) {
-            Mail.model.findById(mongoose.Types.ObjectId(session.income), function(err, _incomeMail) {
-                incomeMail = _incomeMail;
-                callback(err, 'get income mail');
-            });
+            if (session) {
+                Mail.model.findById(mongoose.Types.ObjectId(session.income), function(err, _incomeMail) {
+                    incomeMail = _incomeMail;
+                    callback(err, 'get income mail');
+                });
+            }
         }
     ], function(err) {
         if (err) {
             return res.json({
                 code: 1,
                 message: err.toString()
+            });
+        }
+
+        if (!session) {
+            return res.json({
+                code: 1,
+                message: "Couldn't find session with ID " + sessionId
+            });
+        }
+
+        if (!reviewer) {
+            return res.json({
+                code: 1,
+                message: "Couldn't find user with name " + reviewerUsername
+            });
+        }
+
+        if (!incomeMail) {
+            return res.json({
+                code: 1,
+                message: "Couldn't find income mail with ID " + session.income + " from session with ID " + session._id
             });
         }
 
@@ -236,11 +260,10 @@ var worker_pass = function(req, res, next) {
     sessionId = mongoose.Types.ObjectId(sessionId);
 
     Session.model.findById(sessionId, function(err, session) {
-        if(err) {
-            Log.e(err);
+        if (err) {
             return res.json({
-                code: -1,
-                message: 'internal error'
+                code: 1,
+                message: err.toString()
             })
         }
         Session.model.findByIdAndUpdate(sessionId, {
@@ -255,11 +278,10 @@ var worker_pass = function(req, res, next) {
                 }
             }
         }, function(err) {
-            if(err) {
-                Log.e(err);
+            if (err) {
                 return res.json({
-                    code: -1,
-                    message: 'internal error'
+                    code: 0,
+                    message: err.toString()
                 })
             }
             res.json({
@@ -278,7 +300,7 @@ var reviewer_pass = function(req, res, next) {
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
         return res.json({
             code: 1,
-            message: 'Invalid Session ID'
+            message: 'Invalid session ID ' + sessionId
         });
     }
 
@@ -296,6 +318,20 @@ var reviewer_pass = function(req, res, next) {
             });
         }
     ],function() {
+        if (!session) {
+            return res.json({
+                code: 1,
+                message: "Couldn't find session with ID " + sessionId
+            });
+        }
+
+        if (!mail) {
+            return res.json({
+                code: 1,
+                message: "Couldn't find reply mail with ID " + session.reply + " from session with ID " + session._id
+            });
+        }
+
         if (session.status != 2) {
             return res.json({
                 code: 1,
@@ -329,17 +365,17 @@ var reviewer_pass = function(req, res, next) {
 };
 
 router.use(function(req, res, next) {
-    if(!req.session.user) {
+    if (!req.session.user) {
         return res.json({
             code: 1,
             message: 'You are not yet logged in'
         });
     }
     User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
-        if(err) {
+        if (err || !user) {
             return res.json({
                 code: 1,
-                message: 'Invalid user id'
+                message: 'Invalid user id ' + req.session.user._id
             });
         }
         req.session.user = user;
