@@ -1,4 +1,4 @@
-var ROOT_URL = "/";
+var ROOT_URL = "";
 
 var STATUS = {
     NEW: 0,
