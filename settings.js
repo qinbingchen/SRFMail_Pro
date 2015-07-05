@@ -1,10 +1,10 @@
 exports = module.exports = {
-    mongodb: 'mongodb://localhost/SRFMail',
+    mongodb: 'mongodb://123.57.64.46/SRFMail',
     redis: {
-        host: 'localhost',
+        host: '123.57.64.46',
         port: 6379
     },
-    listen: 8888,
+    listen: 8844,
     mail: {
         imap: {
             host: 'imap.163.com',

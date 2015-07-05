@@ -1,4 +1,5 @@
 var router = new require('express').Router();
+var Log = require('../lib/log')('[controller-index]');
 
 router.use(function(req, res, next) {
     Log.d({req: req});
