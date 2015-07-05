@@ -110,28 +110,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.selected_category = $scope.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[$scope.current_user_type].category[0];
 
         $scope.mail_list = [];
-        $scope.mail_list=[
-            {
-                "id":"123456",
-                "date": "2015/7/4 23:46",
-                "income":{
-                    "from":{
-                        "name":"Susan"
-                    },
-                    "subject": "hello"
-                }
-            },
-            {
-                "id":"123457",
-                "date": "2015/7/4 23:47",
-                "income":{
-                    "from":{
-                        "name":"Flavia"
-                    },
-                    "subject": "Guten Tag"
-                }
-            }
-        ];
         $scope.filtered_mail_list = [];
         $scope.selected_mail = "";
 
@@ -152,6 +130,8 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
         $scope.check_partial_load_status();
 
         $scope.submit = function () {
+            console.log("username: " + username);
+            console.log("password: " + password);
             $scope.login(username, password)
         }
     }]);
