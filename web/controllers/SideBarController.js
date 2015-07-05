@@ -7,13 +7,13 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
             $scope.selected_category = category;
 
             console.log("user type:" + $scope.current_user_type);
-            console.log("selected: " + $scope.select_category);
+            console.log("selected: " + $scope.selected_category);
 
             $scope.filtered_mail_list = $scope.mail_list.filter(function (mail) {
                 console.log(mail);
                 switch ($scope.current_user_type) {
                     case USER_TYPE.DISPATCHER:
-                        switch ($scope.select_category.name) {
+                        switch ($scope.selected_category.name) {
                             case "pending":
                                 return mail.status == STATUS.NEW;
                             case "dispatched":
@@ -27,7 +27,7 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
                         if (mail.worker != $scope.current_user_name) {
                             return false;
                         } else {
-                            switch ($scope.select_category.name) {
+                            switch ($scope.selected_category.name) {
                                 case "pending":
                                     return mail.status == STATUS.DISPATCHED;
                                 case "waiting_for_review":
@@ -42,7 +42,7 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
                         if (mail.reviewer != $scope.current_user_name) {
                             return false;
                         } else {
-                            switch ($scope.select_category.name) {
+                            switch ($scope.selected_category.name) {
                                 case "pending":
                                     return mail.status == STATUS.WAITINGFORREVIEW;
                                 case "sent":
