@@ -78,12 +78,19 @@ mailListener.on('mail', function(_mail, seqno, attributes){
 });
 
 mailListener.on('attachment', function(attachment) {
-    var p = attachment.contentId.split(path.sep).slice(0, -1).join(path.sep);
+    var finalPath = path.join(__dirname, '../attachments', attachment.contentId);
+    var p = finalPath.split(path.sep).slice(0, -1).join(path.sep);
+    console.log(finalPath);
+    console.log(p);
     if(p.length > 0) {
-        mkdirs(p);
+        mkdirs(p, function() {
+            var stream = fs.createWriteStream(finalPath);
+            attachment.stream.pipe(stream);
+        });
+    } else {
+        var stream = fs.createWriteStream(finalPath);
+        attachment.stream.pipe(stream);
     }
-    var stream = fs.createWriteStream(path.join(__dirname, '../attachments', attachment.contentId));
-    attachment.stream.pipe(stream);
 });
 
 var mkdirs = function (dirpath, mode, callback) {
