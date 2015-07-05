@@ -8,6 +8,11 @@ var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
 var dispatcher_dispatch = function(req, res, next) {
+    Log.e({
+        readonly: req.body.readonly,
+        readreply: req.body.readreply
+    });
+
     var sessionId = req.body.id;
     var readonlyWorkers = JSON.parse(req.body.readonly);
     var readreplyWorkers = JSON.parse(req.body.readreply);
