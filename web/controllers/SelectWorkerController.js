@@ -43,10 +43,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
 
         var url = ROOT_URL + "/api/user/list_workers";
         $http.get(url).success(function (data) {
-            if (data.code == 0) {
                 $scope.workers=data.reviewers;
-            } else {
-                console.log(data);
             }
         }).error(function (data, status, headers, config) {
             console.log(data);
