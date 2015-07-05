@@ -7,6 +7,19 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 if ($cookies.get("user_type") == null) {
                     $scope.show_modal("login");
                 } else {
+                    $scope.current_user_type = $cookies.get("user_type") == null ? USER_TYPE.NONE : $cookies.get("user_type");
+                    $scope.current_user_id = $cookies.get("user_id") == null ? "" : $cookies.get("user_id");
+                    $scope.current_user_name = $cookies.get("user_name") == null ? "" : $cookies.get("user_id");
+
+                    $scope.dispatch_show = false;
+
+                    $scope.category_list = CATEGORY_LIST;
+                    $scope.selected_category = $scope.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[$scope.current_user_type].category[0];
+
+                    $scope.mail_list = [];
+                    $scope.filtered_mail_list = [];
+                    $scope.selected_mail = "";
+                    
                     $http.get(ROOT_URL + "/api/session/get_list")
                         .success(function (data, status, headers, config) {
                             $scope.mail_list = data["sessions"];
@@ -116,15 +129,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.show_dispatch=function () {
             $scope.dispatch_show = !$scope.dispatch_show;
         };
-        
-        $scope.dispatch_show = false;
 
-        $scope.category_list = CATEGORY_LIST;
-        $scope.selected_category = $scope.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[$scope.current_user_type].category[0];
-
-        $scope.mail_list = [];
-        $scope.filtered_mail_list = [];
-        $scope.selected_mail = "";
     }]);
 
 SRFMailProControllers.controller("ModalController", ["$scope", "$http", "$cookies",
