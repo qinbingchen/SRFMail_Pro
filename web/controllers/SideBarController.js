@@ -5,7 +5,12 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
 
         $scope.select_category = function (category) {
             $scope.selected_category = category;
+
+            console.log("user type:" + $scope.current_user_type);
+            console.log("selected: " + $scope.select_category);
+
             $scope.filtered_mail_list = $scope.mail_list.filter(function (mail) {
+                console.log(mail);
                 switch ($scope.current_user_type) {
                     case USER_TYPE.DISPATCHER:
                         switch ($scope.select_category.name) {
