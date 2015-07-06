@@ -18,7 +18,8 @@ var SessionSchema = new schema({
     }],
     status: { type: Number },
     isRejected: { type: Boolean },
-    isRedirected: { type: Boolean }
+    isRedirected: { type: Boolean },
+    isUrged: { type: Boolean }
 });
 
 exports.model = mongoose.model('Session', SessionSchema);
