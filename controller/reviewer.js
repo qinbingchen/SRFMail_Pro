@@ -11,7 +11,7 @@ var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
-var reviewer_pass = function(req, res, next) {
+var pass = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
     var session, mail;
@@ -102,5 +102,10 @@ router.use(function(req, res, next) {
     });
 });
 
-router.route('/reviewer/pass').post(reviewer_pass);
+var reject = function(req, res, next) {
+
+  };
+
+router.route('/pass').post(pass);
+router.route('/reject').post(reject);
 module.exports = router;

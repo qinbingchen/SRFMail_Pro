@@ -11,7 +11,7 @@ var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
-var dispatcher_dispatch = function(req, res, next) {
+var dispatch = function(req, res, next) {
     var sessionId = req.body.id;
     var readonlyWorkers, readreplyWorkers;
     try {
@@ -128,6 +128,14 @@ var dispatcher_dispatch = function(req, res, next) {
     });
 };
 
+var set_deadline = function(req, res, next) {
+
+};
+
+var urge = function(req, res, next) {
+
+};
+
 router.use(function(req, res, next) {
     if (!req.session.user) {
         return res.json({
@@ -147,5 +155,7 @@ router.use(function(req, res, next) {
     });
 });
 
-router.route('/dispatcher/dispatch').post(dispatcher_dispatch);
+router.route('/dispatch').post(dispatch);
+router.route('/set_deadline').post(set_deadline);
+router.route('/urge').post(urge);
 module.exports = router;

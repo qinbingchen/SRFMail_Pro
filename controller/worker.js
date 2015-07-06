@@ -11,7 +11,7 @@ var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
-var worker_submit = function(req, res, next) {
+var submit = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
     var subject = req.body.subject;
@@ -132,7 +132,7 @@ var worker_submit = function(req, res, next) {
     });
 };
 
-var worker_pass = function(req, res, next) {
+var pass = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
 
@@ -179,6 +179,10 @@ var worker_pass = function(req, res, next) {
     });
 };
 
+var redirect = function(req, res, next) {
+
+  };
+
 router.use(function(req, res, next) {
     if (!req.session.user) {
         return res.json({
@@ -198,6 +202,7 @@ router.use(function(req, res, next) {
     });
 });
 
-router.route('/worker/submit').post(worker_submit);
-router.route('/worker/pass').post(worker_pass);
+router.route('/submit').post(submit);
+router.route('/pass').post(pass);
+router.route('/redirect').post(redirect);
 module.exports = router;
