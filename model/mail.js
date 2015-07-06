@@ -32,7 +32,7 @@ var MailSchema = new schema({
         content: { type: String },
         encoding: { type: String }
     }],
-    label: [String],
+    labels: [String],
     deadline: { type: Date },
     time: { type: Date },
     messageId: { type: String }

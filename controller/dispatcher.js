@@ -198,6 +198,13 @@ var urge = function(req, res, next) {
             });
         }
 
+        if (session.status != Session.Status.Dispatched) {
+            return res.json({
+                code: 1,
+                message: "Error: Couldn't urge session with status " + session.status + ": only dispatched sessions can be urged"
+            });
+        }
+
         session.isUrged = true;
         session.save(function(err) {
             if (err) {
@@ -209,6 +216,97 @@ var urge = function(req, res, next) {
             return res.json({
                 code: 0,
                 message: "Successfully urged the worker."
+            });
+        });
+    });
+};
+
+var set_label = function(req, res, next) {
+    var sessionId = req.body.id;
+    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid session ID ' + sessionId
+        });
+    }
+
+    var labels;
+    try {
+        labels = JSON.parse(req.body.labels);
+    } catch (e) {
+        return res.json({
+            code: 1,
+            message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
+            + ' ParseError: ' + e.toString()
+            + ' Labels: ' + req.body.labels
+        });
+    }
+
+    if (labels.length == 0) {
+        return res.json({
+            code: 0,
+            message: "Operation succeed, but it seems no labels have been submitted."
+        });
+    }
+
+    var session, incomeMail;
+    async.series([
+        function(callback) {
+            Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, _session) {
+                session = _session;
+                callback(err);
+            });
+        },
+        function(callback) {
+            if (session) {
+                Mail.model.findById(mongoose.Types.ObjectId(session.income), function(err, _incomeMail) {
+                    incomeMail = _incomeMail;
+                    callback(err);
+                });
+            } else {
+                callback(err);
+            }
+        }
+    ], function(err) {
+        if (err) {
+            return res.json({
+                code: 1,
+                message: err.toString
+            });
+        }
+
+        if (!session) {
+            return res.json({
+                code: 1,
+                message: "Error: Couldn't find session with ID " + sessionId
+            });
+        }
+
+        if (!incomeMail) {
+            return res.json({
+                code: 1,
+                message: "Error: Couldn't find mail with ID " + session.income + " from session with ID " + session._id
+            });
+        }
+
+        if (session.status != Session.Status.New) {
+            return res.json({
+                code: 1,
+                message: "Error: Couldn't set labels for session with status " + session.status + ", please check your session ID"
+            });
+        }
+
+        incomeMail.labels = labels;
+        incomeMail.save(function(err) {
+            if (err) {
+                return res.json({
+                    code: 1,
+                    message: err.toString
+                });
+            }
+            return res.json({
+                code: 0,
+                message: "Success: labels " + labels.join(', ') + " added"
             });
         });
     });
@@ -241,4 +339,5 @@ router.use(function(req, res, next) {
 
 router.route('/dispatch').post(dispatch);
 router.route('/urge').post(urge);
+router.route('/set_label').post(set_label);
 module.exports = router;
