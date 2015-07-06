@@ -11,6 +11,82 @@ var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
+var reject = function(req, res, next){
+    var sessionId = req.body.id;
+    var message = req.body.message;
+    var user = req.session.user;
+
+    if(!mongoose.Types.ObjectId.isValid(sessionId)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid session ID ' + sessionId
+        });
+    }
+
+    Session.model.findById(sessionId)
+        .populate('dispatcher', 'username')
+        .populate('worker', 'username')
+        .populate('reviewer', 'username')
+        .populate('reply')
+        .exec(function (err, session){
+            if (err) {
+                Log.e({req: req}, err);
+                return res.json({
+                    code: 1,
+                    message: 'Failed to fetch result via session id'
+                });
+            }
+            if (!session) {
+                return res.json({
+                    code: 1,
+                    message: "Couldn't find session with ID " + sessionId
+                });
+            }
+            var mail = session.reply, sender = session.worker;
+/*
+            if (!mail) {
+                return res.json({
+                    code: 1,
+                    message: "Couldn't find reply mail with ID " + session.reply + " from session with ID " + session._id
+                });
+            }
+*/
+            if (session.status != Session.Status.WaitingForReview) {
+                return res.json({
+                    code: 1,
+                    message: "The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."
+                });
+            }
+
+            var operationDict = {
+                type: Session.Type.Reject,
+                operator: user._id,
+                receiver: sender._id,
+                message: message,
+                time: new Date(),
+                mail: mail ? mail._id : undefined
+            }
+
+            session.isRejected = true;
+            session.status = Session.Status.Dispatched;
+            session.operations.push(operationDict);
+
+            session.save(function(err) {
+                if (err) {
+                    res.json({
+                        code: 1,
+                        message: err.toString()
+                    });
+                } else {
+                    res.json({
+                        "code": 0,
+                        "message": "Success"
+                    });
+                }
+            });
+        })
+}
+
 var pass = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
@@ -59,11 +135,11 @@ var pass = function(req, res, next) {
         }
 
         var operationDict = {
-            type: 5,
-            operator:  user._id,
+            type: Session.Type.Pass,
+            operator: user._id,
             time: new Date(),
             mail: mail._id
-        };
+        }
         session.status = 3;
         session.operations.push(operationDict);
 
@@ -107,10 +183,6 @@ router.use(function(req, res, next) {
         next();
     });
 });
-
-var reject = function(req, res, next) {
-
-  };
 
 router.route('/pass').post(pass);
 router.route('/reject').post(reject);
