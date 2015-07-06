@@ -90,6 +90,10 @@ var reject = function(req, res, next){
 var pass = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
+    var subject = req.body.subject;
+    var html = req.body.html;
+    var attachments = req.body.attachments;
+
     var session, mail;
 
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
@@ -134,13 +138,36 @@ var pass = function(req, res, next) {
             });
         }
 
+        var newMail = _.cloneDeep(mail);
+        delete newMail._id;
+
+        if(subject){
+            newMail.subject = subject;
+        }
+        if(html){
+            newMail.html = html;
+        }
+        if(attachments){
+            newMail.attachment = attachments;
+        }
+        newMail = new Mail.model(newMail);
+        newMail.save(function(err) {
+            if(err) {
+                res.json({
+                    code: 1,
+                    message: "couldn't save new mail" + err.toString()
+                })
+            }
+        })
+        //console.log(newMail);
+
         var operationDict = {
             type: Session.Type.Pass,
             operator: user._id,
             time: new Date(),
-            mail: mail._id
+            mail: newMail._id
         }
-        session.status = 3;
+        session.status = Session.Status.WaitingForSend;
         session.operations.push(operationDict);
 
         session.save(function(err) {
