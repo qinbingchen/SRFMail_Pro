@@ -17,6 +17,6 @@
         "normalize.css": "^3.0.3",
         "font-awesome": "^4.3.0",
         "toastr": "^2.1.0",
-        "select2": "^3.5.2-browserify"
+        "select2": "^4.0.0"
     }
 }
