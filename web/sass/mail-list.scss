@@ -6,48 +6,48 @@
   background-color: #f9f9f9;
   border-right: 1px solid #d6d6d6;
   overflow: scroll;
-}
 
-.mail-list-section .header {
-  height: 44px;
-  border-bottom: 1px solid #a6c4db;
+  .header {
+    height: 44px;
+    border-bottom: 1px solid #a6c4db;
 
-}
+    .search {
+      height: 44px;
+      padding-top: 9px;
+      padding-left: 10px;
 
-.search {
-  height: 44px;
-  padding-top: 9px;
-  padding-left: 10px;
-}
+      .fa {
+        color: #a9a9a9;
+      }
 
-.search .fa {
-  color: #a9a9a9;
-}
+      input {
+        position: relative;
+        top: 1px;
+        width: 314px;
+        border: none;
+        background: none;
+      }
+    }
+  }
 
-.search input {
-  position: relative;
-  top: 1px;
-  width: 314px;
-  border: none;
-  background: none;
-}
+  .body {
+    .mail-list {
+      list-style: none;
+    }
 
-.mail-list{
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+    .mail {
+      height: 100px;
+      line-height: 20px;
+      padding-top: 10px;
+      padding-left: 20px;
+      border-bottom: 1px solid #d6d6d6;
+    }
 
-.mail {
-  height: 100px;
-  line-height: 20px;
-  padding-top: 10px;
-  padding-left: 20px;
-  border-bottom: 1px solid #d6d6d6;
-}
-
-.mail.selected {
-  background-color: #ddeefb;
+    .mail.selected {
+      background-color: #2b91e3;
+      color: #fff;
+    }
+  }
 }
 
 .first-row {
@@ -59,14 +59,14 @@
   overflow: hidden;
 }
 
-.sender{
+.mail-list-section .sender{
   display: inline-block;
   float: left;
-  font-weight: bolder;
+  //font-weight: bolder;
   height: 20px;
   padding: 0;
   margin: 0;
-  font-weight: 900;
+  //font-weight: 900;
 }
 
 .date{
@@ -80,13 +80,9 @@
 
 .mail-title{
   height: 20px;
-  font-weight: bold;
-  padding: 0;
-  margin: 0;
+  //font-weight: bold;
 }
 
 .text-preview{
   color: #a9a9a9;
-  padding: 0;
-  margin: 0;
 }

@@ -72,7 +72,6 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
         };
 
         this.filter_mail_list = function () {
-            console.log(userServices);
             this.filtered_mail_list = this.mail_list.filter(function (mail) {
                 switch (userServices.current_user_type) {
                     case USER_TYPE.DISPATCHER:
