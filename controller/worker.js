@@ -11,6 +11,8 @@ var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
+var EmailRegex = /^[a-z]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/;
+
 var submit = function(req, res, next) {
     var sessionId = req.body.id;
     var user = req.session.user;
@@ -32,6 +34,15 @@ var submit = function(req, res, next) {
             + ' recipients: ' + recipients
             + ' attachments: ' + attachments
         });
+    }
+
+    for(var i = 0; i < recipients.length; i++) {
+        if(!EmailRegex.test(recipients[i])) {
+            return res.json({
+                code: 1,
+                message: 'Invalid Email Address'
+            })
+        }
     }
 
     var reviewer, session, incomeMail;
