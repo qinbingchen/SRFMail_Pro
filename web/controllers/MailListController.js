@@ -21,4 +21,3 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         }
     }
 ]);
-
