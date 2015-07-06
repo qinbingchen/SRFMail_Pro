@@ -76,7 +76,6 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
             this.filtered_mail_list = this.mail_list.filter(function (mail) {
                 switch (userServices.current_user_type) {
                     case USER_TYPE.DISPATCHER:
-                        console.log(222);
                         switch (that.selected_category.name) {
                             case "pending":
                                 return mail.status == STATUS.NEW;

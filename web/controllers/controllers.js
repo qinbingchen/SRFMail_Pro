@@ -44,12 +44,13 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             );
         };
 
-        $scope.$on("emit_did_select_category", function() {
-            $scope.$broadcast("broadcast_did_select_category");
+        $scope.$on("emit_category_did_select", function() {
+            $scope.$broadcast("broadcast_category_did_select");
         });
 
-        $scope.$on("emit_did_select_mail", function () {
-            $scope.$broadcast("broadcast_did_select_mail");
+        $scope.$on("emit_mail_did_select", function () {
+            console.log("emit mail");
+            $scope.$broadcast("broadcast_mail_did_select");
         });
 
         $scope.show_modal = function (name) {

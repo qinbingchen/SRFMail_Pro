@@ -10,7 +10,7 @@ SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cook
         $scope.select_category = function (category) {
             mailServices.select_category(category);
             $scope.selected_category = mailServices.selected_category;
-            $scope.$emit("emit_did_select_category");
+            $scope.$emit("emit_category_did_select");
         };
 
         $scope.$on("mail_list_did_load", function () {
