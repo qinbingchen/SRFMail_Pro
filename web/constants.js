@@ -1,5 +1,3 @@
-var ROOT_URL = "";
-
 var STATUS = {
     NEW: 0,
     DISPATCHED: 1,

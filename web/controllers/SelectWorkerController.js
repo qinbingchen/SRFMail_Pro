@@ -33,7 +33,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
                 readonly="[]";
             }
             
-            var url = ROOT_URL + "/api/action/dispatcher/dispatch";
+            var url = "/api/action/dispatcher/dispatch";
             $http.post(url, {
                 id: $scope.$parent.$parent.selected_mail,
                 readonly: readonly,
@@ -51,7 +51,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
 
         
 
-        var url_workers = ROOT_URL + "/api/user/list_workers";
+        var url_workers = "/api/user/list_workers";
         $http.get(url_workers).success(function (data) {
                 $scope.workers=data.workers;
            
@@ -59,7 +59,7 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             console.log(data);
     });
 
-        var url_reviewers = ROOT_URL + "/api/user/list_reviewers";
+        var url_reviewers = "/api/user/list_reviewers";
         $http.get(url_reviewers).success(function (data) {
                 $scope.reviewers=data.reviewers;
            
