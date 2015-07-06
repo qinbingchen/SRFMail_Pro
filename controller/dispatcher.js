@@ -130,7 +130,7 @@ var dispatch = function(req, res, next) {
                     worker: designatedWorker._id,
                     readonly: (readonlyWorkers.indexOf(worker) > -1),
                     operations: [],
-                    status: 1,
+                    status: Session.Status.Dispatched,
                     isRejected: false,
                     isRedirected: false
                 });
@@ -138,7 +138,7 @@ var dispatch = function(req, res, next) {
                     session.operations.push(row);
                 });
                 var operationDict = {
-                    type: 1,
+                    type: Session.Type.Dispatch,
                     operator: currentUser._id,
                     receiver: designatedWorker._id,
                     time: new Date()
