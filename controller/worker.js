@@ -18,8 +18,21 @@ var submit = function(req, res, next) {
     var html = req.body.html;
     var needReview = req.body.needReview == 'true';
     var reviewerUsername = req.body.reviewer;
+    var recipients = req.body.recipients;
+    var attachments = req.body.attachments;
 
-    console.log(req.body);
+    try {
+        recipients = JSON.parse(recipients);
+        attachments = JSON.parse(attachments);
+    } catch (e) {
+        return res.json({
+            code: 1,
+            message: 'Error: Invalid JSON received, please ensure that recipients & attachments parameters hold valid JSON string representations.'
+            + ' Reason: ' + e.toString()
+            + ' recipients: ' + recipients
+            + ' attachments: ' + attachments
+        });
+    }
 
     var reviewer, session, incomeMail;
 
@@ -88,17 +101,30 @@ var submit = function(req, res, next) {
         }
 
         var repliedMail = new Mail.model({
-            to: [{
-                address: session.income.from[0].address,
-                name: session.income.from[0].name
-            }],
+            to: [],
             from: [{
                 address: '15652915887@163.com',
                 name: 'SRFMail'
             }],
             subject: subject,
             html: html,
-            time: new Date()
+            time: new Date(),
+            attachments: []
+        });
+
+        recipients.forEach(function(row) {
+            repliedMail.to.push({
+                name: row.slice(0, row.indexOf('@')),
+                address: row
+            });
+        });
+
+        attachments.forEach(function(row) {
+            repliedMail.attachments.push({
+                cid: row.id,
+                path: path.join(__dirname, '../attachments', row.id),
+                filename: row.filename
+            });
         });
 
         repliedMail.save(function(err) {
