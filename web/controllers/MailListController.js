@@ -5,6 +5,11 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
 
         $scope.$on("broadcast_category_did_select", function () {
             $scope.filtered_mail_list = mailServices.filtered_mail_list;
+            if ($scope.filtered_mail_list.length != 0) {
+                $scope.selectMail($scope.filtered_mail_list[0]);
+            } else {
+                $scope.$emit("emit_mail_did_select");
+            }
         });
 
         $scope.selectMail = function (mail) {

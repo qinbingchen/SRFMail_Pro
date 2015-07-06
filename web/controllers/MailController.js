@@ -3,8 +3,13 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.partial_load_status.mail = true;
         $scope.check_partial_load_status();
 
+        $scope.current_user_type = userServices.current_user_type;
+        $scope.selected_mail = mailServices.selected_mail;
+
         $scope.$on("broadcast_mail_did_select", function () {
-            console.log("123");
+            $scope.current_user_type = userServices.current_user_type;
+            $scope.selected_mail = mailServices.selected_mail;
+
             $http.get("/api/session/get_detail" + "?id=" + mailServices.selected_mail)
                 .success(function (data,status, headers, config) {
                     if (data.code == 0) {
