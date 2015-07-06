@@ -182,7 +182,36 @@ var dispatch = function(req, res, next) {
 };
 
 var urge = function(req, res, next) {
+    var sessionId = req.body.id;
+    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid session ID ' + sessionId
+        });
+    }
 
+    Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, session) {
+        if (err || !session) {
+            return res.json({
+                code: 1,
+                message: "Error: Couldn't find session by ID " + sessionId + ": " + err.toString
+            });
+        }
+
+        session.isUrged = true;
+        session.save(function(err) {
+            if (err) {
+                return res.json({
+                    code: 1,
+                    message: err.toString
+                });
+            }
+            return res.json({
+                code: 0,
+                message: "Successfully urged the worker."
+            });
+        });
+    });
 };
 
 router.use(function(req, res, next) {
