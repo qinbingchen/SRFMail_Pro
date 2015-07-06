@@ -264,14 +264,14 @@ var set_label = function(req, res, next) {
                     callback(err);
                 });
             } else {
-                callback(err);
+                callback();
             }
         }
     ], function(err) {
         if (err) {
             return res.json({
                 code: 1,
-                message: err.toString
+                message: err.toString()
             });
         }
 
@@ -301,7 +301,7 @@ var set_label = function(req, res, next) {
             if (err) {
                 return res.json({
                     code: 1,
-                    message: err.toString
+                    message: err.toString()
                 });
             }
             return res.json({
