@@ -56,6 +56,9 @@ var CATEGORY_LIST = [
                 name: "pending",
                 display_name: "未处理"
             }, {
+                name: "rejected",
+                display_name: "未通过审核"
+            }, {
                 name: "waiting_for_review",
                 display_name: "已提交审核"
             }, {
