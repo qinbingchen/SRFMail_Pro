@@ -19,6 +19,8 @@ var submit = function(req, res, next) {
     var needReview = req.body.needReview == 'true';
     var reviewerUsername = req.body.reviewer;
 
+    console.log(req.body);
+
     var reviewer, session, incomeMail;
 
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
@@ -28,24 +30,26 @@ var submit = function(req, res, next) {
         });
     }
 
-    async.series([
+    async.parallel([
         function(callback) {
             User.model.findOne({ username: reviewerUsername }, function(err, _reviewer) {
+                if(err) {
+                    Log.e({req: req}, err);
+                }
                 reviewer = _reviewer;
+                console.log(reviewer);
                 callback(err, 'get designated reviewer');
             });
         }, function(callback) {
-            Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, _session) {
+            Session.model.findById(mongoose.Types.ObjectId(sessionId))
+                .populate('income')
+                .exec(function(err, _session) {
+                if(err) {
+                    Log.e({req: req}, err);
+                }
                 session = _session;
                 callback(err, 'get session');
             });
-        }, function(callback) {
-            if (session) {
-                Mail.model.findById(mongoose.Types.ObjectId(session.income), function(err, _incomeMail) {
-                    incomeMail = _incomeMail;
-                    callback(err, 'get income mail');
-                });
-            }
         }
     ], function(err) {
         if (err) {
@@ -62,17 +66,17 @@ var submit = function(req, res, next) {
             });
         }
 
+        if(session.status != Session.Status.Dispatched || session.readonly) {
+            return res.json({
+                code: 1,
+                message: 'Invalid Session Status'
+            })
+        }
+
         if (!reviewer) {
             return res.json({
                 code: 1,
                 message: "Couldn't find user with name " + reviewerUsername
-            });
-        }
-
-        if (!incomeMail) {
-            return res.json({
-                code: 1,
-                message: "Couldn't find income mail with ID " + session.income + " from session with ID " + session._id
             });
         }
 
@@ -85,8 +89,12 @@ var submit = function(req, res, next) {
 
         var repliedMail = new Mail.model({
             to: [{
-                address: incomeMail.to[0].address,
-                name: incomeMail.to[0].name
+                address: session.income.from[0].address,
+                name: session.income.from[0].name
+            }],
+            from: [{
+                address: '15652915887@163.com',
+                name: 'SRFMail'
             }],
             subject: subject,
             html: html,
@@ -95,6 +103,7 @@ var submit = function(req, res, next) {
 
         repliedMail.save(function(err) {
             if (err) {
+                Log.e({req: req}, err);
                 return res.json({
                     code: 1,
                     message: err.toString()
@@ -117,6 +126,7 @@ var submit = function(req, res, next) {
 
             session.save(function(err) {
                 if (err) {
+                    Log.e({req: req}, err);
                     res.json({
                         code: 1,
                         message: err.toString()
@@ -152,6 +162,18 @@ var pass = function(req, res, next) {
                 message: err.toString()
             })
         }
+        if(!session) {
+            return res.json({
+                code: 1,
+                message: 'Invalid Session Id'
+            })
+        }
+        if(session.status != Session.Status.Dispatched || !session.readonly) {
+            return res.json({
+                code: 1,
+                message: 'Invalid Session Status'
+            })
+        }
         Session.model.findByIdAndUpdate(sessionId, {
             status: Session.Status.Success,
             $push: {
@@ -180,8 +202,113 @@ var pass = function(req, res, next) {
 };
 
 var redirect = function(req, res, next) {
+    var id = req.body.id;
+    var user = req.body.user;
 
-  };
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid Session ID'
+        });
+    }
+
+    var modify = {
+        isRedirected: true
+    };
+    var session;
+
+    async.series([
+        function(cb) {
+            Session.model.findById(mongoose.Types.ObjectId(id), function(err, _session) {
+                if(err) {
+                    Log.e({req: req}, err);
+                    res.json({
+                        code: -1,
+                        message: 'Internal error'
+                    });
+                    return cb(err);
+                }
+                if(!_session) {
+                    res.json({
+                        code: 1,
+                        message: 'Invalid session id'
+                    });
+                    return cb(new Error('Invalid session id'));
+                }
+                session = _session;
+                cb();
+            });
+        },
+        function(cb) {
+            if(user) {
+                User.model.findOne({
+                    username: user
+                }, function(err, user) {
+                    if(err) {
+                        Log.e({req: req}, err);
+                        res.json({
+                            code: -1,
+                            message: 'Internal error'
+                        });
+                        return cb(err);
+                    }
+                    if(!user) {
+                        res.json({
+                            code: 1,
+                            message: 'Invalid username'
+                        });
+                        return cb(new Error('Invalid username'));
+                    }
+                    modify.worker = user._id;
+                    modify.$push = {
+                        operations: {
+                            type: Session.Type.Redirect,
+                            operator: req.session.user._id,
+                            receiver: user._id,
+                            time: new Date(),
+                            mail: session.income
+                        }
+                    };
+                    modify.status = Session.Status.Dispatched;
+                    cb();
+                })
+            }                                                                                                                                                                                                                                                                else {
+                modify.worker = null;
+                modify.$push = {
+                    operations: {
+                        type: Session.Type.Redirect,
+                        operator: req.session.user._id,
+                        receiver: session.dispatcher,
+                        time: new Date(),
+                        mail: session.income
+                    }
+                };
+                modify.status = Session.Status.New;
+                cb();
+            }
+        },
+        function(cb) {
+            Session.model.findByIdAndUpdate(mongoose.Types.ObjectId(id), modify, function(err) {
+                if(err) {
+                    Log.e({req: req}, err);
+                    res.json({
+                        code: -1,
+                        message: 'Internal error'
+                    });
+                }
+                cb(err);
+            })
+        }
+    ], function(err) {
+        if(err) {
+            return;
+        }
+        res.json({
+            code: 0,
+            message: 'success'
+        });
+    });
+                                                                                                                                                                                                                                                                 };
 
 router.use(function(req, res, next) {
     if (!req.session.user) {
