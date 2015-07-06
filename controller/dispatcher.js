@@ -129,7 +129,18 @@ var dispatch = function(req, res, next) {
 };
 
 var set_deadline = function(req, res, next) {
+    var sessionId = req.body.id;
+    var deadline = req.body.deadline;
+    var deadlineDate = new Date(deadline);
+    if (deadlineDate.toString() == 'Invalid Date') {
+        return res.json({
+            code: 1,
+            message: 'Invalid date ' + deadline
+        });
+    }
 
+    var currentUser = req.session.user;
+    
 };
 
 var urge = function(req, res, next) {
@@ -151,6 +162,12 @@ router.use(function(req, res, next) {
             });
         }
         req.session.user = user;
+        if (user.role != User.Role.Dispatcher) {
+            return res.json({
+                code: 1,
+                message: "Unauthorized: User " + user.username + " with role " + user.role + " isn't a dispatcher"
+            });
+        }
         next();
     });
 });

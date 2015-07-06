@@ -198,6 +198,12 @@ router.use(function(req, res, next) {
             });
         }
         req.session.user = user;
+        if (user.role != User.Role.Worker) {
+            return res.json({
+                code: 1,
+                message: "Unauthorized: User " + user.username + " with role " + user.role + " isn't a worker"
+            });
+        }
         next();
     });
 });
