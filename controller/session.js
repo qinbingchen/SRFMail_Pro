@@ -152,6 +152,7 @@ var list = function(req, res, next){
                     isRejected: session.isRejected,
                     isRedirected: session.isRedirected,
                     lastOperation: session.operations ? (session.operations.length > 0 ? session.operations[session.operations.length-1] : undefined) : undefined,
+                    isUrged: session.isUrged,
                     income: {
                         subject: session.income.subject,
                         from: session.income.from,
