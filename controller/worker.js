@@ -11,6 +11,7 @@ var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
+var MailSender = require('../lib/mail');
 
 var EmailRegex = /^[a-z0-9]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/;
 
@@ -181,10 +182,22 @@ var submit = function(req, res, next) {
                         message: err.toString()
                     });
                 } else {
-                    res.json({
-                        "code": 0,
-                        "message": "Success"
-                    });
+                    if(!needReview) {
+                        MailSender.sendMail(repliedMail._id.toString(), function(err) {
+                            if(err) {
+                                Log.e({req: req}, err);
+                                res.json({
+                                    code: 1,
+                                    message: err.toString()
+                                });
+                            } else {
+                                res.json({
+                                    "code": 0,
+                                    "message": "Success"
+                                });
+                            }
+                        })
+                    }
                 }
             });
         });
@@ -217,7 +230,7 @@ var pass = function(req, res, next) {
                 message: 'Invalid Session Id'
             })
         }
-        if(session.status != Session.Status.Dispatched || !session.readonly) {
+        if(session.status != Session.Status.Dispatched) {
             return res.json({
                 code: 1,
                 message: 'Invalid Session Status'

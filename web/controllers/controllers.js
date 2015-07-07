@@ -147,6 +147,14 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
 
         $scope.$on("broadcast_show_edit", function () {
             $scope.edit_mode = EDIT_MODE.EDIT;
+            // 在审核修改的时候将邮件内容写入弹出框
+
+            var data = mailServices.selected_mail;
+            $scope.recipient = data.reply.to[0].address;
+            $scope.subject = data.reply.subject;
+            $scope.content = data.reply.html;
+
+
         });
 
         $scope.switch_review = function () {
@@ -197,10 +205,22 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                         });
                         break;
                     case EDIT_MODE.EDIT:
+                        $http.post("/api/action/reviewer/pass", {
+                            id: mailServices.selected_mail,
+                            subject: $scope.recipient,
+                            html: $scope.content,
+                            attachments: []
+                        }).success(function (data, status, headers, config) {
+                            toastr.success("发送成功", "");
+                            $scope.dismiss_modal();
+                        }).error(function () {
+
+                        });
                         break;
                     default :
                         break;
                 }
             }
+
         }
     }]);
