@@ -60,8 +60,8 @@ var detail = function(req, res, next) {
             }
             session.operations.forEach(function(row) {
                 var op = {
-                    operator: row.operator.username,
-                    receiver: row.receiver.username,
+                    operator: row.operator ? row.operator.username : undefined,
+                    receiver: row.receiver ? row.receiver.username : undefined,
                     type: row.type,
                     message: row.message,
                     time: row.time
