@@ -23,6 +23,9 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         });
 
         $scope.review_pass = function () {
+            if ($scope.review_reject_show) {
+                $scope.review_reject_show = false;
+            }
             $http.post("/api/action/reviewer/pass", {
                 id: mailServices.selected_mail_id
             }).success(function (data, status, headers, config) {
