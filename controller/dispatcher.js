@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
+var Label = require('../model').label;
 var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
@@ -302,19 +303,38 @@ var set_label = function(req, res, next) {
         }
 
         labels = labels.getUnique();
-        incomeMail.labels = labels;
-        incomeMail.save(function(err) {
-            if (err) {
-                return res.json({
-                    code: 1,
-                    message: err.toString()
-                });
-            }
-            return res.json({
-                code: 0,
-                message: labels.length == 0 ? "Success: All labels removed." : "Success: Labels set to: " + labels.join(', ') + "."
-            });
-        });
+        var labels_id = [];
+        var cnt = 0;
+        labels.forEach(function(label){
+            Label.model.findOne({
+                name: label
+            }, function(err, _label){
+                cnt += 1;
+                if(err) {
+                    Log.e({req: req}, err);
+                    return res.json({
+                        code: 1,
+                        message: 'couldn\'t find label with name ' + label
+                    });
+                }
+                if(_label)labels_id.push(_label._id);
+                if(cnt == labels.length){
+                    incomeMail.labels = labels_id;
+                    incomeMail.save(function(err) {
+                        if (err) {
+                            return res.json({
+                                code: 1,
+                                message: err.toString()
+                            });
+                        }
+                        return res.json({
+                            code: 0,
+                            message: labels.length == 0 ? "Success: All labels removed." : "Success: Labels set to: " + labels.join(', ') + "."
+                        });
+                    });
+                }
+            })
+        })
     });
 };
 
