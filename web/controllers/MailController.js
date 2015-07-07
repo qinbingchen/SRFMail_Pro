@@ -4,28 +4,25 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.check_partial_load_status();
 
         $scope.current_user_type = userServices.current_user_type;
-        $scope.selected_mail = mailServices.selected_mail;
+        $scope.selected_mail_id = mailServices.selected_mail_id;
 
         $scope.$on("broadcast_mail_did_select", function () {
             $scope.current_user_type = userServices.current_user_type;
-            $scope.selected_mail = mailServices.selected_mail;
+            $scope.selected_mail_id = mailServices.selected_mail_id;
 
-            $http.get("/api/session/get_detail" + "?id=" + mailServices.selected_mail)
-                .success(function (data,status, headers, config) {
-                    if (data.code == 0) {
-                        $scope.mail = data;
-                    } else {
-                        console.log(data);
-                    }
-                }).error(function (data, status, headers, config) {
-                    console.log(data);
+            mailServices.load_mail(
+                function () {
+                    $scope.mail = mailServices.selected_mail;
+                },
+                function () {
 
-                });
+                }
+            );
         });
 
         $scope.check = function () {
             $http.post("/api/action/worker/pass", {
-                id: $scope.selected_mail
+                id: $scope.selected_mail_id
             }).success(function (data, status, headers, config) {
 
             }).error(function (data, status, headers, config) {

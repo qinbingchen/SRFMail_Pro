@@ -51,7 +51,8 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
         this.selected_category = userServices.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[userServices.current_user_type].category[0];
         this.mail_list = [];
         this.filtered_mail_list = [];
-        this.selected_mail = "";
+        this.selected_mail_id = "";
+        this.selected_mail = {};
 
         this.load_mail_list = function (success, error) {
             $http.get("/api/session/get_list")
@@ -122,6 +123,22 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                         return false;
                 }
             });
+        }
+
+        this.load_mail = function (success, error) {
+            $http.get("/api/session/get_detail?id=" + this.selected_mail_id)
+                .success(function (data,status, headers, config) {
+                    if (data.code == 0) {
+                        that.selected_mail = data;
+                        success();
+                    } else {
+                        console.log(data);
+                        error()
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log(data);
+                    error()
+                });
         }
     }
 ]);

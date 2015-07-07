@@ -16,7 +16,7 @@
             <ng-include src="'partial/select-worker.html'"></ng-include>
         </div>
 
-        <div class="mail" ng-if="selected_mail != ''">
+        <div class="mail" ng-if="selected_mail_id != ''">
             <div class="info">
                 <div class="title">{{mail.income.subject}}</div>
                 <div class="time">{{mail.income.time}}</div>
@@ -25,7 +25,7 @@
             <div class="content" ng-bind-html="mail.income.html"></div>
         </div>
 
-        <div class="mail-empty" ng-if="selected_mail == ''">
+        <div class="mail-empty" ng-if="selected_mail_id == ''">
             <i class="fa fa-envelope-o fa-5x"></i>
             <div class="text">未选取邮件</div>
         </div>

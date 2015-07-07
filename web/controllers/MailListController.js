@@ -13,12 +13,12 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         });
 
         $scope.selectMail = function (mail) {
-            mailServices.selected_mail = mail.id;
+            mailServices.selected_mail_id = mail.id;
             $scope.$emit("emit_mail_did_select");
         };
 
         $scope.changeClass = function(mail) {
-            if (mail.id == mailServices.selected_mail) {
+            if (mail.id == mailServices.selected_mail_id) {
                 return 'mail selected';
             } else {
                 return 'mail';
