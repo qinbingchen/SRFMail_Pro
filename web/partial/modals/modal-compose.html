@@ -17,7 +17,7 @@
                         <span class="prompt">主题：</span>
                         <input id="subject" type="text" ng-model="subject" />
                     </div>
-                    <div class="input-group review" ng-hide="edit_mode == 2|| edit_mode == 3">
+                    <div class="input-group review" ng-hide="edit_mode == 2">
                         <span class="prompt">需要审核</span>
                         <input type="checkbox" id="review-checkbox" ng-model="need_review" ng-change="switch_review()"/>
                         <select id="reviewer" class="ng-hide" ng-model="reviewer">

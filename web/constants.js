@@ -88,4 +88,3 @@ var EDIT_MODE = {
     REPLY: 1,
     EDIT: 2
 };
-

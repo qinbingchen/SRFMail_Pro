@@ -29,13 +29,17 @@
       color: #465d6f;
     }
 
+    .mail-category:first-child.selected {
+      border-top: 1px solid #cae8fb;
+    }
+
     .before-selected {
-      border-bottom-color: #ddeefb !important;
+      border-bottom-color: #ddeefb;
     }
 
     .selected {
-      border-top-color: #b1dbf9 !important;
-      border-bottom-color: #b1dbf9 !important;
+      border-top-color: #b1dbf9 ;
+      border-bottom-color: #b1dbf9 ;
       background-color: #cae8fb;
       color: #007aff;
     }

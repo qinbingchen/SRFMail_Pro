@@ -58,18 +58,10 @@
           font-size: 15px;
         }
       }
-      .content {
-        border-bottom: 1px solid #cfcfd3;
-        padding-bottom: 10px;
-      }
-      .attribute {
-        color: #888;
-      }
-      .value {
-        margin-left: 20px;
-        color: #888;
-      }
-      .income_content {
+
+      .original-income {
+        padding: 10px 20px;
+        border-top: 1px solid #cfcfd3;
         color: #888;
       }
     }

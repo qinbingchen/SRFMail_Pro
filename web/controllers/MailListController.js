@@ -8,6 +8,7 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
             if ($scope.filtered_mail_list.length != 0) {
                 $scope.selectMail($scope.filtered_mail_list[0]);
             } else {
+                mailServices.selected_mail_id = "";
                 $scope.$emit("emit_mail_did_select");
             }
         });

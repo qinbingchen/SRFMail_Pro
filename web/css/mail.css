@@ -38,15 +38,9 @@
         .mail-section .body .mail .info .sender {
           margin-top: 6px;
           font-size: 15px; }
-      .mail-section .body .mail .content {
-        border-bottom: 1px solid #cfcfd3;
-        padding-bottom: 10px; }
-      .mail-section .body .mail .attribute {
-        color: #888; }
-      .mail-section .body .mail .value {
-        margin-left: 20px;
-        color: #888; }
-      .mail-section .body .mail .income_content {
+      .mail-section .body .mail .original-income {
+        padding: 10px 20px;
+        border-top: 1px solid #cfcfd3;
         color: #888; }
     .mail-section .body .mail-empty {
       height: 100%;

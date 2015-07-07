@@ -23,11 +23,13 @@
       border-top: 1px solid #e4f2fc;
       border-bottom: 1px solid #cde3f1;
       color: #465d6f; }
+    .side-bar-section .mail-category-list .mail-category:first-child.selected {
+      border-top: 1px solid #cae8fb; }
     .side-bar-section .mail-category-list .before-selected {
-      border-bottom-color: #ddeefb !important; }
+      border-bottom-color: #ddeefb; }
     .side-bar-section .mail-category-list .selected {
-      border-top-color: #b1dbf9 !important;
-      border-bottom-color: #b1dbf9 !important;
+      border-top-color: #b1dbf9;
+      border-bottom-color: #b1dbf9;
       background-color: #cae8fb;
       color: #007aff; }
     .side-bar-section .mail-category-list .fa {

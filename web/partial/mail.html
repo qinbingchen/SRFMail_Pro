@@ -5,7 +5,7 @@
             <button ng-click="check()" ng-show="current_user_type == 2"><i class="fa fa-check-circle-o fa-lg"></i>标记处理</button>
              <button ng-click="remind()" ng-show="current_user_type == 1 && selected_mail.status == 1">提醒</button>
             <button ng-click="show_compose()" ng-show="current_user_type == 2"><i class="fa fa-edit fa-lg"></i>撰写</button>
-            <button ng-click="show_reply()" ng-show="current_user_type == 2 && !selected_mail.readonly"><i class="fa fa-edit fa-lg"></i>回复</button>
+            <button ng-click="show_reply()" ng-show="current_user_type == 2 && selected_mail != null && !selected_mail.readonly"><i class="fa fa-edit fa-lg"></i>回复</button>
             <button ng-click="review_pass()" ng-show="current_user_type == 3 &&  selected_category.name == 'pending'"><i
                     class="fa fa-lg"></i>通过
             </button>
@@ -21,6 +21,7 @@
     </div>
 
     <div class="body">
+
         <div class="bubble" ng-show="dispatch_show">
             <div class="tri"></div>
             <div class="tri-inner"></div>
@@ -42,30 +43,30 @@
         </div>
 
         <div class="mail" ng-if="selected_mail_id != ''">
-            <div class="info">
+            <div class="info" ng-if="selected_mail.reply != null">
                 <div class="title">{{selected_mail.reply.subject}}</div>
                 <div class="time">{{selected_mail.reply.time}}</div>
-                <div class="sender" ng-if="current_user_type!=3">发件人 {{selected_mail.reply.to[0].address}}</div>
-                <div class="sender" ng-if="current_user_type==3">收件人 {{selected_mail.reply.to[0].address}}</div>
+                <div class="recipient">收件人 {{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
+            </div>
+            <div class="info" ng-if="selected_mail.reply == null">
+                <div class="title">{{selected_mail.income.subject}}</div>
+                <div class="time">{{selected_mail.income.time}}</div>
+                <div class="sender">发件人 {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
             </div>
 
-            <div class="content" ng-bind-html="selected_mail.reply.html"></div>
-            <div ng-if="selected_mail.income">
-                <div>
-                    <div><span class="attribute">日期:</span><span class="value">{{selected_mail.income.time}}</span>
-                    </div>
-                    <div><span class="attribute">主题:</span><span class="value">{{selected_mail.income.subject}}</span>
-                    </div>
-                    <div><span class="attribute">发件人:</span><span
-                            class="value">{{selected_mail.income.from[0].address}}</span></div>
-                </div>
-                <div class="income_content" ng-bind-html="selected_mail.income.html"></div>
-            </div>
+            <div class="content" ng-bind-html="selected_mail.reply.html" ng-if="selected_mail.reply != null"></div>
+            <div class="content" ng-bind-html="selected_mail.income.html" ng-if="selected_mail.reply == null"></div>
 
+            <div class="original-income" ng-if="selected_mail.reply != null && selected_mail.income != null">
+                <div class="title">主题：{{selected_mail.income.subject}}</div>
+                <div class="time">时间：{{selected_mail.income.time}}</div>
+                <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
+                <div class="content" ng-bind-html="selected_mail.income.html"></div>
+            </div>
         </div>
 
         <div class="mail-empty" ng-if="selected_mail_id == ''">
-            <i class="fa fa-envelope-o fa-5x"></i>
+            <i class="fa fa-envelope-o"></i>
             <div class="text">未选取邮件</div>
         </div>
 
