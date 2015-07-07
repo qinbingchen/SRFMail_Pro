@@ -52,6 +52,27 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.$broadcast("broadcast_mail_did_select");
         });
 
+        $scope.$on("emit_show_compose", function() {
+            $scope.$broadcast("broadcast_show_compose");
+            $scope.show_modal("compose");
+        });
+
+        $scope.$on("emit_show_reply", function () {
+            $scope.$broadcast("broadcast_show_reply");
+            $scope.show_modal("compose");
+        });
+
+        $scope.$on("emit_show_edit", function () {
+            $scope.$broadcast("broadcast_show_edit");
+            $scope.show_modal("compose");
+        });
+
+        $("body").on("select2:open", "select", function () {
+            $(this).siblings(".select2").addClass("selected");
+        }).on("select2:close", "select", function () {
+            $(this).siblings(".select2").removeClass("selected");
+        });
+
         $scope.show_modal = function (name) {
             $("#modal-" + name).addClass("show");
             $("#modal-" + name + " .modal").addClass("show");
@@ -61,39 +82,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $(".modal").removeClass("show");
             $(".modal-background").removeClass("show");
         };
-
-        $scope.show_compose = function () {
-            $scope.$broadcast("show_compose")
-        };
-
-        $scope.show_reply = function () {
-            $scope.$broadcast("show_reply")
-        };
-
-        $scope.show_edit = function () {
-            $scope.$broadcast("show_edit")
-        };
-
-        // TODO REWRITE
-
-        $scope.check = function () {
-            $http.post("/api/action/worker/pass", {
-                id: $scope.selected_mail
-            }).success(function (data, status, headers, config) {
-                $scope.reload_mail();
-            }).error(function (data, status, headers, config) {
-                console.log(data);
-            });
-        };
-
-        $scope.show_dispatch = function () {
-            $scope.dispatch_show = !$scope.dispatch_show;
-        };
-
-
-        $scope.dispatch_show = false;
-
-        // TODO END OF TODO
     }]);
 
 SRFMailProControllers.controller("ModalController", ["$scope",
@@ -124,15 +112,72 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         $scope.partial_load_status.modal_compose = true;
         $scope.check_partial_load_status();
 
-        $scope.$on("show_compose", function () {
+        $scope.edit_mode = EDIT_MODE.COMPOSE;
 
+        $http.get("/api/user/list_reviewers")
+            .success(function (data, status, headers, config) {
+                $scope.reviewer_list = data["reviewers"];
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+
+        $scope.$on("broadcast_show_compose", function () {
+            $scope.edit_mode = EDIT_MODE.COMPOSE;
         });
 
-        $scope.$on("show_reply", function () {
-
+        $scope.$on("broadcast_show_reply", function () {
+            $scope.edit_mode = EDIT_MODE.REPLY;
         });
 
-        $scope.$on("show_edit", function () {
-
+        $scope.$on("broadcast_show_edit", function () {
+            $scope.edit_mode = EDIT_MODE.EDIT;
         });
+
+        $scope.switch_review = function () {
+            if ($scope.need_review) {
+                $("#select-reviewer").select2({
+                    data: $scope.reviewer_list,
+                    placeholder: "请选择审核人"
+                });
+            } else {
+
+            }
+        };
+
+        $scope.submit = function () {
+            switch ($scope.edit_mode) {
+                case EDIT_MODE.COMPOSE:
+                    $http.post("/api/action/worker/submit", {
+                        subject: $scope.recipient,
+                        html: $scope.content,
+                        attachments: [],
+                        needReview: "",
+                        reviewer: ""
+                    }).success(function (data, status, headers, config) {
+                        $scope.load_mail_list();
+                    }).error(function (data, status, headers, config) {
+                        console.log(data);
+                    });
+                    break;
+                case EDIT_MODE.REPLY:
+                    $http.post("/api/action/worker/submit", {
+                        id: mailServices.selected_mail,
+                        subject: "123",
+                        html: "344",
+                        attachments: [],
+                        needReview: "",
+                        reviewer: ""
+                    }).success(function (data, status, headers, config) {
+                        $scope.load_mail_list();
+                    }).error(function (data, status, headers, config) {
+                        console.log(data);
+                    });
+                    break;
+                case EDIT_MODE.EDIT:
+                    break;
+                default :
+                    break;
+            }
+
+        }
     }]);

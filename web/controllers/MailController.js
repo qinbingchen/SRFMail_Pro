@@ -22,4 +22,33 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
                 });
         });
+
+        $scope.check = function () {
+            $http.post("/api/action/worker/pass", {
+                id: $scope.selected_mail
+            }).success(function (data, status, headers, config) {
+
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
+
+        $scope.show_dispatch = function () {
+            $scope.dispatch_show = !$scope.dispatch_show;
+        };
+
+        $scope.dispatch_show = false;
+
+        $scope.show_compose = function () {
+            $scope.$emit("emit_show_compose");
+        };
+
+        $scope.show_reply = function () {
+            $scope.$emit("emit_show_reply");
+        };
+
+        $scope.show_edit = function () {
+            $scope.$emit("emit_show_edit");
+        };
+
     }]);

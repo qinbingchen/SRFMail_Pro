@@ -83,3 +83,9 @@ var CATEGORY_LIST = [
     }
 ];
 
+var EDIT_MODE = {
+    COMPOSE: 0,
+    REPLY: 1,
+    EDIT: 2
+};
+

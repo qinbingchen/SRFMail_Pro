@@ -4,7 +4,7 @@
             <div class="modal" ng-click="prevent_dismiss($event)">
                 <div class="header">
                     <button class="btn" ng-click="dismiss_modal()">取消</button>
-                    <button class="btn right">发送</button>
+                    <button class="btn right" ng-click="submit()">发送</button>
                 </div>
                 <div class="body">
                     <div class="input-group">
@@ -12,8 +12,15 @@
                         <input id="recipient" type="email" ng-model="recipient" />
                     </div>
                     <div class="input-group">
-                        <span class="prompt" id="title">主题：</span>
+                        <span class="prompt">主题：</span>
                         <input id="subject" type="text" ng-model="subject" />
+                    </div>
+                    <div class="input-group">
+                        <span class="prompt">需要审核</span>
+                        <input type="checkbox" id="review-checkbox" ng-model="need_review" ng-change="switch_review()"/>
+                        <select id="select-reviewer" class="ng-hide" ng-model="reviewer">
+                            <option></option>
+                        </select>
                     </div>
                     <textarea ng-model="content"></textarea>
                 </div>

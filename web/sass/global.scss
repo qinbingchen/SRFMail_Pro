@@ -53,6 +53,49 @@ textarea {
   float: right;
 }
 
+/* select2 begin */
+
+.select2-selection,
+.select2-dropdown {
+  border-radius: 0 !important;
+}
+
+.select2 {
+  min-width: 200px;
+  border: 1px solid #e5e5e5 !important;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s !important;
+}
+
+.select2.selected {
+  border: 1px solid #1caf9a !important;
+}
+
+.select2.invalid {
+  border: 1px solid #d14 !important;
+}
+
+.select2-selection {
+  border: none !important;
+}
+
+.select2-selection__rendered {
+  font-size: 13px !important;
+}
+
+.select2-dropdown {
+  border: 1px solid #1caf9a !important;
+}
+
+.select2-results__option {
+  font-size: 13px !important;
+}
+
+.select2-results__option--highlighted {
+  background-color: #1caf9a !important;
+}
+
+/* select2 end */
+
 /* button begin */
 
 .btn {
