@@ -9,10 +9,10 @@
         <ul class="mail-list">
             <li class="mail" ng-repeat="mail in filtered_mail_list" ng-class="changeClass(mail)" ng-click="selectMail(mail)">
                 <p class="first-row">
-                    <a class="sender">{{mail.income.from[0].name}}</a>
-                    <a class="date">{{mail.income.time}}</a>
+                    <a class="sender">{{(mail.lastOperation.mail==null)?(mail.income.from[0].name):(mail.lastOperation.operator)}}</a>
+                    <a class="date">{{(mail.lastOperation.mail==null)?(mail.income.time):(mail.lastOperation.time)}}</a>
                 </p>
-                <p class="mail-title">{{mail.income.subject}}</p>
+                <p class="mail-title">{{(mail.lastOperation.mail==null)?(mail.income.subject):(mail.lastOperation.mail.subject)}}</p>
                 <!--<p class="text-preview">{{mail.content}}</p>-->
             </li>
         </ul>
