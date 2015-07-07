@@ -43,19 +43,26 @@ var reject = function(req, res, next){
                 });
             }
             var mail = session.reply, sender = session.worker;
-/*
+
             if (!mail) {
                 return res.json({
                     code: 1,
                     message: "Couldn't find reply mail with ID " + session.reply + " from session with ID " + session._id
                 });
             }
-*/
+
             if (session.status != Session.Status.WaitingForReview) {
                 return res.json({
                     code: 1,
                     message: "The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."
                 });
+            }
+
+            if(!sender){
+                return res.json({
+                    code: 1,
+                    message: "this mail have no worker, cannot be reject"
+                })
             }
 
             var operationDict = {
@@ -131,7 +138,7 @@ var pass = function(req, res, next) {
             });
         }
 
-        if (session.status != 2) {
+        if (session.status != Session.Status.WaitingForReview) {
             return res.json({
                 code: 1,
                 message: "The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."
