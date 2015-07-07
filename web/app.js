@@ -123,7 +123,7 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                         return false;
                 }
             });
-        }
+        };
 
         this.load_mail = function (success, error) {
             $http.get("/api/session/get_detail?id=" + this.selected_mail_id)
@@ -139,7 +139,7 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                     console.log(data);
                     error()
                 });
-        }
+        };
     }
 ]);
 
