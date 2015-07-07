@@ -24,24 +24,27 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
         $scope.review_pass = function () {
             $http.post("/api/action/reviewer/pass", {
-                id: mailServices.selected_mail
+                id: mailServices.selected_mail_id
             }).success(function (data, status, headers, config) {
                 toastr.success('审核通过', '');
+                $scope.load_mail_list();
             });
 
         };
 
         $scope.review_refuse = function () {
             $scope.review_reject_show = !$scope.review_reject_show;
+
         };
 
         $scope.review_refuse_confirm = function () {
             $scope.review_reject_show = false;
             $http.post("/api/action/reviewer/reject", {
-                id: mailServices.selected_mail,
+                id: mailServices.selected_mail_id,
                 message: $scope.review_comment_textarea
             }).success(function () {
                 toastr.success('成功退回', '');
+                $scope.load_mail_list();
             }).error(function () {
                 alert("review refuse confirm is error");
             });
@@ -52,9 +55,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $scope.review_reject_show = false;
 
         };
-        $scope.review_edit = function () {
-            $scope.$emit("emit_show_compose");
-        };
+
         $scope.check = function () {
             $http.post("/api/action/worker/pass", {
                 id: $scope.selected_mail_id
