@@ -284,6 +284,13 @@ var redirect = function(req, res, next) {
                     });
                     return cb(new Error('Invalid session id'));
                 }
+                if(!session.income) {
+                    res.json({
+                        code: 1,
+                        message: 'Session you wrote couldn\'t be redirected.'
+                    });
+                    return cb(new Error('Session you wrote couldn\'t be redirected.'));
+                }
                 session = _session;
                 cb();
             });
