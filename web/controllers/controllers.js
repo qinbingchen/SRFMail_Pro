@@ -112,6 +112,12 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         $scope.partial_load_status.modal_compose = true;
         $scope.check_partial_load_status();
 
+        if (userServices.current_user_type == USER_TYPE.REVIEWER) {
+            $scope.recipient_disable_input = true;
+        } else {
+            $scope.recipient_disable_input = false;
+        }
+
         $scope.edit_mode = EDIT_MODE.COMPOSE;
         var editor = new wysihtml5.Editor("editor", {
             toolbar: "toolbar",
@@ -204,16 +210,22 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                         break;
                     case EDIT_MODE.EDIT:
                         $http.post("/api/action/reviewer/pass", {
-                            id: mailServices.selected_mail,
-                            subject: $scope.recipient,
+                            id: mailServices.selected_mail_id,
+                            subject: $scope.subject,
                             html: $scope.content,
                             attachments: []
                         }).success(function (data, status, headers, config) {
-                            toastr.success("发送成功", "");
-                            $scope.dismiss_modal();
+                            if (data.code == 0) {
+                                toastr.success("发送成功", "");
+                                $scope.load_mail_list();
+                            } else {
+                                toastr.error("发送失败，请重试", "");
+                            }
+
                         }).error(function () {
 
                         });
+                        $scope.dismiss_modal();
                         break;
                     default :
                         break;
