@@ -48,10 +48,10 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
     function($http, $cookies, userServices) {
         var that = this;
 
+        this.selected_category = userServices.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[userServices.current_user_type].category[0];
         this.mail_list = [];
         this.filtered_mail_list = [];
         this.selected_mail = "";
-        this.selected_category = userServices.current_user_type == USER_TYPE.NONE ? null : CATEGORY_LIST[userServices.current_user_type].category[0];
 
         this.load_mail_list = function (success, error) {
             $http.get("/api/session/get_list")
@@ -86,15 +86,15 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                                 return false;
                         }
                     case USER_TYPE.WORKER:
-                        if (mail.worker != that.current_user_name) {
+                        if (mail.worker != userServices.current_user_name) {
                             return false;
                         } else {
                             switch (that.selected_category.name) {
                                 case "pending":
                                     return mail.status == STATUS.DISPATCHED
-                                        && (mail.lastOperation == OPERATION_TYPE.DISPATCH || mail.lastOperation == OPERATION_TYPE.REDIRECT);
+                                        && (mail.lastOperation.type == OPERATION_TYPE.DISPATCH || mail.lastOperation.type == OPERATION_TYPE.REDIRECT);
                                 case "rejected":
-                                    return mail.status == STATUS.DISPATCHED && mail.lastOperation == OPERATION_TYPE.REJECT;
+                                    return mail.status == STATUS.DISPATCHED && mail.lastOperation.type == OPERATION_TYPE.REJECT;
                                 case "waiting_for_review":
                                     return mail.status == STATUS.WAITINGFORREVIEW;
                                 case "success":
@@ -104,7 +104,7 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                             }
                         }
                     case USER_TYPE.REVIEWER:
-                        if (mail.reviewer != that.current_user_name) {
+                        if (mail.reviewer != userServices.current_user_name) {
                             return false;
                         } else {
                             switch (that.selected_category.name) {
@@ -119,7 +119,6 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                             }
                         }
                     default:
-                        console.log("ddd");
                         return false;
                 }
             });
