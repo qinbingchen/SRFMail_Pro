@@ -78,12 +78,14 @@ textarea {
   border: none;
   background: none; }
 
-.btn:not(:disabled):hover {
+.btn:not(:disabled):hover,
+.btn:not(.disabled):hover {
   cursor: pointer;
   color: #1d5fcc; }
 
-.btn:disabled {
-  color: #bbd3fd; }
+.btn:disabled,
+.btn.disabled {
+  color: #dadada; }
 
 /* button end */
 /* modal begin */

@@ -113,7 +113,10 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         $scope.check_partial_load_status();
 
         $scope.edit_mode = EDIT_MODE.COMPOSE;
-        $scope.current_user_type = userServices.current_user_type;
+        var editor = new wysihtml5.Editor("editor", {
+            toolbar: "toolbar",
+            parserRules:  wysihtml5ParserRules
+        });
 
         $http.get("/api/user/list_reviewers")
             .success(function (data, status, headers, config) {
@@ -129,11 +132,17 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.need_review = false;
             $scope.reviewer = "";
             $("select#reviewer").select2("destroy");
-            $scope.content = "312";
+            //$scope.content = "312";
+
         });
 
         $scope.$on("broadcast_show_reply", function () {
             $scope.edit_mode = EDIT_MODE.REPLY;
+            $scope.recipient = mailServices.selected_mail.income.from[0].address;
+            $scope.subject = "Re: " + mailServices.selected_mail.income.subject;
+            $scope.need_review = false;
+            $scope.reviewer = "";
+            $("select#reviewer").select2("destroy");
         });
 
         $scope.$on("broadcast_show_edit", function () {
@@ -152,43 +161,46 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         };
 
         $scope.submit = function () {
-            console.log($scope.recipient);
-            console.log($scope.content);
-            switch ($scope.edit_mode) {
-                case EDIT_MODE.COMPOSE:
-                    $http.post("/api/action/worker/submit", {
-                        recipients: "12312",
-                        subject: $scope.subject,
-                        html: $scope.content,
-                        attachments: [],
-                        needReview: $scope.need_review,
-                        reviewer: $scope.reviewer
-                    }).success(function (data, status, headers, config) {
-                        $scope.load_mail_list();
-                        $scope.dismiss_modal();
-                    }).error(function (data, status, headers, config) {
-                        console.log(data);
-                    });
-                    break;
-                case EDIT_MODE.REPLY:
-                    $http.post("/api/action/worker/submit", {
-                        id: mailServices.selected_mail_id,
-                        subject: "123",
-                        html: "344",
-                        attachments: [],
-                        needReview: "",
-                        reviewer: ""
-                    }).success(function (data, status, headers, config) {
-                        $scope.load_mail_list();
-                    }).error(function (data, status, headers, config) {
-                        console.log(data);
-                    });
-                    break;
-                case EDIT_MODE.EDIT:
-                    break;
-                default :
-                    break;
+            if ($scope.recipient == "") {
+                return;
+            } else {
+                switch ($scope.edit_mode) {
+                    case EDIT_MODE.COMPOSE:
+                        $http.post("/api/action/worker/submit", {
+                            recipients: JSON.stringify([$scope.recipient]),
+                            subject: $scope.subject,
+                            html: $scope.content,
+                            attachments: JSON.stringify([]),
+                            needReview: $scope.need_review,
+                            reviewer: $scope.reviewer
+                        }).success(function (data, status, headers, config) {
+                            $scope.load_mail_list();
+                            $scope.dismiss_modal();
+                        }).error(function (data, status, headers, config) {
+                            console.log(data);
+                        });
+                        break;
+                    case EDIT_MODE.REPLY:
+                        $http.post("/api/action/worker/submit", {
+                            id: mailServices.selected_mail_id,
+                            recipients: JSON.stringify([$scope.recipient]),
+                            subject: $scope.subject,
+                            html: $scope.content,
+                            attachments: JSON.stringify([]),
+                            needReview: $scope.need_review,
+                            reviewer: $scope.reviewer
+                        }).success(function (data, status, headers, config) {
+                            $scope.load_mail_list();
+                            $scope.dismiss_modal();
+                        }).error(function (data, status, headers, config) {
+                            console.log(data);
+                        });
+                        break;
+                    case EDIT_MODE.EDIT:
+                        break;
+                    default :
+                        break;
+                }
             }
-
         }
     }]);

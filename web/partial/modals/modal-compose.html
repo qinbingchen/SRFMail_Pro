@@ -1,28 +1,40 @@
 <div ng-controller="ModalController">
     <div ng-controller="ComposeModalController">
         <div id="modal-compose" class="modal-background">
-            <div class="modal" ng-click="prevent_dismiss($event)">
+            <div class="modal" ng-form name="compose_form" ng-click="prevent_dismiss($event)">
                 <div class="header">
                     <button class="btn" ng-click="dismiss_modal()">取消</button>
-                    <button class="btn right" ng-click="submit()">发送</button>
+                    <button class="btn right"
+                            ng-class="{'disabled': compose_form.recipient.$error.required || compose_form.recipient.$error.email}"
+                            ng-click="submit()">发送</button>
                 </div>
                 <div class="body">
                     <div class="input-group">
                         <span class="prompt">收件人：</span>
-                        <input id="recipient" type="email" ng-model="recipient" />
+                        <input id="recipient" type="email" name="recipient" ng-model="recipient" ng-change="aaa()"/>
                     </div>
                     <div class="input-group">
                         <span class="prompt">主题：</span>
                         <input id="subject" type="text" ng-model="subject" />
                     </div>
-                    <div class="input-group review" ng-hide="$scope.edit_mode == 2">
+                    <div class="input-group review" ng-hide="edit_mode == 2">
                         <span class="prompt">需要审核</span>
                         <input type="checkbox" id="review-checkbox" ng-model="need_review" ng-change="switch_review()"/>
                         <select id="reviewer" class="ng-hide" ng-model="reviewer">
                             <option></option>
                         </select>
                     </div>
-                    <textarea ng-model="content"></textarea>
+                    <!--<textarea ng-model="content"></textarea>-->
+
+                    <div id="toolbar">
+                        <a data-wysihtml5-command="bold">bold</a>
+                        <a data-wysihtml5-command="italic">italic</a>
+                        <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>
+                        <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a>
+                    </div>
+
+                    <!-- element to edit -->
+                    <div id="editor" data-placeholder="Go on, start editing..."></div>
                 </div>
             </div>
         </div>
