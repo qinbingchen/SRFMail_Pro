@@ -116,6 +116,24 @@ var list = function(req, res, next){
     var queryIsRejected = req.query.isRejected == "true";
     var queryIsRedirected = req.query.isRedirected == "true";
     var find_key = {};
+
+    switch(req.session.user.role) {
+        case User.Role.Reviewer:
+            find_key.reviewer = req.session.user._id;
+            break;
+        case User.Role.Worker:
+            find_key.worker = req.session.user._id;
+            break;
+        case User.Role.Dispatcher:
+            break;
+        default:
+            return res.json({
+                code: 1,
+                message: 'You are not yet logged in'
+            });
+            break;
+    }
+
     if(queryStatus){
         find_key.status = queryStatus
     }
@@ -129,141 +147,72 @@ var list = function(req, res, next){
         find_key.readonly = queryReadonly
     }
 
-    async.parallel([
-        function(callback) {
-            if(queryDispatcherUserName) {
-                User.model.findOne({
-                    username: queryDispatcherUserName,
-                    role: User.Role.Dispatcher
-                }, function(err, user) {
-                    if(err) {
-                        Log.e({req: req}, err);
-                        return callback(err);
-                    }
-                    if(!user) {
-                        return callback(new Error('Invalid dispatcher name'));
-                    }
-                    find_key.dispatcher = user._id;
-                    callback();
+    Session.model.find(find_key)
+        .populate('dispatcher', 'username')
+        .populate('worker', 'username')
+        .populate('reviewer', 'username')
+        .populate('income')
+        .populate('reply')
+        .exec(function(err, sessions){
+            if (err) {
+                Log.e({req: req}, err);
+                return res.json({
+                    code: 1,
+                    message: 'Failed to fetch result'
                 });
-            } else {
-                callback();
             }
-        },
-        function(callback) {
-            if(queryWorkerUserName) {
-                User.model.findOne({
-                    username: queryWorkerUserName,
-                    role: User.Role.Worker
-                }, function(err, user) {
-                    if(err) {
-                        Log.e({req: req}, err);
-                        return callback(err);
+            ret.count = sessions.length;
+            sessions.forEach(function (session, index){
+                var list_element = {
+                    id: session._id,
+                    readonly: session.readonly,
+                    dispatcher: session.dispatcher ? session.dispatcher.username : undefined,
+                    worker: session.worker ? session.worker.username : undefined,
+                    reviewer: session.reviewer ? session.reviewer.username : undefined,
+                    status: session.status,
+                    isRejected: session.isRejected ? session.isRejected : false,
+                    isRedirected: session.isRedirected ? session.isRejected : false,
+                    isUrged: session.isUrged ? session.isUrged : false,
+                    lastOperation: session.operations ? (session.operations.length > 0 ? session.operations[session.operations.length-1] : undefined) : undefined
+                };
+                if(session.income) {
+                    list_element.income = {
+                        subject: session.income.subject,
+                        from: session.income.from,
+                        to: session.income.to,
+                        labels: session.income.labels,
+                        deadline: session.income.deadline,
+                        time: session.income.time
                     }
-                    if(!user) {
-                        return callback(new Error('Invalid worker name'));
-                    }
-                    find_key.worker = user._id;
-                    callback();
-                });
-            } else {
-                callback();
-            }
-        },
-        function(callback) {
-            if(queryReviewerUserName) {
-                User.model.findOne({
-                    username: queryReviewerUserName,
-                    role: User.Role.Reviewer
-                }, function(err, user) {
-                    if(err) {
-                        Log.e({req: req}, err);
-                        return callback(err);
-                    }
-                    if(!user) {
-                        return callback(new Error('Invalid reviewer name'));
-                    }
-                    find_key.reviewer = user._id;
-                    callback();
-                });
-            } else {
-                callback();
-            }
-        }
-    ], function(err) {
-        if(err) {
-            return res.json({
-                code: 1,
-                message: err.toString()
-            });
-        }
-        Session.model.find(find_key)
-            .populate('dispatcher', 'username')
-            .populate('worker', 'username')
-            .populate('reviewer', 'username')
-            .populate('income')
-            .populate('reply')
-            .exec(function(err, sessions){
-                if (err) {
-                    Log.e({req: req}, err);
-                    return res.json({
-                        code: 1,
-                        message: 'Failed to fetch result'
-                    });
                 }
-                ret.count = sessions.length;
-                sessions.forEach(function (session, index){
-                    var list_element = {
-                        id: session._id,
-                        readonly: session.readonly,
-                        dispatcher: session.dispatcher ? session.dispatcher.username : undefined,
-                        worker: session.worker ? session.worker.username : undefined,
-                        reviewer: session.reviewer ? session.reviewer.username : undefined,
-                        status: session.status,
-                        isRejected: session.isRejected ? session.isRejected : false,
-                        isRedirected: session.isRedirected ? session.isRejected : false,
-                        isUrged: session.isUrged ? session.isUrged : false,
-                        lastOperation: session.operations ? (session.operations.length > 0 ? session.operations[session.operations.length-1] : undefined) : undefined
-                    };
-                    if(session.income) {
-                        list_element.income = {
-                            subject: session.income.subject,
-                            from: session.income.from,
-                            to: session.income.to,
-                            labels: session.income.labels,
-                            deadline: session.income.deadline,
-                            time: session.income.time
-                        }
+                if(session.reply) {
+                    list_element.reply = {
+                        subject: session.reply.subject,
+                        from: session.reply.from,
+                        to: session.reply.to,
+                        labels: session.reply.labels,
+                        deadline: session.reply.deadline,
+                        time: session.reply.time
                     }
-                    if(session.reply) {
-                        list_element.reply = {
-                            subject: session.reply.subject,
-                            from: session.reply.from,
-                            to: session.reply.to,
-                            labels: session.reply.labels,
-                            deadline: session.reply.deadline,
-                            time: session.reply.time
-                        }
-                    }
-                    ret.sessions.push(list_element);
-                });
-                ret.sessions.sort(function (a, b){
-                    var A, B;
-                    if(a.lastOperation) {
-                        A = a.lastOperation.time.getTime();
-                    } else {
-                        A = a.income.time.getTime();
-                    }
-                    if(b.lastOperation) {
-                        B = b.lastOperation.time.getTime();
-                    } else {
-                        B = b.income.time.getTime();
-                    }
-                    return A < B;
-                });
-                res.json(ret);
+                }
+                ret.sessions.push(list_element);
             });
-    });
+            ret.sessions.sort(function (a, b){
+                var A, B;
+                if(a.lastOperation) {
+                    A = a.lastOperation.time.getTime();
+                } else {
+                    A = a.income.time.getTime();
+                }
+                if(b.lastOperation) {
+                    B = b.lastOperation.time.getTime();
+                } else {
+                    B = b.income.time.getTime();
+                }
+                return A < B;
+            });
+            res.json(ret);
+        });
 };
 
 
