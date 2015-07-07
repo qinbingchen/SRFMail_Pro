@@ -160,6 +160,7 @@ var submit = function(req, res, next) {
             session.reply = repliedMail._id;
             session.reviewer = reviewer._id;
             session.operations.push(operationDict);
+            session.isRejected = false;
 
             session.save(function(err) {
                 if (err) {
