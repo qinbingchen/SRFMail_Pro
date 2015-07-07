@@ -10,7 +10,7 @@ var path = require('path');
 var client = redis.createClient(settings.redis.port, settings.redis.host);
 
 exports.start = function() {
-    FetchAndSend();
+    process.nextTick(FetchAndSend);
 };
 
 function FetchAndSend() {
@@ -41,17 +41,18 @@ function FetchAndSend() {
             }
             MailSender.realSendMail(mail, function(err, info) {
                 if(err) {
-                    return Log.e(err)
+                    Log.e(err)
+                } else {
+                    Session.model.findOneAndUpdate({
+                        reply: mongoose.Types.ObjectId(data[1].toString())
+                    }, {
+                        status: Session.Status.Success
+                    }, function(err) {
+                        if(err) {
+                            Log.e(err)
+                        }
+                    });
                 }
-                Session.model.findOneAndUpdate({
-                    reply: mongoose.Types.ObjectId(data[1].toString())
-                }, {
-                    status: Session.Status.Success
-                }, function(err) {
-                    if(err) {
-                        Log.e(err)
-                    }
-                });
                 FetchAndSend()
             })
         })
