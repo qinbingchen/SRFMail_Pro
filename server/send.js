@@ -43,7 +43,7 @@ function FetchAndSend() {
                 if(err) {
                     return Log.e(err)
                 }
-                Session.findOneAndUpdate({
+                Session.model.findOneAndUpdate({
                     reply: mongoose.Types.ObjectId(data[1].toString())
                 }, {
                     status: Session.Status.Success
