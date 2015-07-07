@@ -4,6 +4,15 @@
             <button ng-click="show_dispatch()" ng-show="current_user_type == 1"><i class="fa fa-reply fa-lg"></i>分发</button>
             <button ng-click="check()" ng-show="current_user_type == 2"><i class="fa fa-check-circle-o fa-lg"></i>标记处理</button>
             <button ng-click="show_compose()" ng-show="current_user_type == 2"><i class="fa fa-edit fa-lg"></i>撰写</button>
+            <button ng-click="review_pass()" ng-show="current_user_type == 3 &&  selected_category.name == 'pending'"><i
+                    class="fa fa-lg"></i>通过
+            </button>
+            <button ng-click="review_refuse()" ng-show="current_user_type == 3 && selected_category.name == 'pending'">
+                <i class="fa fa-lg"></i>拒绝
+            </button>
+            <button ng-click="review_edit()" ng-show="current_user_type == 3 && selected_category.name == 'pending'"><i
+                    class="fa fa-lg"></i>修改
+            </button>
             <button class="right" ng-hide="current_user_type == -1" ng-click="logout()">登出</button>
             <span class="right">{{current_user_name}}</span>
         </div>
@@ -15,14 +24,27 @@
             <div class="tri-inner"></div>
             <ng-include src="'partial/select-worker.html'"></ng-include>
         </div>
+        <div class="reject-bubble" ng-show="review_reject_show">
+            <div class="tri"></div>
+            <div class="tri-inner"></div>
+            <div class="review-bubble">
+
+                <label>拒绝意见</label>
+                <br/>
+                <textarea ng-model="review_comment_textarea"/>
+                <br/>
+                <button ng-click="review_refuse_confirm()">确定</button>
+                <button ng-click="review_refuse_cancel()">取消</button>
+            </div>
+        </div>
 
         <div class="mail" ng-if="selected_mail_id != ''">
             <div class="info">
-                <div class="title">{{mail.income.subject}}</div>
-                <div class="time">{{mail.income.time}}</div>
-                <div class ="sender">发件人 {{mail.income.from[0].address}}</div>
+                <div class="title">{{selected_mail.income.subject}}</div>
+                <div class="time">{{selected_mail.income.time}}</div>
+                <div class ="sender">发件人 {{selected_mail.income.from[0].address}}</div>
             </div>
-            <div class="content" ng-bind-html="mail.income.html"></div>
+            <div class="content" ng-bind-html="selected_mail.income.html"></div>
         </div>
 
         <div class="mail-empty" ng-if="selected_mail_id == ''">

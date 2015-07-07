@@ -113,6 +113,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         $scope.check_partial_load_status();
 
         $scope.edit_mode = EDIT_MODE.COMPOSE;
+        $scope.current_user_type = userServices.current_user_type;
 
         $http.get("/api/user/list_reviewers")
             .success(function (data, status, headers, config) {

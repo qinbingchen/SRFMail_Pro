@@ -9,7 +9,7 @@ var login = function(req, res, next) {
     User.model.findOne({
         username: req.body.user,
         password: req.body.password
-    }).populate('defaultReviewer', 'username').exec(function(err, user) {
+    }).exec(function(err, user) {
         if(err) {
             Log.e({req: req}, err);
             return res.json({
@@ -31,7 +31,7 @@ var login = function(req, res, next) {
             role: user.role,
             name: user.name,
             gender: user.gender,
-            defaultReviewer: user.defaultReviewer ? user.defaultReviewer.username : undefined
+            defaultReviewer: user.defaultReviewer
         });
     });
 };
