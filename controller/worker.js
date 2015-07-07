@@ -217,7 +217,7 @@ var pass = function(req, res, next) {
                 message: 'Invalid Session Id'
             })
         }
-        if(session.status != Session.Status.Dispatched || !session.readonly) {
+        if(session.status != Session.Status.Dispatched) {
             return res.json({
                 code: 1,
                 message: 'Invalid Session Status'
