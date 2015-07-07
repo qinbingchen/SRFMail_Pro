@@ -1,7 +1,7 @@
 SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "$cookies",
     function ($scope, $http, $cookies) {
 
-        $scope.sendDispatch=function(){
+           $scope.sendDispatch=function(){
 
             var readreply_selected = $("#readreply").select2("val");
             if(readreply_selected.length>0)
@@ -33,11 +33,14 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
                 readonly="[]";
             }
             
-            var url = "/api/action/dispatcher/dispatch";
+            var deadline = $("#deadline").val();           
+
+             var url = "/api/action/dispatcher/dispatch";
             $http.post(url, {
                 id: $scope.$parent.$parent.selected_mail,
                 readonly: readonly,
-                readreply: readreply
+                readreply: readreply,
+                deadline: deadline
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     location.reload();
@@ -47,9 +50,31 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
-        };
 
-        
+            var label_selected = $("#themelabel").select2("val");
+            if(label_selected.length>0)
+            {
+                var labels="[\""+label_selected[0]+"\"";
+                for(i=1;i<label_selectedlength;i++) 
+                {
+                    labels+=",\""+label_selected[i]+"\"";
+                }
+                labels="]";
+
+                var url = "/api/action/dispatcher/set_label";
+                $http.post(url, {
+                    id: $scope.$parent.$parent.selected_mail,
+                    labels: labels
+                }).success(function (data, status, headers, config) {
+                    if (data.code == 0) {
+                    } else {
+                        console.log(data);
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log(data);
+                });
+                }                   
+        };
 
         var url_workers = "/api/user/list_workers";
         $http.get(url_workers).success(function (data) {
@@ -59,18 +84,24 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             console.log(data);
     });
 
-        var url_reviewers = "/api/user/list_reviewers";
-        $http.get(url_reviewers).success(function (data) {
-                $scope.reviewers=data.reviewers;
+        var url_labels = "/api/user/list_label";
+        $http.get(url_labels).success(function (data) {
+                $scope.theme_labels=data.theme_labels;
            
         }).error(function (data, status, headers, config) {
             console.log(data);
     });
-        	
 
-    	setTimeout(function() {
-    			$(".select-workers").select2();
-    	}, 0);	
+        $scope.theme_labels=["hello","goodmorning"];
+        	setTimeout(function() {
+               $(".select-workers").select2({
+                    data: $scope.workers
+                });
+               $(".select-labels").select2({
+                    data: $scope.theme_labels
+                });
+        }, 100);  
+
     }]);
 
 
