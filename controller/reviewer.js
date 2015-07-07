@@ -146,8 +146,9 @@ var pass = function(req, res, next) {
                     newMail.html = html;
                 }
                 if(attachments){
-                    newMail.attachment = attachments;
+                    newMail.attachments = attachments;
                 }
+                newMail.time = new Date();
                 newMail = new Mail.model(newMail);
 
                 newMail.save(function(err) {
