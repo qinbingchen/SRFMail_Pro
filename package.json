@@ -22,7 +22,6 @@
     "imap": "^0.8.14",
     "lodash": "^3.10.0",
     "mailparser": "^0.5.1",
-    "mime-types": "^2.1.2",
     "mongoose": "^4.0.6",
     "multiparty": "^4.1.2",
     "nodemailer": "^1.4.0",
