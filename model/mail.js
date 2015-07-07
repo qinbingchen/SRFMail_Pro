@@ -27,8 +27,7 @@ var MailSchema = new schema({
         id: { type: String },
         contentType: { type: String },
         filename: { type: String },
-        path: { type: String },
-        cid: { type: String },
+        contentId: { type: String },
         content: { type: String },
         encoding: { type: String }
     }],

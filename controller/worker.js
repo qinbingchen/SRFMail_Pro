@@ -6,12 +6,13 @@ var mongoose = require('mongoose');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
+var Attachment = require('../model').attachment;
 var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
-var EmailRegex = /^[a-z]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/;
+var EmailRegex = /^[a-z0-9]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/;
 
 var submit = function(req, res, next) {
     var sessionId = req.body.id;
@@ -25,7 +26,9 @@ var submit = function(req, res, next) {
 
     try {
         recipients = JSON.parse(recipients);
-        attachments = JSON.parse(attachments);
+        if(attachments) {
+            attachments = JSON.parse(attachments);
+        }
     } catch (e) {
         return res.json({
             code: 1,
@@ -40,14 +43,14 @@ var submit = function(req, res, next) {
         if(!EmailRegex.test(recipients[i])) {
             return res.json({
                 code: 1,
-                message: 'Invalid Email Address'
+                message: 'Invalid Email Address: ' + recipients[i]
             })
         }
     }
 
-    var reviewer, session, incomeMail;
+    var reviewer, session;
 
-    if (!mongoose.Types.ObjectId.isValid(sessionId)) {
+    if (!mongoose.Types.ObjectId.isValid(sessionId) && typeof sessionId != 'undefined') {
         return res.json({
             code: 1,
             message: 'Invalid session ID ' + sessionId
@@ -56,58 +59,65 @@ var submit = function(req, res, next) {
 
     async.parallel([
         function(callback) {
-            User.model.findOne({ username: reviewerUsername }, function(err, _reviewer) {
-                if(err) {
-                    Log.e({req: req}, err);
-                }
-                reviewer = _reviewer;
-                console.log(reviewer);
-                callback(err, 'get designated reviewer');
-            });
-        }, function(callback) {
-            Session.model.findById(mongoose.Types.ObjectId(sessionId))
-                .populate('income')
-                .exec(function(err, _session) {
-                if(err) {
-                    Log.e({req: req}, err);
-                }
-                session = _session;
-                callback(err, 'get session');
-            });
+            if(needReview) {
+                User.model.findOne({ username: reviewerUsername }, function(err, _reviewer) {
+                    if(err) {
+                        Log.e({req: req}, err);
+                        return callback(err);
+                    }
+                    if(!_reviewer) {
+                        return callback(new Error("Couldn't find user with name " + reviewerUsername));
+                    }
+                    reviewer = _reviewer;
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        },
+        function(callback) {
+            if(!sessionId) {
+                session = new Session.model({
+                    worker: user._id
+                });
+                session.save(callback);
+            } else {
+                Session.model.findById(mongoose.Types.ObjectId(sessionId)).exec(function(err, _session) {
+                    if(err) {
+                        Log.e({req: req}, err);
+                        return callback(err);
+                    }
+                    if(!_session) {
+                        return callback(new Error("Couldn't find session with ID " + sessionId));
+                    }
+                    if(_session.status != Session.Status.Dispatched || _session.readonly) {
+                        return callback(new Error('Invalid Session Status'));
+                    }
+                    session = _session;
+                    callback();
+                });
+            }
+        },
+        function(callback) {
+            if(attachments) {
+                Attachment.model.find({
+                    saveId: {
+                        $in: attachments
+                    }
+                }, function(err, items) {
+                    attachments = items;
+                    callback(err);
+                });
+            } else {
+                attachments = [];
+                callback();
+            }
         }
     ], function(err) {
         if (err) {
             return res.json({
                 code: 1,
                 message: err.toString()
-            });
-        }
-
-        if (!session) {
-            return res.json({
-                code: 1,
-                message: "Couldn't find session with ID " + sessionId
-            });
-        }
-
-        if(session.status != Session.Status.Dispatched || session.readonly) {
-            return res.json({
-                code: 1,
-                message: 'Invalid Session Status'
-            })
-        }
-
-        if (!reviewer) {
-            return res.json({
-                code: 1,
-                message: "Couldn't find user with name " + reviewerUsername
-            });
-        }
-
-        if (session.status != 1) {
-            return res.json({
-                code: 1,
-                message: "The session's status is " + session.status + " therefore couldn't be submitted. Aborting."
             });
         }
 
@@ -132,9 +142,10 @@ var submit = function(req, res, next) {
 
         attachments.forEach(function(row) {
             repliedMail.attachments.push({
-                cid: row.id,
-                path: path.join(__dirname, '../attachments', row.id),
-                filename: row.filename
+                cid: row.contentId,
+                path: path.join(__dirname, '../attachments', row.saveId),
+                filename: row.name,
+                contentType: row.contentType
             });
         });
 

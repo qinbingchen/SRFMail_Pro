@@ -2,9 +2,11 @@ var MailListener = require('../lib/mail-listener2');
 var settings = require('../settings');
 var Mail = require('../model').mail;
 var Session = require('../model').session;
+var Attachment = require('../model').attachment;
 var fs = require('fs');
 var path = require('path');
 var Log = require('../lib/log')('[server-receive');
+var uuid = require('uuid');
 
 var mailListener = new MailListener({
     username: settings.mail.username,
@@ -56,7 +58,6 @@ mailListener.on('mail', function(_mail, seqno, attributes){
             mail.attachments.push({
                 contentType: row.contentType,
                 filename: row.filename,
-                path: row.contentId ? path.join(__dirname, '../attachments', row.contentId) : undefined,
                 cid: row.cid,
                 content: row.content,
                 encoding: row.encoding,
@@ -78,32 +79,22 @@ mailListener.on('mail', function(_mail, seqno, attributes){
 });
 
 mailListener.on('attachment', function(attachment) {
-    var finalPath = path.join(__dirname, '../attachments', attachment.contentId);
-    var p = finalPath.split(path.sep).slice(0, -1).join(path.sep);
-    console.log(finalPath);
-    console.log(p);
-    if(p.length > 0) {
-        mkdirs(p, function() {
-            var stream = fs.createWriteStream(finalPath);
-            attachment.stream.pipe(stream);
-        });
-    } else {
-        var stream = fs.createWriteStream(finalPath);
-        attachment.stream.pipe(stream);
-    }
-});
-
-var mkdirs = function (dirpath, mode, callback) {
-    fs.exists(dirpath, function(exists) {
-        if(exists) {
-            callback(dirpath);
-        } else {
-            //尝试创建父目录，然后再创建当前目录
-            mkdirs(path.dirname(dirpath), mode, function(){
-                fs.mkdir(dirpath, mode, callback);
-            });
-        }
+    var saveId = uuid.v1();
+    var stream = fs.createWriteStream(path.join(__dirname, '../attachments', saveId));
+    attachment.stream.pipe(stream);
+    var atta = new Attachment.model({
+        name: attachment.generatedFileName,
+        contentType: attachment.contentType,
+        contentId: attachment.contentId,
+        type: Attachment.Type.In,
+        saveId: saveId
     });
-};
+    attachment.contentId = saveId;
+    atta.save(function(err) {
+        if(err) {
+            Log.e(err);
+        }
+    })
+});
 
 exports.start = mailListener.start.bind(mailListener);

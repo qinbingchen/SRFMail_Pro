@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var async = require('async');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
@@ -52,11 +53,27 @@ var detail = function(req, res, next) {
                 income: session.income,
                 reply: session.reply
             };
-            if(!ret.income.html) {
+            if(ret.income && !ret.income.html) {
                 ret.income.html = '<p>' + ret.income.text + '</p>'
             }
             if(ret.reply && !ret.reply.html) {
                 ret.reply.html = '<p>' + ret.income.text + '</p>'
+            }
+            if(ret.income && ret.income.attachments) {
+                ret.income.attachments.forEach(function(attachment, index) {
+                    op.mail.attachments[index] = {
+                        title: attachment.filename,
+                        id: attachment.id
+                    };
+                });
+            }
+            if(ret.reply && ret.reply.attachments) {
+                ret.reply.attachments.forEach(function(attachment, index) {
+                    op.mail.attachments[index] = {
+                        title: attachment.filename,
+                        id: attachment.id
+                    };
+                });
             }
             session.operations.forEach(function(row) {
                 var op = {
@@ -66,8 +83,10 @@ var detail = function(req, res, next) {
                     message: row.message,
                     time: row.time
                 };
-                if(row.mail && row.mail.attachments) {
+                if(row.mail) {
                     op.mail = row.mail;
+                }
+                if(row.mail && row.mail.attachments) {
                     op.mail.attachments.forEach(function(attachment, index) {
                         op.mail.attachments[index] = {
                             title: attachment.filename,
@@ -94,8 +113,8 @@ var list = function(req, res, next){
     var queryReadonly = req.query.readonly;
     var queryReviewerUserName = req.query.reviewer;
     var queryStatus = req.query.status;
-    var queryIsRejected = req.query.isRejected;
-    var queryIsRedirected = req.query.isRedirected;
+    var queryIsRejected = req.query.isRejected == "true";
+    var queryIsRedirected = req.query.isRedirected == "true";
     var find_key = {};
     if(queryStatus){
         find_key.status = queryStatus
@@ -109,75 +128,142 @@ var list = function(req, res, next){
     if(queryReadonly){
         find_key.readonly = queryReadonly
     }
-    if(queryDispatcherUserName) {
-        find_key.dispatcher = User.model.findOne({
-            username: queryDispatcherUserName,
-            role: User.Role.Dispatcher
-        })._id
-    }
-    if(queryWorkerUserName){
-        find_key.worker = User.model.findOne({
-            username: queryWorkerUserName,
-            role: User.Role.Worker
-        })._id
-    }
-    if(queryReviewerUserName){
-        find_key.reviewer = User.model.findOne({
-            username: queryReviewerUserName,
-            role: User.Role.Reviewer
-        })._id
-    }
-    Session.model.find(find_key)
-        .populate('dispatcher', 'username')
-        .populate('worker', 'username')
-        .populate('reviewer', 'username')
-        .populate('income')
-        .populate('reply')
-        .exec(function(err, sessions){
-            if (err) {
-                Log.e({req: req}, err);
-                return res.json({
-                    code: 1,
-                    message: 'Failed to fetch result'
+
+    async.parallel([
+        function(callback) {
+            if(queryDispatcherUserName) {
+                User.model.findOne({
+                    username: queryDispatcherUserName,
+                    role: User.Role.Dispatcher
+                }, function(err, user) {
+                    if(err) {
+                        Log.e({req: req}, err);
+                        return callback(err);
+                    }
+                    if(!user) {
+                        return callback(new Error('Invalid dispatcher name'));
+                    }
+                    find_key.dispatcher = user._id;
+                    callback();
                 });
+            } else {
+                callback();
             }
-            ret.count = sessions.length;
-            sessions.forEach(function (session, index){
-                var list_element = {
-                    id: session._id,
-                    readonly: session.readonly,
-                    dispatcher: session.dispatcher ? session.dispatcher.username : undefined,
-                    worker: session.worker ? session.worker.username : undefined,
-                    reviewer: session.reviewer ? session.reviewer.username : undefined,
-                    status: session.status,
-                    isRejected: session.isRejected ? session.isRejected : false,
-                    isRedirected: session.isRedirected ? session.isRejected : false,
-                    isUrged: session.isUrged ? session.isUrged : false,
-                    lastOperation: session.operations ? (session.operations.length > 0 ? session.operations[session.operations.length-1] : undefined) : undefined,
-                    income: {
-                        subject: session.income.subject,
-                        from: session.income.from,
-                        labels: session.income.labels,
-                        deadline: session.income.deadline,
-                        time: session.income.time
+        },
+        function(callback) {
+            if(queryWorkerUserName) {
+                User.model.findOne({
+                    username: queryWorkerUserName,
+                    role: User.Role.Worker
+                }, function(err, user) {
+                    if(err) {
+                        Log.e({req: req}, err);
+                        return callback(err);
                     }
-                };
-                if(session.reply) {
-                    list_element.reply = {
-                        subject: session.reply.subject,
-                        from: session.reply.from,
-                        labels: session.reply.labels,
-                        deadline: session.reply.deadline,
-                        time: session.reply.time
+                    if(!user) {
+                        return callback(new Error('Invalid worker name'));
                     }
+                    find_key.worker = user._id;
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        },
+        function(callback) {
+            if(queryReviewerUserName) {
+                User.model.findOne({
+                    username: queryReviewerUserName,
+                    role: User.Role.Reviewer
+                }, function(err, user) {
+                    if(err) {
+                        Log.e({req: req}, err);
+                        return callback(err);
+                    }
+                    if(!user) {
+                        return callback(new Error('Invalid reviewer name'));
+                    }
+                    find_key.reviewer = user._id;
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        }
+    ], function(err) {
+        if(err) {
+            return res.json({
+                code: 1,
+                message: err.toString()
+            });
+        }
+        Session.model.find(find_key)
+            .populate('dispatcher', 'username')
+            .populate('worker', 'username')
+            .populate('reviewer', 'username')
+            .populate('income')
+            .populate('reply')
+            .exec(function(err, sessions){
+                if (err) {
+                    Log.e({req: req}, err);
+                    return res.json({
+                        code: 1,
+                        message: 'Failed to fetch result'
+                    });
                 }
-                ret.sessions.push(list_element);
+                ret.count = sessions.length;
+                sessions.forEach(function (session, index){
+                    var list_element = {
+                        id: session._id,
+                        readonly: session.readonly,
+                        dispatcher: session.dispatcher ? session.dispatcher.username : undefined,
+                        worker: session.worker ? session.worker.username : undefined,
+                        reviewer: session.reviewer ? session.reviewer.username : undefined,
+                        status: session.status,
+                        isRejected: session.isRejected ? session.isRejected : false,
+                        isRedirected: session.isRedirected ? session.isRejected : false,
+                        isUrged: session.isUrged ? session.isUrged : false,
+                        lastOperation: session.operations ? (session.operations.length > 0 ? session.operations[session.operations.length-1] : undefined) : undefined
+                    };
+                    if(session.income) {
+                        list_element.income = {
+                            subject: session.income.subject,
+                            from: session.income.from,
+                            to: session.income.to,
+                            labels: session.income.labels,
+                            deadline: session.income.deadline,
+                            time: session.income.time
+                        }
+                    }
+                    if(session.reply) {
+                        list_element.reply = {
+                            subject: session.reply.subject,
+                            from: session.reply.from,
+                            to: session.reply.to,
+                            labels: session.reply.labels,
+                            deadline: session.reply.deadline,
+                            time: session.reply.time
+                        }
+                    }
+                    ret.sessions.push(list_element);
+                });
+                ret.sessions.sort(function (a, b){
+                    var A, B;
+                    if(a.lastOperation) {
+                        A = a.lastOperation.time.getTime();
+                    } else {
+                        A = a.income.time.getTime();
+                    }
+                    if(b.lastOperation) {
+                        B = b.lastOperation.time.getTime();
+                    } else {
+                        B = b.income.time.getTime();
+                    }
+                    return A < B;
+                });
+                res.json(ret);
             });
-            ret.sessions.sort(function (a, b){
-                return a.income.time.getTime() < b.income.time.getTime();
-            });
-            res.json(ret);
-    })
+    });
 };
 
 
