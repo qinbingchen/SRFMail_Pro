@@ -69,6 +69,16 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             });
         };
 
+        $scope.remind = function() {
+                $http.post("/api/action/dispatcher/urge", {
+                    id: $scope.selected_mail_id
+                }).success(function (data, status, headers, config) {
+                    console.log(data);
+                }).error(function (data, status, headers, config) {
+                    console.log(data);
+                });
+        };
+
         $scope.show_dispatch = function () {
             $scope.dispatch_show = !$scope.dispatch_show;
         };
@@ -86,5 +96,4 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.show_edit = function () {
             $scope.$emit("emit_show_edit");
         };
-
     }]);

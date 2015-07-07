@@ -3,6 +3,7 @@
         <div class="toolbar">
             <button ng-click="show_dispatch()" ng-show="current_user_type == 1"><i class="fa fa-reply fa-lg"></i>分发</button>
             <button ng-click="check()" ng-show="current_user_type == 2"><i class="fa fa-check-circle-o fa-lg"></i>标记处理</button>
+             <button ng-click="remind()" ng-show="current_user_type == 1 && selected_mail.status == 1">提醒</button>
             <button ng-click="show_compose()" ng-show="current_user_type == 2"><i class="fa fa-edit fa-lg"></i>撰写</button>
             <button ng-click="show_reply()" ng-show="current_user_type == 2 && !selected_mail.readonly"><i class="fa fa-edit fa-lg"></i>回复</button>
             <button ng-click="review_pass()" ng-show="current_user_type == 3 &&  selected_category.name == 'pending'"><i

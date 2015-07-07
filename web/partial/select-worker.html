@@ -1,11 +1,16 @@
 <div class="select-worker-section" ng-controller="SelectWorkerController">
 	<div class="select-section">
 		<select placeholder="选择处理人" class="select-workers" id="readreply" multiple="multiple">
-				<option value="{{worker}}" ng-repeat="worker in workers">{{worker}}</option>
 		</select>
 		<select placeholder="选择查看人" class="select-workers" id="readonly" multiple="multiple">
 			<option value="{{worker}}" ng-repeat="worker in workers">{{worker}}</option>
 		</select>
+		
+		<select placeholder="添加主题标签" class="select-labels" id="themelabel" multiple="multiple">
+			<!-- <option value="{{label}}" ng-repeat="label in labels">{{label}}</option> -->
+		</select>
+		
+		<input type="text" name="deadline" id="deadline" class="select-deadline"/>
 		<a class="btn" ng-click="show_dispatch()">取消</a>
 		<a class="btn" ng-click="sendDispatch()">确认</a>
 	</div>
