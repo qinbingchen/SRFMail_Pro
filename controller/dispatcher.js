@@ -254,13 +254,6 @@ var set_label = function(req, res, next) {
         });
     }
 
-    if (labels.length == 0) {
-        return res.json({
-            code: 0,
-            message: "Operation succeed, but it seems no labels have been submitted."
-        });
-    }
-
     var session, incomeMail;
     async.series([
         function(callback) {
@@ -319,7 +312,7 @@ var set_label = function(req, res, next) {
             }
             return res.json({
                 code: 0,
-                message: "Success: Labels set to: " + labels.join(', ') + "."
+                message: labels.length == 0 ? "Success: All labels removed" : "Success: Labels set to: " + labels.join(', ') + "."
             });
         });
     });
