@@ -123,6 +123,12 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
 
         $scope.$on("broadcast_show_compose", function () {
             $scope.edit_mode = EDIT_MODE.COMPOSE;
+            $scope.recipient = "";
+            $scope.subject = "";
+            $scope.need_review = false;
+            $scope.reviewer = "";
+            $("select#reviewer").select2("destroy");
+            $scope.content = "312";
         });
 
         $scope.$on("broadcast_show_reply", function () {
@@ -135,33 +141,37 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
 
         $scope.switch_review = function () {
             if ($scope.need_review) {
-                $("#select-reviewer").select2({
+                $("select#reviewer").select2({
                     data: $scope.reviewer_list,
                     placeholder: "请选择审核人"
                 });
             } else {
-
+                $("select#reviewer").select2("destroy");
             }
         };
 
         $scope.submit = function () {
+            console.log($scope.recipient);
+            console.log($scope.content);
             switch ($scope.edit_mode) {
                 case EDIT_MODE.COMPOSE:
                     $http.post("/api/action/worker/submit", {
-                        subject: $scope.recipient,
+                        recipients: "12312",
+                        subject: $scope.subject,
                         html: $scope.content,
                         attachments: [],
-                        needReview: "",
-                        reviewer: ""
+                        needReview: $scope.need_review,
+                        reviewer: $scope.reviewer
                     }).success(function (data, status, headers, config) {
                         $scope.load_mail_list();
+                        $scope.dismiss_modal();
                     }).error(function (data, status, headers, config) {
                         console.log(data);
                     });
                     break;
                 case EDIT_MODE.REPLY:
                     $http.post("/api/action/worker/submit", {
-                        id: mailServices.selected_mail,
+                        id: mailServices.selected_mail_id,
                         subject: "123",
                         html: "344",
                         attachments: [],

@@ -46,11 +46,11 @@ textarea {
 
 .select2 {
   min-width: 200px;
-  border: 1px solid #e5e5e5 !important;
+  border: 1px solid #eaeaea !important;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s !important; }
 
 .select2.selected {
-  border: 1px solid #1caf9a !important; }
+  border: 1px solid #a6c4db !important; }
 
 .select2.invalid {
   border: 1px solid #d14 !important; }
@@ -62,13 +62,13 @@ textarea {
   font-size: 13px !important; }
 
 .select2-dropdown {
-  border: 1px solid #1caf9a !important; }
+  border: 1px solid #a6c4db !important; }
 
 .select2-results__option {
   font-size: 13px !important; }
 
 .select2-results__option--highlighted {
-  background-color: #1caf9a !important; }
+  background-color: #a6c4db !important; }
 
 /* select2 end */
 /* button begin */
@@ -175,6 +175,9 @@ textarea {
     width: 531px; }
   #modal-compose .modal .body .input-group input#subject {
     width: 547px; }
+  #modal-compose .modal .body .input-group .select2 {
+    vertical-align: top;
+    margin-top: 1px; }
 
 #modal-compose .modal .body textarea {
   padding: 15px;

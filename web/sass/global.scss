@@ -62,12 +62,12 @@ textarea {
 
 .select2 {
   min-width: 200px;
-  border: 1px solid #e5e5e5 !important;
+  border: 1px solid #eaeaea !important;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s !important;
 }
 
 .select2.selected {
-  border: 1px solid #1caf9a !important;
+  border: 1px solid #a6c4db !important;
 }
 
 .select2.invalid {
@@ -83,7 +83,7 @@ textarea {
 }
 
 .select2-dropdown {
-  border: 1px solid #1caf9a !important;
+  border: 1px solid #a6c4db !important;
 }
 
 .select2-results__option {
@@ -91,7 +91,7 @@ textarea {
 }
 
 .select2-results__option--highlighted {
-  background-color: #1caf9a !important;
+  background-color: #a6c4db !important;
 }
 
 /* select2 end */
@@ -243,6 +243,11 @@ textarea {
 
     input#subject {
       width: 547px;
+    }
+
+    .select2 {
+      vertical-align: top;
+      margin-top: 1px;
     }
   }
 
