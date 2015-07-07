@@ -234,6 +234,30 @@ var urge = function(req, res, next) {
     });
 };
 
+var list_label = function(req, res, next) {
+    var list = {
+        labels: []
+    };
+    Label.model.find({})
+        .populate("labels")
+        .exec(function(err, labels){
+            if(err){
+                return res.json({
+                    code: 1,
+                    message: "couldn't load labels!"
+                });
+            }
+            labels.forEach(function(label){
+                list.labels.push({
+                    name: label.name,
+                    color: label.color
+                })
+            })
+
+            res.json(list);
+        })
+}
+
 var set_label = function(req, res, next) {
     var sessionId = req.body.id;
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
@@ -366,4 +390,6 @@ router.use(function(req, res, next) {
 router.route('/dispatch').post(dispatch);
 router.route('/urge').post(urge);
 router.route('/set_label').post(set_label);
+router.route('/list_labels').get(list_label);
+
 module.exports = router;

@@ -31,7 +31,7 @@ var MailSchema = new schema({
         content: { type: String },
         encoding: { type: String }
     }],
-    labels: [ {type: schema.ObjectId, ref: 'label'} ],
+    labels: [ {type: schema.ObjectId, ref: 'Label'} ],
     deadline: { type: Date },
     time: { type: Date },
     messageId: { type: String }
