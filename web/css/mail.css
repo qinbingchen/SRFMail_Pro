@@ -73,10 +73,49 @@
 
 .mail-section .bubble {
   overflow: visible;
-  position: relative;
+  position: fixed;
   top: 20px;
   display: inline-block;
   padding: 5px 10px;
   background-color: #ffffff;
   border: 1px solid #a9a9a9;
   box-shadow: rgba(0, 0, 0, 0.5) 0 1px 3px 0; }
+
+.mail-section .reject-bubble {
+  overflow: visible;
+  position: fixed;
+  top: 54px;
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #ffffff;
+  border: 1px solid #a9a9a9;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 1px 3px 0;
+}
+
+.mail-section .review-bubble label {
+  color: #a9a9a9;
+  font-size: 1em;
+}
+
+.mail-section .review-bubble textarea {
+  font-size: 1em;
+  border-color: #888;
+  height: 80px;
+  width: 400px;
+}
+
+.mail-section .review-bubble button {
+  margin-left: 10px;
+  border: none;
+  background: none;
+  color: #2674ff;
+}
+
+.mail-section .review-bubble button:not(:disabled):hover {
+  cursor: pointer;
+  color: #1d5fcc;
+}
+
+.mail-section .review-bubble button:disabled {
+  color: #bbd3fd;
+}

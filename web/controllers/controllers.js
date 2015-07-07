@@ -113,6 +113,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         $scope.check_partial_load_status();
 
         $scope.edit_mode = EDIT_MODE.COMPOSE;
+        $scope.current_user_type = userServices.current_user_type;
 
         $http.get("/api/user/list_reviewers")
             .success(function (data, status, headers, config) {
@@ -123,6 +124,10 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
 
         $scope.$on("broadcast_show_compose", function () {
             $scope.edit_mode = EDIT_MODE.COMPOSE;
+            // 在审核修改的时候将邮件内容写入弹出框
+            if (current_user_type == 3) {
+                //$scope.recipient=userServices.
+            }
         });
 
         $scope.$on("broadcast_show_reply", function () {
