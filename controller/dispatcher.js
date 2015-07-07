@@ -11,6 +11,18 @@ var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 
+Array.prototype.getUnique = function(){
+    var u = {}, a = [];
+    for(var i = 0, l = this.length; i < l; ++i){
+        if(u.hasOwnProperty(this[i])) {
+            continue;
+        }
+        a.push(this[i]);
+        u[this[i]] = 1;
+    }
+    return a;
+};
+
 var dispatch = function(req, res, next) {
     var sessionId = req.body.id;
     var readonlyWorkers, readreplyWorkers;
@@ -109,7 +121,7 @@ var dispatch = function(req, res, next) {
         }
 
         // spawn sessions iteratively
-        var workers = readonlyWorkers.concat(readreplyWorkers);
+        var workers = (readonlyWorkers.concat(readreplyWorkers)).getUnique();
         var effectiveWorkers = [];
         async.each(workers, function(worker, callback) {
             User.model.findOne({
@@ -296,6 +308,7 @@ var set_label = function(req, res, next) {
             });
         }
 
+        labels = labels.getUnique();
         incomeMail.labels = labels;
         incomeMail.save(function(err) {
             if (err) {
@@ -306,7 +319,7 @@ var set_label = function(req, res, next) {
             }
             return res.json({
                 code: 0,
-                message: "Success: labels " + labels.join(', ') + " added"
+                message: "Success: Labels set to: " + labels.join(', ') + "."
             });
         });
     });
