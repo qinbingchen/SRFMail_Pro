@@ -59,22 +59,6 @@ var detail = function(req, res, next) {
             if(ret.reply && !ret.reply.html) {
                 ret.reply.html = '<p>' + ret.income.text + '</p>'
             }
-            if(ret.income && ret.income.attachments) {
-                ret.income.attachments.forEach(function(attachment, index) {
-                    op.mail.attachments[index] = {
-                        title: attachment.filename,
-                        id: attachment.id
-                    };
-                });
-            }
-            if(ret.reply && ret.reply.attachments) {
-                ret.reply.attachments.forEach(function(attachment, index) {
-                    op.mail.attachments[index] = {
-                        title: attachment.filename,
-                        id: attachment.id
-                    };
-                });
-            }
             session.operations.forEach(function(row) {
                 var op = {
                     operator: row.operator ? row.operator.username : undefined,
@@ -83,6 +67,22 @@ var detail = function(req, res, next) {
                     message: row.message,
                     time: row.time
                 };
+                if(ret.income && ret.income.attachments) {
+                    ret.income.attachments.forEach(function(attachment, index) {
+                        op.mail.attachments[index] = {
+                            title: attachment.filename,
+                            id: attachment.id
+                        };
+                    });
+                }
+                if(ret.reply && ret.reply.attachments) {
+                    ret.reply.attachments.forEach(function(attachment, index) {
+                        op.mail.attachments[index] = {
+                            title: attachment.filename,
+                            id: attachment.id
+                        };
+                    });
+                }
                 if(row.mail) {
                     op.mail = row.mail;
                 }
