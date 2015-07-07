@@ -8,5 +8,6 @@ router.use(function(req, res, next) {
 router.use('/user', require('./user'));
 router.use('/session', require('./session'));
 router.use('/action', require('./action'));
+router.use('/attachments', require('./attachments'));
 
 exports = module.exports = router;

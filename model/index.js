@@ -1,5 +1,6 @@
 exports = module.exports = {
     mail: require('./mail'),
     session: require('./session'),
-    user: require('./user')
+    user: require('./user'),
+    attachment: require('./attachment')
 };

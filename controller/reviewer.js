@@ -10,6 +10,7 @@ var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
+var MailSender = require('../lib/mail');
 
 var reject = function(req, res, next){
     var sessionId = req.body.id;
@@ -24,9 +25,7 @@ var reject = function(req, res, next){
     }
 
     Session.model.findById(sessionId)
-        .populate('dispatcher', 'username')
         .populate('worker', 'username')
-        .populate('reviewer', 'username')
         .populate('reply')
         .exec(function (err, session){
             if (err) {
@@ -72,7 +71,7 @@ var reject = function(req, res, next){
                 message: message,
                 time: new Date(),
                 mail: mail ? mail._id : undefined
-            }
+            };
 
             session.isRejected = true;
             session.status = Session.Status.Dispatched;
@@ -92,7 +91,7 @@ var reject = function(req, res, next){
                 }
             });
         })
-}
+};
 
 var pass = function(req, res, next) {
     var sessionId = req.body.id;
@@ -100,6 +99,7 @@ var pass = function(req, res, next) {
     var subject = req.body.subject;
     var html = req.body.html;
     var attachments = req.body.attachments;
+    var newMail;
 
     var session, mail;
 
@@ -122,74 +122,71 @@ var pass = function(req, res, next) {
                 mail = _mail;
                 callback(err, 'get mail');
             });
-        }
-    ],function() {
-        if (!session) {
-            return res.json({
-                code: 1,
-                message: "Couldn't find session with ID " + sessionId
-            });
-        }
-
-        if (!mail) {
-            return res.json({
-                code: 1,
-                message: "Couldn't find reply mail with ID " + session.reply + " from session with ID " + session._id
-            });
-        }
-
-        if (session.status != Session.Status.WaitingForReview) {
-            return res.json({
-                code: 1,
-                message: "The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."
-            });
-        }
-
-        var newMail = _.cloneDeep(mail);
-        delete newMail._id;
-
-        if(subject){
-            newMail.subject = subject;
-        }
-        if(html){
-            newMail.html = html;
-        }
-        if(attachments){
-            newMail.attachment = attachments;
-        }
-        newMail = new Mail.model(newMail);
-        newMail.save(function(err) {
-            if(err) {
-                res.json({
-                    code: 1,
-                    message: "couldn't save new mail" + err.toString()
-                })
+        },
+        function(callback) {
+            if (!session) {
+                return callback(new Error("Couldn't find session with ID " + sessionId));
             }
-        })
-        //console.log(newMail);
 
-        var operationDict = {
-            type: Session.Type.Pass,
-            operator: user._id,
-            time: new Date(),
-            mail: newMail._id
-        }
-        session.status = Session.Status.WaitingForSend;
-        session.operations.push(operationDict);
+            if (!mail) {
+                return callback(new Error("Couldn't find reply mail with ID " + session.reply + " from session with ID " + session._id));
+            }
 
-        session.save(function(err) {
-            if (err) {
-                res.json({
-                    code: 1,
-                    message: err.toString()
+            if (session.status != Session.Status.WaitingForReview) {
+                return callback(new Error("The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."));
+            }
+
+            if(subject || html || attachments) {
+                newMail = _.cloneDeep(mail);
+                delete newMail._id;
+                if(subject){
+                    newMail.subject = subject;
+                }
+                if(html){
+                    newMail.html = html;
+                }
+                if(attachments){
+                    newMail.attachments = attachments;
+                }
+                newMail.time = new Date();
+                newMail = new Mail.model(newMail);
+
+                newMail.save(function(err) {
+                    return callback(err);
                 });
             } else {
-                res.json({
-                    "code": 0,
-                    "message": "Success"
-                });
+                newMail = mail;
+                callback();
             }
-        });
+        },
+        function(callback) {
+            var operationDict = {
+                type: Session.Type.Pass,
+                operator: user._id,
+                time: new Date(),
+                mail: newMail._id
+            };
+            session.status = Session.Status.WaitingForSend;
+            session.operations.push(operationDict);
+            session.reply = newMail._id;
+
+            session.save(callback);
+        },
+        function(callback) {
+            MailSender.sendMail(newMail._id, callback);
+        }
+    ],function(err) {
+        if (err) {
+            res.json({
+                code: 1,
+                message: err.toString()
+            });
+        } else {
+            res.json({
+                "code": 0,
+                "message": "Success"
+            });
+        }
     });
 };
 
