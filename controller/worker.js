@@ -166,10 +166,10 @@ var submit = function(req, res, next) {
             };
             if (needReview) {
                 operationDict['receiver'] = reviewer._id;
+                session.reviewer = reviewer._id;
             }
             session.status = needReview ? 2 : 3;
             session.reply = repliedMail._id;
-            session.reviewer = reviewer._id;
             session.operations.push(operationDict);
             session.isRejected = false;
 
