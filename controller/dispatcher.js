@@ -20,13 +20,13 @@ var dispatch = function(req, res, next) {
         if (deadline.toString() == 'Invalid Date') {
             return res.json({
                 code: 1,
-                message: '(!) Error: Invalid date string ' + req.body.deadline
+                message: 'Error: Invalid date string ' + req.body.deadline
             });
         }
         if (deadline < new Date()) {
             return res.json({
                 code: 1,
-                message: '(!) Error: Designated deadline (' + deadline.toLocaleString() + ') is earlier then now (' + (new Date()).toLocaleString() + ')'
+                message: 'Error: Designated deadline (' + deadline.toLocaleString() + ') is earlier then now (' + (new Date()).toLocaleString() + ')'
             });
         }
     }
@@ -37,7 +37,7 @@ var dispatch = function(req, res, next) {
     } catch (e) {
         return res.json({
             code: 1,
-            message: '(!) Error: Invalid JSON received, please ensure that readonly / readreply parameters hold valid JSON string representations.'
+            message: 'Error: Invalid JSON received, please ensure that readonly / readreply parameters hold valid JSON string representations.'
             + ' Reason: ' + e.toString()
             + ' ReadonlyWorkers: ' + req.body.readonly
             + ' ReadreplyWorkers: ' + req.body.readreply
@@ -50,7 +50,7 @@ var dispatch = function(req, res, next) {
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
         return res.json({
             code: 1,
-            message: '(!) Error: Invalid session ID ' + sessionId
+            message: 'Error: Invalid session ID ' + sessionId
         });
     }
 
@@ -83,28 +83,28 @@ var dispatch = function(req, res, next) {
         if (err) {
             return res.json({
                 code: 1,
-                message: "(!) " + err.toString()
+                message: err.toString()
             });
         }
 
         if (!originalSession) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't find session with ID " + sessionId
+                message: "Error: Couldn't find session with ID " + sessionId
             });
         }
 
         if (deadline && !incomeMail) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't find mail with ID " + originalSession.income + " from session with ID " + originalSession._id
+                message: "Error: Couldn't find mail with ID " + originalSession.income + " from session with ID " + originalSession._id
             });
         }
 
         if (originalSession.status != Session.Status.New) {
             return res.json({
                 code: 1,
-                message: "(!) Error: The session's status is " + originalSession.status + " therefore couldn't be dispatched. Aborting."
+                message: "Error: The session's status is " + originalSession.status + " therefore couldn't be dispatched. Aborting."
             });
         }
 
@@ -152,14 +152,14 @@ var dispatch = function(req, res, next) {
             if (err) {
                 return res.json({
                     code: 1,
-                    message: "(!) " + err.toString()
+                    message: err.toString()
                 });
             }
 
             if (effectiveWorkers.length == 0) {
                 return res.json({
                     code: 1,
-                    message: "(!) Error: None of the workers you designated is valid. A user is" +
+                    message: "Error: None of the workers you designated is valid. A user is" +
                     " considered a valid worker if and only if *all* of the following criterias" +
                     " are met: 1) the user can be found in our database; 2) the user is a worker"
                 });
@@ -169,7 +169,7 @@ var dispatch = function(req, res, next) {
                 if (err) {
                     return res.json({
                         code: 1,
-                        message: "(!) " + err.toString()
+                        message: err.toString()
                     });
                 }
                 return res.json({
@@ -186,7 +186,7 @@ var urge = function(req, res, next) {
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
         return res.json({
             code: 1,
-            message: '(!) Error: Invalid session ID ' + sessionId
+            message: 'Error: Invalid session ID ' + sessionId
         });
     }
 
@@ -194,14 +194,14 @@ var urge = function(req, res, next) {
         if (err || !session) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't find session by ID " + sessionId + ": " + err.toString
+                message: "Error: Couldn't find session by ID " + sessionId + ": " + err.toString
             });
         }
 
         if (session.status != Session.Status.Dispatched) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't urge session with status " + session.status + ": only dispatched sessions can be urged."
+                message: "Error: Couldn't urge session with status " + session.status + ": only dispatched sessions can be urged."
             });
         }
 
@@ -226,7 +226,7 @@ var set_label = function(req, res, next) {
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
         return res.json({
             code: 1,
-            message: '(!) Error: Invalid session ID ' + sessionId
+            message: 'Error: Invalid session ID ' + sessionId
         });
     }
 
@@ -236,7 +236,7 @@ var set_label = function(req, res, next) {
     } catch (e) {
         return res.json({
             code: 1,
-            message: '(!) Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
+            message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
             + ' ParseError: ' + e.toString()
             + ' Labels: ' + req.body.labels
         });
@@ -278,21 +278,21 @@ var set_label = function(req, res, next) {
         if (!session) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't find session with ID " + sessionId
+                message: "Error: Couldn't find session with ID " + sessionId
             });
         }
 
         if (!incomeMail) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't find mail with ID " + session.income + " from session with ID " + session._id
+                message: "Error: Couldn't find mail with ID " + session.income + " from session with ID " + session._id
             });
         }
 
         if (session.status != Session.Status.New) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't set labels for session with status other than 1 (:new). The session's status is " + session.status + ". Please check your session ID."
+                message: "Error: Couldn't set labels for session with status other than 1 (:new). The session's status is " + session.status + ". Please check your session ID."
             });
         }
 
@@ -316,21 +316,21 @@ router.use(function(req, res, next) {
     if (!req.session.user) {
         return res.json({
             code: 1,
-            message: '(!) Error: You are not yet logged in'
+            message: 'Error: You are not yet logged in'
         });
     }
     User.model.findById(mongoose.Types.ObjectId(req.session.user._id), function(err, user) {
         if (err || !user) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Couldn't find user with ID " + req.session.user._id
+                message: "Error: Couldn't find user with ID " + req.session.user._id
             });
         }
         req.session.user = user;
         if (user.role != User.Role.Dispatcher) {
             return res.json({
                 code: 1,
-                message: "(!) Error: Unauthorized: User " + user.username + " with role " + user.role + " isn't a dispatcher"
+                message: "Error: Unauthorized: User " + user.username + " with role " + user.role + " isn't a dispatcher"
             });
         }
         next();
