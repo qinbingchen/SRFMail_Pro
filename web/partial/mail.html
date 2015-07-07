@@ -2,6 +2,7 @@
     <div class="header">
         <div class="toolbar">
             <button ng-click="show_dispatch()" ng-show="current_user_type == 1"><i class="fa fa-reply fa-lg"></i>分发</button>
+            <button ng-click="show_label()" ng-show="current_user_type == 1"><i class="fa fa-reply fa-lg"></i>主题标签</button>
             <button ng-click="check()" ng-show="current_user_type == 2"><i class="fa fa-check-circle-o fa-lg"></i>标记处理</button>
              <button ng-click="remind()" ng-show="current_user_type == 1 && selected_mail.status == 1">提醒</button>
             <button ng-click="show_compose()" ng-show="current_user_type == 2"><i class="fa fa-edit fa-lg"></i>撰写</button>
@@ -26,6 +27,11 @@
             <div class="tri"></div>
             <div class="tri-inner"></div>
             <ng-include src="'partial/select-worker.html'"></ng-include>
+        </div>
+        <div class="bubble" ng-show="label_show">
+            <div class="tri"></div>
+            <div class="tri-inner"></div>
+            <ng-include src="'partial/select-label.html'"></ng-include>
         </div>
         <div class="reject-bubble" ng-show="review_reject_show">
             <div class="tri"></div>
