@@ -41,6 +41,20 @@
   max-height: 20px;
   overflow: hidden; }
 
+  .mail-labels{
+    height: 20px;
+    margin: 0;
+  }
+
+  .mail-label{
+    display: inline-block;
+    margin-right:  10px;
+    padding: 2px 5px;
+    font-size: 10px;
+    border-radius:  3px;
+    color:  #000;
+  }
+
 .mail-list-section .sender {
   display: inline-block;
   float: left;
@@ -57,7 +71,8 @@
   line-height: 20px; }
 
 .mail-title {
-  height: 20px; }
+  height: 20px; 
+  margin: 5px;}
 
 .text-preview {
   color: #a9a9a9; }

@@ -6,7 +6,7 @@ SRFMailProControllers.controller("SelectLabelController", ["$scope", "$http", "$
                 if(label_selected!=null)
                 {
                     var labels="[\""+label_selected[0]+"\"";
-                    for(i=1;i<label_selectedlength;i++) 
+                    for(i=1;i<label_selected.length;i++) 
                     {
                         labels+=",\""+label_selected[i]+"\"";
                     }
