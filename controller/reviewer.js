@@ -185,6 +185,7 @@ var pass = function(req, res, next) {
             session.status = Session.Status.WaitingForSend;
             session.operations.push(operationDict);
             session.reply = newMail._id;
+            session.isUrged = false;
 
             session.save(callback);
         },

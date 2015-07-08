@@ -30,7 +30,7 @@ var SessionSchema = new schema({
 });
 
 SessionSchema.pre('save', function(next) {
-    this.lastModified = new Date();
+    this.index = new Date();
     next();
 });
 

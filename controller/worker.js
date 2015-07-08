@@ -182,6 +182,9 @@ var submit = function(req, res, next) {
             session.reply = repliedMail._id;
             session.operations.push(operationDict);
             session.isRejected = false;
+            if(!needReview) {
+                session.isUrged = false;
+            }
 
             session.save(function(err) {
                 if (err) {
@@ -255,7 +258,8 @@ var pass = function(req, res, next) {
                     time: new Date(),
                     mail: session.income
                 }
-            }
+            },
+            isUrged: false
         }, function(err) {
             if (err) {
                 return res.json({
