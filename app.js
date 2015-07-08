@@ -12,12 +12,17 @@ if(cluster.isMaster) {
     }
     Threads[0].send('receive');
     Threads[1].send('send');
-    Threads[2].send('socket);');
+    Threads[2].send('socket');
     setAutoRestart(Threads[0], 'receive');
     setAutoRestart(Threads[1], 'send');
     setAutoRestart(Threads[2], 'socket');
     for(i = 3; i < ThreadNum; i++) {
         Threads[i].send('web');
+        Threads[i].on('message', function(msg) {
+            if(msg == 'Restart Mail') {
+                restartMail();
+            }
+        });
         setAutoRestart(Threads[i], 'web');
     }
     function setAutoRestart(worker, message) {
@@ -29,12 +34,24 @@ if(cluster.isMaster) {
             } else {
                 Log.d("worker success!");
             }
-            Threads.slice(Threads.indexOf(worker), 1);
+            var index = Threads.indexOf(worker);
             worker = cluster.fork();
-            Threads.push(worker);
+            Threads[index] = worker;
             setAutoRestart(worker);
             worker.send(message);
+            if(message == 'web') {
+                worker.on('message', function(msg) {
+                    if(msg == 'Restart Mail') {
+                        restartMail();
+                    }
+                });
+            }
         });
+    }
+
+    function restartMail() {
+        Threads[0].kill();
+        Threads[1].kill();
     }
 } else {
     var mongoose = require('mongoose');

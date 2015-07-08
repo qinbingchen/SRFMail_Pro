@@ -4,6 +4,7 @@ exports = module.exports = {
         host: '123.57.64.46',
         port: 6379
     },
+    host: '127.0.0.1',
     listen: 8844,
     mail: {
         imap: {
@@ -18,5 +19,3 @@ exports = module.exports = {
         password: 'tmytmsftpkkflzhm'
     }
 };
-
-// Hard code will be deprecated when system module finished
