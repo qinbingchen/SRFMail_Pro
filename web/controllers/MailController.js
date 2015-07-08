@@ -17,9 +17,9 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             mailServices.load_mail(
                 function () {
                     $scope.selected_mail = mailServices.selected_mail;
-                    //var sessionHistory = SessionHistoryKit.SessionHistory("mail-operation-history");
-                    //sessionHistory.setOperations(mailServices.selected_mail.operations);
-                    //sessionHistory.draw();
+                    var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
+                    sessionHistory.setOperations(mailServices.selected_mail.operations);
+                    sessionHistory.draw();
                 },
                 function () {
 

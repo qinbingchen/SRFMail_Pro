@@ -70,7 +70,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 
 	this.initCanvas = function() {
 		while (this.container.hasChildNodes()) {
-			var child = this.container.childNodes.firstObject();
+			var child = this.container.childNodes[0];
 			this.container.removeChild(child);
 		}
 

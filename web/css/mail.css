@@ -42,6 +42,8 @@
         padding: 10px 20px;
         border-top: 1px solid #cfcfd3;
         color: #888; }
+      .mail-section .body .mail .operation-history-container {
+        height: 150px; }
     .mail-section .body .mail-empty {
       height: 100%;
       padding-top: calc((100vh - 233px) / 2);
