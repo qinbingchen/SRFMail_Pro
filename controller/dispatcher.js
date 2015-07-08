@@ -258,6 +258,75 @@ var list_label = function(req, res, next) {
         })
 }
 
+var is_valid_color = function(color_str){
+    if(color_str.length != 7){
+        return false;
+    }
+    if(color_str[0] != '#')return false;
+    for(var i = 1 ; i < 7 ; i ++){
+        var c = color_str[i];
+        if(!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))){
+            return false;
+        }
+    }
+    return true;
+}
+
+var set_all_label = function(req, res, next){
+    var labels = req.body.labels;
+    try {
+        labels = JSON.parse(req.body.labels);
+    } catch (e) {
+        return res.json({
+            code: 1,
+            message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
+            + ' ParseError: ' + e.toString()
+            + ' Labels: ' + req.body.labels
+        });
+    }
+    Label.model.remove({name: 'fuck'}, function(err){
+        if(err) {
+            return res.json({
+                code: 1,
+                message: 'remove failed'
+            })
+        }
+        var cnt = 0;
+        labels.forEach(function(label){
+            if(!label.name){
+                return res.json({
+                    code: 1,
+                    message: 'invalid name in labels'
+                })
+            }
+            if(!label.color || !is_valid_color(label.color)){
+                label.color = '#C0C0C0'
+            }
+            var newLabel = {
+                name: label.name,
+                color: label.color
+            }
+            newLabel = new Label.model(newLabel);
+
+            newLabel.save(function(err) {
+                if(err){
+                    return res.json({
+                        code: 1,
+                        message: 'cannot save label' + newLabel.name
+                    })
+                }
+                cnt ++;
+                if(cnt == labels.length){
+                    return res.json({
+                        code: 0,
+                        message: "success"
+                    })
+                }
+            });
+        });
+    });
+}
+
 var set_label = function(req, res, next) {
     var sessionId = req.body.id;
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
@@ -390,6 +459,7 @@ router.use(function(req, res, next) {
 router.route('/dispatch').post(dispatch);
 router.route('/urge').post(urge);
 router.route('/set_label').post(set_label);
+router.route('/set_all_labels').post(set_all_label);
 router.route('/list_labels').get(list_label);
 
 module.exports = router;
