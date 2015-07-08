@@ -12,6 +12,7 @@ var async = require('async');
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
 var MailSender = require('../lib/mail');
+var util = require('../lib/util');
 
 var EmailRegex = /^[a-z0-9]([a-z0-9]*[-_]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/;
 
@@ -20,14 +21,14 @@ var submit = function(req, res, next) {
     var user = req.session.user;
     var subject = req.body.subject;
     var html = req.body.html;
-    var needReview = req.body.needReview == 'true';
+    var needReview = util.toBoolean(req.body.needReview);
     var reviewerUsername = req.body.reviewer;
     var recipients = req.body.recipients;
     var attachments = req.body.attachments;
 
     try {
         if (recipients) {
-            recipients = JSON.parse(recipients);
+            recipients = util.safeParseJson(recipients);
         }
         if (attachments) {
             attachments = JSON.parse(attachments);
