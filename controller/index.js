@@ -9,5 +9,6 @@ router.use('/user', require('./user'));
 router.use('/session', require('./session'));
 router.use('/action', require('./action'));
 router.use('/attachments', require('./attachments'));
+router.use('/system',require('./system'));
 
 exports = module.exports = router;

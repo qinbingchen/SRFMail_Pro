@@ -82,6 +82,7 @@
                 <div class="subject">{{selected_mail.income.subject}}</div>
                 <div class="time">{{income_time}}</div>
                 <div class="sender">发件人 {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
+                <!--<div class="deadline" ng-if="deadline_time">时限：{{deadline_time}}</div>-->
             </div>
 
             <div class="content" ng-bind-html="selected_mail.reply.html" ng-if="selected_mail.reply"></div>
@@ -92,6 +93,7 @@
                 <div class="time">时间：{{income_time}}</div>
                 <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
                 <div class="content" ng-bind-html="selected_mail.income.html"></div>
+                <!--<div class="deadline" ng-if="deadline_time">时限：{{deadline_time}}</div>-->
             </div>
 
             <div class="operation-history-container" ng-if="selected_mail.operations.length > 0">

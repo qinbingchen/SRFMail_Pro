@@ -3,5 +3,6 @@ exports = module.exports = {
     session: require('./session'),
     user: require('./user'),
     attachment: require('./attachment'),
-    label: require('./label')
+    label: require('./label'),
+    system: require('./system')
 };

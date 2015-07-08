@@ -15,7 +15,28 @@ function handler(req, res) {
 }
 
 exports.start = function() {
-    server.listen(settings.listen + 1);
+    var port = settings.listen + 1;
+    server.listen(port);
+    server.on('error', function(error) {
+        if(error.syscall !== 'listen') {
+            throw error;
+        }
+        switch(error.code) {
+            case 'EACCES':
+                console.error('Port ' + port + ' requires elevated privileges');
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                console.error('Port ' + port + ' is already in use');
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    });
+    server.on('listening', function() {
+        console.log('Socket.io listening on ' + port);
+    });
 };
 
 var sockets = {};

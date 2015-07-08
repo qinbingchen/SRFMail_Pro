@@ -94,9 +94,11 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $http.post("/api/action/dispatcher/urge", {
                 id: $scope.selected_mail_id
             }).success(function (data, status, headers, config) {
+                $scope.load_mail_list();
                 toastr.success('成功提醒', '');
                 console.log(data);
             }).error(function (data, status, headers, config) {
+                toastr.success('提醒失败，请重试', '');
                 console.log(data);
             });
         };

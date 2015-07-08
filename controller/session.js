@@ -75,7 +75,7 @@ var detail = function(req, res, next) {
                     inReplyTo: session.income.inReplyTo,
                     subject: session.income.subject,
                     text: session.income.text,
-                    html: util.fetchContent(session.income.html),
+                    html: session.income.html,
                     attachments: session.income.attachments,
                     labels: null,
                     deadline: session.income.deadline,
@@ -90,32 +90,38 @@ var detail = function(req, res, next) {
                     inReplyTo: session.reply.inReplyTo,
                     subject: session.reply.subject,
                     text: session.reply.text,
-                    html: util.fetchContent(session.reply.html),
+                    html: session.reply.html,
                     attachments: session.reply.attachments,
                     time: session.reply.time
                 } : undefined
             };
-            if(ret.income && !ret.income.html) {
-                ret.income.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
+            if(ret.income) {
+                if(!ret.income.html) {
+                    ret.income.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
+                }
+                if(ret.income.attachments) {
+                    ret.income.attachments.forEach(function(attachment) {
+                        attachment = {
+                            title: attachment.filename,
+                            id: attachment.id
+                        };
+                    });
+                }
+                ret.income.html = util.fetchContent(ret.income.html);
             }
-            if(ret.reply && !ret.reply.html) {
-                ret.reply.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
-            }
-            if(ret.income && ret.income.attachments) {
-                ret.income.attachments.forEach(function(attachment) {
-                    attachment = {
-                        title: attachment.filename,
-                        id: attachment.id
-                    };
-                });
-            }
-            if(ret.reply && ret.reply.attachments) {
-                ret.reply.attachments.forEach(function(attachment) {
-                    attachment = {
-                        title: attachment.filename,
-                        id: attachment.id
-                    };
-                });
+            if(ret.reply) {
+                if(!ret.reply.html) {
+                    ret.reply.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
+                }
+                if(ret.reply.attachments) {
+                    ret.reply.attachments.forEach(function(attachment) {
+                        attachment = {
+                            title: attachment.filename,
+                            id: attachment.id
+                        };
+                    });
+                }
+                ret.reply.html = util.fetchContent(ret.reply.html);
             }
             session.operations.forEach(function(row) {
                 var op = {
@@ -127,20 +133,20 @@ var detail = function(req, res, next) {
                 };
                 if(row.mail) {
                     op.mail = row.mail;
-                }
-                if(row.mail && !row.mail.html) {
-                    op.mail.html = '<p style="padding: 20px 0">' + row.mail.text + '</p>'
-                }
-                if(row.mail && row.mail.html) {
-                    op.mail.html = util.fetchContent(op.mail.html);
-                }
-                if(row.mail && row.mail.attachments) {
-                    op.mail.attachments.forEach(function(attachment, index) {
-                        op.mail.attachments[index] = {
-                            title: attachment.filename,
-                            id: attachment.id
-                        };
-                    });
+                    if(!row.mail.html) {
+                        op.mail.html = '<p style="padding: 20px 0">' + row.mail.text + '</p>'
+                    }
+                    if(row.mail.html) {
+                        op.mail.html = util.fetchContent(op.mail.html);
+                    }
+                    if(row.mail.attachments) {
+                        op.mail.attachments.forEach(function(attachment, index) {
+                            op.mail.attachments[index] = {
+                                title: attachment.filename,
+                                id: attachment.id
+                            };
+                        });
+                    }
                 }
                 ret.operations.push(op);
             });
@@ -200,6 +206,8 @@ var list = function(req, res, next){
             find_key.worker = req.session.user._id;
             break;
         case User.Role.Dispatcher:
+            break;
+        case User.Role.System:
             break;
         default:
             return res.json({
