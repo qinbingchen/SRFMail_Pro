@@ -121,6 +121,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 'id': $scope.selected_mail_id
             }).success(function () {
                 toastr.success('成功退回', '');
+                $scope.load_mail_list();
             }).error(function () {
                 toastr.error('退回失败，请重试', '');
             });

@@ -11,6 +11,7 @@ SRFMailProControllers.controller("SelectWorkerFWController", ["$scope", "$http",
                     'user': fw_selected
                 }).success(function () {
                     toastr.success('转发成功', '');
+                    $scope.load_mail_list();
 
 
                 }).error(function () {
