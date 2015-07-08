@@ -297,7 +297,7 @@ var redirect = function(req, res, next) {
                     });
                     return cb(new Error('Invalid session id'));
                 }
-                if(!session.income) {
+                if(!_session.income) {
                     res.json({
                         code: 1,
                         message: 'Session you wrote couldn\'t be redirected.'
