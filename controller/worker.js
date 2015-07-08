@@ -42,12 +42,14 @@ var submit = function(req, res, next) {
         });
     }
 
-    for(var i = 0; i < recipients.length; i++) {
-        if(!EmailRegex.test(recipients[i])) {
-            return res.json({
-                code: 1,
-                message: 'Invalid Email Address: ' + recipients[i]
-            })
+    if (recipients) {
+        for(var i = 0; i < recipients.length; i++) {
+            if(!EmailRegex.test(recipients[i])) {
+                return res.json({
+                    code: 1,
+                    message: 'Invalid Email Address: ' + recipients[i]
+                })
+            }
         }
     }
 
@@ -136,22 +138,26 @@ var submit = function(req, res, next) {
             attachments: []
         });
 
-        recipients.forEach(function(row) {
-            repliedMail.to.push({
-                name: row.slice(0, row.indexOf('@')),
-                address: row
+        if (recipients) {
+            recipients.forEach(function(row) {
+                repliedMail.to.push({
+                    name: row.slice(0, row.indexOf('@')),
+                    address: row
+                });
             });
-        });
+        }
 
-        attachments.forEach(function(row) {
-            repliedMail.attachments.push({
-                cid: row.contentId,
-                path: path.join(__dirname, '../attachments', row.saveId),
-                filename: row.name,
-                contentType: row.contentType
+        if (attachments) {
+            attachments.forEach(function(row) {
+                repliedMail.attachments.push({
+                    cid: row.contentId,
+                    path: path.join(__dirname, '../attachments', row.saveId),
+                    filename: row.name,
+                    contentType: row.contentType
+                });
             });
-        });
-
+        }
+        
         repliedMail.save(function(err) {
             if (err) {
                 Log.e({req: req}, err);
