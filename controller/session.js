@@ -224,6 +224,7 @@ var list = function(req, res, next){
             async.each(sessions, function(session, callback){
                 var list_element = {
                     id: session._id,
+                    index: session.index,
                     readonly: session.readonly,
                     dispatcher: session.dispatcher ? session.dispatcher.username : undefined,
                     worker: session.worker ? session.worker.username : undefined,
