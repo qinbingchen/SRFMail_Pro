@@ -209,6 +209,11 @@ var submit = function(req, res, next) {
                                 });
                             }
                         })
+                    } else {
+                        res.json({
+                            "code": 0,
+                            "message": "Success"
+                        });
                     }
                 }
             });
