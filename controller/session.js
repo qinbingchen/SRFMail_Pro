@@ -160,16 +160,19 @@ var list = function(req, res, next){
     var queryStatus = req.query.status;
     var queryIsRejected = util.toBoolean(req.query.isRejected);
     var queryIsRedirected = util.toBoolean(req.query.isRedirected);
-    var find_key = {};
+    var find_key = {}, sort_key = {};
 
     var lastIndex = req.query.last;
     var limit = parseInt(req.query.limit) || 100;
+    sort_key.index = 'desc';
 
     switch(req.session.user.role) {
         case User.Role.Reviewer:
+            sort_key.idUrged = 'desc';
             find_key.reviewer = req.session.user._id;
             break;
         case User.Role.Worker:
+            sort_key.idUrged = 'desc';
             find_key.worker = req.session.user._id;
             break;
         case User.Role.Dispatcher:
@@ -202,7 +205,7 @@ var list = function(req, res, next){
 
     Session.model.find(find_key)
         .limit(limit)
-        .sort('-index')
+        .sort(sort_key)
         .populate('dispatcher', 'username')
         .populate('worker', 'username')
         .populate('reviewer', 'username')
