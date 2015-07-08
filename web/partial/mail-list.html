@@ -14,7 +14,10 @@
                     <a class="sender">{{mail.reply ? mail.reply.from[0].name : mail.income.from[0].name}}</a>
                     <a class="date">{{mail.reply ? mail.reply.time : mail.income.time}}</a>
                 </p>
-                <p class="mail-title">{{mail.reply ? mail.reply.subject : mail.income.subject}}</p>
+                <p class="mail-title">{{(mail.reply ? mail.reply.subject : mail.income.subject)}}</p>
+                <p class="mail-labels">
+                    <a class="mail-label" ng-repeat="label in mail.income.labels" style="background-color:{{label.color}}">{{label.name}}</a>
+                </p>
             </li>
         </ul>
     </div>

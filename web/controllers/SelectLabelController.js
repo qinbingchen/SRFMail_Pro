@@ -10,14 +10,15 @@ SRFMailProControllers.controller("SelectLabelController", ["$scope", "$http", "$
                     {
                         labels+=",\""+label_selected[i]+"\"";
                     }
-                    labels="]";
+                    labels+="]";
 
                     var url = "/api/action/dispatcher/set_label";
                     $http.post(url, {
-                        id: $scope.$parent.$parent.selected_mail,
+                        id: $scope.selected_mail_id,
                         labels: labels
                     }).success(function (data, status, headers, config) {
                         if (data.code == 0) {
+                            location.reload();
                         } else {
                             console.log(data);
                         }
@@ -27,20 +28,17 @@ SRFMailProControllers.controller("SelectLabelController", ["$scope", "$http", "$
                 }                   
         };       
 
-        var url_labels = "/api/user/list_label";
+        var url_labels = "/api/action/dispatcher/list_labels";
         $http.get(url_labels).success(function (data) {
-                $scope.theme_labels=data.theme_labels;
+                $scope.theme_labels=data.labels;
            
         }).error(function (data, status, headers, config) {
             console.log(data);
     });
 
-        $scope.theme_labels=["hello","goodmorning"];
         	setTimeout(function() {               
-               $(".select-labels").select2({
-                    data: $scope.theme_labels
-                });
-        }, 2000);  
+               $(".select-labels").select2();
+        }, 0);  
     }]);
 
 
