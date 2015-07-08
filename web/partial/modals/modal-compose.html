@@ -4,18 +4,16 @@
             <div class="modal" ng-form name="compose_form" ng-click="prevent_dismiss($event)">
                 <div class="header">
                     <button class="btn" ng-click="dismiss_modal()">取消</button>
-                    <button class="btn right"
-                            ng-class="{'disabled': compose_form.recipient.$error.required || compose_form.recipient.$error.email}"
-                            ng-click="submit()">发送</button>
+                    <button class="btn right" ng-class="{'disabled': compose_form.$invalid}" ng-click="submit()">发送</button>
                 </div>
                 <div class="body">
                     <div class="input-group">
                         <span class="prompt">收件人：</span>
-                        <input id="recipient" type="email" name="recipient" ng-model="recipient" ng-change="aaa()"/>
+                        <input id="recipient" type="email" name="recipient" ng-model="recipient" required/>
                     </div>
                     <div class="input-group">
                         <span class="prompt">主题：</span>
-                        <input id="subject" type="text" ng-model="subject" />
+                        <input id="subject" type="text" name="subject" ng-model="subject" required/>
                     </div>
                     <div class="input-group review" ng-hide="edit_mode == 2">
                         <span class="prompt">需要审核</span>

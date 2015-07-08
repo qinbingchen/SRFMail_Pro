@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Renfei Song">
+		<title>SessionHistoryKit</title>
+		<link rel="stylesheet" type="text/css" href="history-kit.css">
+	</head>
+	<body>
+		<div id="history"></div>
+		
+		<script src="history-kit.js"></script>
+		<script>
+			var sessionHistory = new SessionHistoryKit.SessionHistory('history', {
+				width: 750,
+				height: 100
+			});
+			sessionHistory.setOperations([{
+				"type": 1,
+      			"operator": "disparcher1",
+      			"receiver": "worker23",
+      			"time": "2015-06-01T10:43:18.897Z"
+			},{
+				"type": 2,
+      			"operator": "worker23",
+      			"receiver": "worker1739",
+      			"time": "2015-06-01T14:43:18.897Z"
+			},{
+				"type": 2,
+      			"operator": "worker1739",
+      			"time": "2015-06-02T11:23:18.897Z"
+			},{
+				"type": 1,
+      			"operator": "dispatcher1",
+      			"receiver": "Yanhong Li",
+      			"time": "2015-06-02T12:43:18.897Z"
+			},{
+				"type": 3,
+      			"operator": "Yanhong Li",
+      			"receiver": "Bill Gates",
+      			"time": "2015-06-02T16:43:18.897Z"
+			},{
+				"type": 5,
+      			"operator": "Bill Gates",
+      			"time": "2015-06-05T06:43:18.897Z"
+			}]);
+			sessionHistory.draw();
+		</script>
+	</body>
+</html>

@@ -3,27 +3,23 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         $scope.partial_load_status.mail_list = true;
         $scope.check_partial_load_status();
 
+        $scope.selected_mail_id = mailServices.selected_mail_id;
+
         $scope.$on("broadcast_category_did_select", function () {
             $scope.filtered_mail_list = mailServices.filtered_mail_list;
             if ($scope.filtered_mail_list.length != 0) {
-                $scope.selectMail($scope.filtered_mail_list[0]);
+                $scope.select_mail($scope.filtered_mail_list[0]);
             } else {
                 mailServices.selected_mail_id = "";
+                $scope.selected_mail_id = mailServices.selected_mail_id;
                 $scope.$emit("emit_mail_did_select");
             }
         });
 
-        $scope.selectMail = function (mail) {
+        $scope.select_mail = function (mail) {
             mailServices.selected_mail_id = mail.id;
+            $scope.selected_mail_id = mailServices.selected_mail_id;
             $scope.$emit("emit_mail_did_select");
         };
-
-        $scope.changeClass = function(mail) {
-            if (mail.id == mailServices.selected_mail_id) {
-                return 'mail selected';
-            } else {
-                return 'mail';
-            }
-        }
     }
 ]);

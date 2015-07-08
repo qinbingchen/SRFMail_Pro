@@ -169,7 +169,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         };
 
         $scope.submit = function () {
-            if (!$scope.compose_form.recipient.$error.required && !$scope.compose_form.recipient.$error.email) {
+            if (!$scope.compose_form.$valid) {
                 switch ($scope.edit_mode) {
                     case EDIT_MODE.COMPOSE:
                         $http.post("/api/action/worker/submit", {

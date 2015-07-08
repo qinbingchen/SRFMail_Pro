@@ -8,9 +8,9 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
     function($http, $cookies) {
         var that = this;
 
-        this.current_user_type = $cookies.get("user_type") == null ? USER_TYPE.NONE : parseInt($cookies.get("user_type"));
-        this.current_user_id = $cookies.get("user_id") == null ? "" : $cookies.get("user_id");
-        this.current_user_name = $cookies.get("user_name") == null ? "" : $cookies.get("user_name");
+        this.current_user_type = $cookies.get("user_type") == undefined ? USER_TYPE.NONE : parseInt($cookies.get("user_type"));
+        this.current_user_id = $cookies.get("user_id") == undefined ? "" : $cookies.get("user_id");
+        this.current_user_name = $cookies.get("user_name") == undefined ? "" : $cookies.get("user_name");
 
         this.login = function (username, password, success, error) {
             $http.post("/api/user/login", {
@@ -58,6 +58,16 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
             $http.get("/api/session/get_list")
                 .success(function (data, status, headers, config) {
                     that.mail_list = data["sessions"];
+                    that.mail_list.map(function (mail) {
+                        if (mail.income) {
+                            var time = new Date(mail.income.time);
+                            mail.income.time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
+                        }
+                        if (mail.reply) {
+                            var time = new Date(mail.reply.time);
+                            mail.reply.time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
+                        }
+                    });
                     success();
                 }).error(function (data, status, headers, config) {
                     console.log(data);
@@ -87,7 +97,7 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                                 return false;
                         }
                     case USER_TYPE.WORKER:
-                        if (mail.worker != userServices.current_user_name) {
+                        if (!mail.worker || mail.worker != userServices.current_user_name) {
                             return false;
                         } else {
                             switch (that.selected_category.name) {
@@ -105,7 +115,7 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                             }
                         }
                     case USER_TYPE.REVIEWER:
-                        if (mail.reviewer != userServices.current_user_name) {
+                        if (!mail.reviewer || mail.reviewer != userServices.current_user_name) {
                             return false;
                         } else {
                             switch (that.selected_category.name) {
