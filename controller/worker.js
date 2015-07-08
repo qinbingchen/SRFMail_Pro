@@ -26,8 +26,10 @@ var submit = function(req, res, next) {
     var attachments = req.body.attachments;
 
     try {
-        recipients = JSON.parse(recipients);
-        if(attachments) {
+        if (recipients) {
+            recipients = JSON.parse(recipients);
+        }
+        if (attachments) {
             attachments = JSON.parse(attachments);
         }
     } catch (e) {
