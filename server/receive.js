@@ -7,6 +7,9 @@ var fs = require('fs');
 var path = require('path');
 var Log = require('../lib/log')('[server-receive');
 var uuid = require('uuid');
+var redis = require('redis');
+
+var client = redis.createClient(settings.redis.port, settings.redis.host);
 
 var mailListener = new MailListener({
     username: settings.mail.username,
@@ -74,7 +77,13 @@ mailListener.on('mail', function(_mail, seqno, attributes){
             income: mail._id,
             status: Session.Status.New
         });
-        session.save(function(err) {});
+        session.save(function(err) {
+            if(err) {
+                Log.e(err);
+            } else {
+                client.LPUSH('ReceiveQueue', session._id.toString(), function() {});
+            }
+        });
     });
 });
 
@@ -97,4 +106,6 @@ mailListener.on('attachment', function(attachment) {
     })
 });
 
-exports.start = mailListener.start.bind(mailListener);
+exports.start = function() {
+    process.nextTick(mailListener.start.bind(mailListener))
+};
