@@ -17,8 +17,8 @@ var download = function(req, res, next) {
                 message: err.toString()
             })
         }
-        fs.exists(path.join(__dirname, '../attachments', file.saveId), function(err, exist) {
-            if(err || !exist) {
+        fs.exists(path.join(__dirname, '../attachments', file.saveId), function(exist) {
+            if(!exist) {
                 return res.status(404).send('');
             }
             var fileStream = fs.createReadStream(path.join(__dirname, '../attachments', file.saveId));

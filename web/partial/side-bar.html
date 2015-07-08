@@ -1,13 +1,17 @@
 <div class="side-bar-section" ng-controller="SideBarController">
     <div class="header">SRF Mail Pro</div>
     <div class="body">
-        <ul class="mail-category-list" ng-repeat="user_type in category_list" ng-if="current_user_type == user_type.user_type">
+        <ul class="mail-category-list" ng-repeat="user_type in category_list"
+            ng-if="current_user_type == user_type.user_type">
             <li class="mail-category"
                 ng-repeat="(index, category) in user_type.category"
                 ng-class="{'selected': category == selected_category,
                            'before-selected': category.name == user_type.category[user_type.category.indexOf(selected_category) - 1].name}"
                 ng-click="select_category(category)">
+                <span title={{category.hint}}>
                 <i class="fa fa-inbox fa-lg"></i>{{category.display_name}}
+                </span>
+
             </li>
         </ul>
 
