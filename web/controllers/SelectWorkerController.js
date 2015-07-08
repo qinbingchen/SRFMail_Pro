@@ -60,22 +60,10 @@ SRFMailProControllers.controller("SelectWorkerController", ["$scope", "$http", "
             console.log(data);
     });
 
-        var url_labels = "/api/user/list_label";
-        $http.get(url_labels).success(function (data) {
-                $scope.theme_labels=data.theme_labels;
-           
-        }).error(function (data, status, headers, config) {
-            console.log(data);
-    });
-
-        $scope.theme_labels=["hello","goodmorning"];
-        	setTimeout(function() {
+            	setTimeout(function() {
                $(".select-workers").select2({
                     data: $scope.workers
-                });
-               $(".select-labels").select2({
-                    data: $scope.theme_labels
-                });
+                });              
         }, 2000);  
 
     }]);

@@ -85,10 +85,10 @@ var detail = function(req, res, next) {
                 reply: session.reply
             };
             if(ret.income && !ret.income.html) {
-                ret.income.html = '<p>' + ret.income.text + '</p>'
+                ret.income.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
             }
             if(ret.reply && !ret.reply.html) {
-                ret.reply.html = '<p>' + ret.income.text + '</p>'
+                ret.reply.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
             }
             if(ret.income && ret.income.attachments) {
                 ret.income.attachments.forEach(function(attachment) {
@@ -116,6 +116,9 @@ var detail = function(req, res, next) {
                 };
                 if(row.mail) {
                     op.mail = row.mail;
+                }
+                if(row.mail && !row.mail.html) {
+                    op.mail.html = '<p style="padding: 20px 0">' + row.mail.text + '</p>'
                 }
                 if(row.mail && row.mail.attachments) {
                     op.mail.attachments.forEach(function(attachment, index) {
