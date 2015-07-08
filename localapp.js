@@ -19,3 +19,4 @@ mongoose.connect(settings.mongodb, {
 });
 
 require('./server/web').start();
+require('./server/socket').start();
