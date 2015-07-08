@@ -10,9 +10,12 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
         $scope.selected_category = mailServices.selected_category;
 
+
         $scope.$on("broadcast_mail_did_select", function () {
+            $scope.current_user_type = userServices.current_user_type;
             $scope.selected_category = mailServices.selected_category;
             $scope.selected_mail_id = mailServices.selected_mail_id;
+
 
             mailServices.load_mail(
                 function () {
@@ -20,6 +23,18 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
                     sessionHistory.setOperations(mailServices.selected_mail.operations);
                     sessionHistory.draw();
+                  
+
+                    if ($scope.selected_mail != null) {
+                        if ($scope.selected_mail.income != null) {
+                            $scope.income_time = (new Date($scope.selected_mail.income.time)).toLocaleString();
+
+                        }
+                        if ($scope.selected_mail.reply != null) {
+                            $scope.reply_time = (new Date($scope.selected_mail.reply.time)).toLocaleString();
+                        }
+
+                    }
                 },
                 function () {
 
@@ -76,15 +91,15 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             });
         };
 
-        $scope.remind = function() {
-                $http.post("/api/action/dispatcher/urge", {
-                    id: $scope.selected_mail_id
-                }).success(function (data, status, headers, config) {
-                    toastr.success('成功提醒','');
-                    console.log(data);
-                }).error(function (data, status, headers, config) {
-                    console.log(data);
-                });
+        $scope.remind = function () {
+            $http.post("/api/action/dispatcher/urge", {
+                id: $scope.selected_mail_id
+            }).success(function (data, status, headers, config) {
+                toastr.success('成功提醒', '');
+                console.log(data);
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
         };
 
         $scope.show_dispatch = function () {
