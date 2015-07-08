@@ -352,7 +352,7 @@ SessionHistoryKit.SessionHistory.prototype.draw = function() {
 		return;
 	}
 
-	var x = this.hoverRadius;
-	var y = this.height - 20;
+	var x = Math.max(this.hoverRadius, this.radius, (ctx.measureText('宋').width + 5) / 2 + 2);
+	var y = this.height - 60; // card's height is ~50
 	this.drawStream(ctx, x, y);
 };
