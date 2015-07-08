@@ -24,7 +24,7 @@
             <button ng-click="show_fw()" ng-disabled="selected_mail_id==''"
                     ng-show="current_user_type == 2 && !selected_mail.readonly"><i class="fa fa-edit fa-lg"></i>转发
             </button>
-            <button ng-click="worker_sendback()" ng-disabled="selected_mail_id==''"
+            <button ng-click="worker_sendback()" ng-disabled="selected_mail_id=='' || work_sendback_flag"
                     ng-show="current_user_type == 2 && !selected_mail.readonly"><i class="fa fa-edit fa-lg"></i>退回
             </button>
             <button class="right" ng-hide="current_user_type == -1" ng-click="logout()">登出</button>

@@ -8,6 +8,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.selected_mail_id = mailServices.selected_mail_id;
         $scope.fw_show = false;
         $scope.clicked = false;
+        $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
 
         $scope.$on("broadcast_mail_did_select", function () {
             $scope.current_user_type = userServices.current_user_type;
@@ -117,13 +118,18 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
         $scope.worker_sendback = function () {
 
+            $scope.work_sendback_flag = !$scope.work_sendback_flag;
+
             $http.post('/api/action/worker/redirect', {
                 'id': $scope.selected_mail_id
             }).success(function () {
                 toastr.success('成功退回', '');
                 $scope.load_mail_list();
+                $scope.work_sendback_flag = !$scope.work_sendback_flag;
+
             }).error(function () {
                 toastr.error('退回失败，请重试', '');
+                $scope.work_sendback_flag = !$scope.work_sendback_flag;
             });
         };
 
