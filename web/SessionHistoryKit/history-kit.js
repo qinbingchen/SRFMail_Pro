@@ -12,10 +12,6 @@
 
 var SessionHistoryKit = SessionHistoryKit || {};
 
-Array.prototype.firstObject = function() {
-	return this[0];
-};
-
 SessionHistoryKit.SessionHistory = function(containerId, options) {
 	this.container = document.getElementById(containerId);
 	if (!this.container) {
@@ -70,7 +66,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 
 	this.initCanvas = function() {
 		while (this.container.hasChildNodes()) {
-			var child = this.container.childNodes.firstObject();
+			var child = this.container.childNodes[0];
 			this.container.removeChild(child);
 		}
 
@@ -328,13 +324,15 @@ SessionHistoryKit.SessionHistory.prototype.handleMouseMove = function(event) {
 
 			// normal dot
 			ctx.clearRect(dot.pos.x - that.hoverRadius, dot.pos.y - that.hoverRadius, that.hoverRadius * 2, that.hoverRadius * 2);
-			if (index == that.dots.length - 1) {
+			var isFirst = index === 0;
+			var isLast = index === that.dots.length - 1;
+			if (isLast && !isFirst) {
 				// last dot
 				that.drawHorizontalLine(ctx, dot.pos.x - that.hoverRadius, dot.pos.y, that.hoverRadius);
-			} else if (index == 0) {
+			} else if (isFirst && !isLast) {
 				// first dot
 				that.drawHorizontalLine(ctx, dot.pos.x, dot.pos.y, that.hoverRadius);
-			} else {
+			} else if (!isFirst && !isLast) {
 				// middle dot
 				that.drawHorizontalLine(ctx, dot.pos.x - that.hoverRadius, dot.pos.y, that.hoverRadius * 2);
 			}
