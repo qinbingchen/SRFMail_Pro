@@ -272,14 +272,6 @@ var list = function(req, res, next){
                             time: list_element.lastOperation.time,
                             mail: list_element.lastOperation.mail
                         }
-                        if(receiverName) {
-                            console.log("receivername: " + receiverName);
-                            console.log("after assgined value: " + list_element.lastOperation.receiver);
-                        }
-                        if(operatorName){
-                            console.log("operatorname: " + operatorName);
-                            console.log("after assgined value: " + list_element.lastOperation.operator);
-                        }
                     }
                     if(session.income) {
                         list_element.income = {
