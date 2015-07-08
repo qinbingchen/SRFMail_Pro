@@ -67,12 +67,12 @@
 
         <div class="mail" ng-if="selected_mail_id != ''">
             <div class="info" ng-if="selected_mail.reply != null">
-                <div class="title">{{selected_mail.reply.subject}}</div>
+                <div class="subject">{{selected_mail.reply.subject}}</div>
                 <div class="time">{{reply_time}}</div>
                 <div class="recipient">收件人 {{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
             </div>
             <div class="info" ng-if="selected_mail.reply == null">
-                <div class="title">{{selected_mail.income.subject}}</div>
+                <div class="subject">{{selected_mail.income.subject}}</div>
                 <div class="time">{{income_time}}</div>
                 <div class="sender">发件人 {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
             </div>
@@ -81,7 +81,7 @@
             <div class="content" ng-bind-html="selected_mail.income.html" ng-if="selected_mail.reply == null"></div>
 
             <div class="original-income" ng-if="selected_mail.reply != null && selected_mail.income != null">
-                <div class="title">主题：{{selected_mail.income.subject}}</div>
+                <div class="subject">主题：{{selected_mail.income.subject}}</div>
                 <div class="time">时间：{{income_time}}</div>
                 <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
                 <div class="content" ng-bind-html="selected_mail.income.html"></div>

@@ -29,7 +29,7 @@
       .mail-section .body .mail .info {
         border-bottom: 1px solid #cfcfd3;
         padding-bottom: 10px; }
-        .mail-section .body .mail .info .title {
+        .mail-section .body .mail .info .subject {
           font-size: 27px; }
         .mail-section .body .mail .info .time {
           margin-top: 6px;
