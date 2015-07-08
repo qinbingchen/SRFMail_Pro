@@ -207,6 +207,8 @@ var list = function(req, res, next){
             break;
         case User.Role.Dispatcher:
             break;
+        case User.Role.System:
+            break;
         default:
             return res.json({
                 code: 1,
