@@ -10,15 +10,16 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
         $scope.selected_category = mailServices.selected_category;
 
-
         $scope.$on("broadcast_mail_did_select", function () {
-            $scope.current_user_type = userServices.current_user_type;
             $scope.selected_category = mailServices.selected_category;
             $scope.selected_mail_id = mailServices.selected_mail_id;
 
             mailServices.load_mail(
                 function () {
                     $scope.selected_mail = mailServices.selected_mail;
+                    //var sessionHistory = SessionHistoryKit.SessionHistory("mail-operation-history");
+                    //sessionHistory.setOperations(mailServices.selected_mail.operations);
+                    //sessionHistory.draw();
                 },
                 function () {
 
@@ -95,7 +96,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.show_label = function () {
             $scope.label_show = !$scope.label_show;
             $scope.dispatch_show = false;
-        }
+        };
         $scope.label_show = false;
 
 

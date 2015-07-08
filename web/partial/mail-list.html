@@ -8,12 +8,13 @@
     <div class="body">
         <ul class="mail-list">
             <li class="mail" ng-repeat="mail in filtered_mail_list"
-                ng-class="{'selected': mail.id == selected_mail_id}" ng-click="select_mail(mail)">
+                ng-class="{'selected': mail.id == selected_mail_id, 'highlight': mail.isUrged && current_user_type == 2}"
+                ng-click="select_mail(mail)">
                 <p class="first-row">
-                    <a class="sender">{{(mail.lastOperation.mail==null)?(mail.income.from[0].name):(mail.lastOperation.operator)}}</a>
-                    <a class="date">{{(mail.lastOperation.mail==null)?(mail.income.time):(mail.lastOperation.time)}}</a>
+                    <a class="sender">{{mail.reply ? mail.reply.from[0].name : mail.income.from[0].name}}</a>
+                    <a class="date">{{mail.reply ? mail.reply.time : mail.income.time}}</a>
                 </p>
-                <p class="mail-title">{{(mail.reply ? mail.reply.subject : mail.income.subject)}}</p>
+                <p class="mail-title">{{mail.reply ? mail.reply.subject : mail.income.subject}}</p>
             </li>
         </ul>
     </div>

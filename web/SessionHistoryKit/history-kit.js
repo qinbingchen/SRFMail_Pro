@@ -8,7 +8,7 @@
  * 2015 Renfei Song, All rights released.
  */
 
-"use strict";
+//"use strict";
 
 var SessionHistoryKit = SessionHistoryKit || {};
 
@@ -24,6 +24,8 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 
 	this.operations = [];
 	this.dots = [];
+
+    options = options || {};
 
 	/* Configurable */
 	this.width = options.width || 750;

@@ -3,6 +3,7 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         $scope.partial_load_status.mail_list = true;
         $scope.check_partial_load_status();
 
+        $scope.current_user_type = mailServices.current_user_type;
         $scope.selected_mail_id = mailServices.selected_mail_id;
 
         $scope.$on("broadcast_category_did_select", function () {
