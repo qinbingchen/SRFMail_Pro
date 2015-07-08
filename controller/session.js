@@ -6,6 +6,7 @@ var User = require('../model').user;
 var Label = require('../model').label;
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
+var util = require('../lib/util');
 
 var getLabelsFromIdArray = function(labelIdArray, fnCallback) {
     Label.model.find({
@@ -154,12 +155,15 @@ var list = function(req, res, next){
     };
     var queryDispatcherUserName = req.query.dispatcherUserName;
     var queryWorkerUserName = req.query.workerUserName;
-    var queryReadonly = req.query.readonly;
+    var queryReadonly = util.toBoolean(req.query.readonly);
     var queryReviewerUserName = req.query.reviewer;
     var queryStatus = req.query.status;
-    var queryIsRejected = req.query.isRejected == "true";
-    var queryIsRedirected = req.query.isRedirected == "true";
+    var queryIsRejected = util.toBoolean(req.query.isRejected);
+    var queryIsRedirected = util.toBoolean(req.query.isRedirected);
     var find_key = {};
+
+    var lastIndex = req.query.last;
+    var limit = parseInt(req.query.limit) || 100;
 
     switch(req.session.user.role) {
         case User.Role.Reviewer:
@@ -190,8 +194,15 @@ var list = function(req, res, next){
     if(queryReadonly){
         find_key.readonly = queryReadonly
     }
+    if(lastIndex) {
+        find_key.index = {
+            $lt: new Date(lastIndex)
+        }
+    }
 
     Session.model.find(find_key)
+        .limit(limit)
+        .sort('-index')
         .populate('dispatcher', 'username')
         .populate('worker', 'username')
         .populate('reviewer', 'username')
@@ -304,7 +315,6 @@ var list = function(req, res, next){
                         callback();
                     }
                 })
-
             }, function(err) {
                 if (err) {
                     return res.json({
@@ -312,25 +322,11 @@ var list = function(req, res, next){
                         message: err.toString()
                     });
                 }
-                ret.sessions.sort(function (a, b){
-                    var A, B;
-                    if(a.lastOperation) {
-                        A = a.lastOperation.time.getTime();
-                    } else {
-                        A = a.income.time.getTime();
-                    }
-                    if(b.lastOperation) {
-                        B = b.lastOperation.time.getTime();
-                    } else {
-                        B = b.income.time.getTime();
-                    }
-                    return A < B;
-                });
+                ret.done = (ret.sessions.length < limit);
                 res.json(ret);
             });
         });
 };
-
 
 router.use(function(req, res, next) {
     if(!req.session.user) {
