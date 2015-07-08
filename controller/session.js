@@ -166,13 +166,20 @@ var list = function(req, res, next){
     var limit = parseInt(req.query.limit) || 100;
     sort_key.index = 'desc';
 
+    if(lastIndex && isNaN(parseInt(lastIndex))) {
+        return res.json({
+            code: 1,
+            message: 'Invalid parameter last: ' + lastIndex
+        });
+    }
+
     switch(req.session.user.role) {
         case User.Role.Reviewer:
-            sort_key.idUrged = 'desc';
+            sort_key.isUrged = 'desc';
             find_key.reviewer = req.session.user._id;
             break;
         case User.Role.Worker:
-            sort_key.idUrged = 'desc';
+            sort_key.isUrged = 'desc';
             find_key.worker = req.session.user._id;
             break;
         case User.Role.Dispatcher:
@@ -199,7 +206,7 @@ var list = function(req, res, next){
     }
     if(lastIndex) {
         find_key.index = {
-            $lt: new Date(lastIndex)
+            $lt: new Date(parseInt(lastIndex))
         }
     }
 

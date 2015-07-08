@@ -32,9 +32,6 @@
   .mail-list-section .body .mail.selected {
     background-color: #2b91e3;
     color: #fff; }
-  .mail-list-section .body .mail.highlight {
-    background-color: #c30c1e;
-    color: #fff; }
 
 .first-row {
   margin: 0;
