@@ -3,8 +3,23 @@ var async = require('async');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
+var Label = require('../model').label;
 var router = new require('express').Router();
 var Log = require('../lib/log')('[controller-session]');
+
+var getLabelsFromIdArray = function(labelIdArray, fnCallback) {
+    Label.model.find({
+        _id: {
+            $in: labelIdArray
+        }
+    }, function(err, labels) {
+        if (err) {
+            return fnCallback(err, null);
+        }
+
+        fnCallback(null, labels);
+    });
+};
 
 var detail = function(req, res, next) {
     var id = req.query.id;
@@ -50,7 +65,22 @@ var detail = function(req, res, next) {
                 isRedirected: session.isRedirected ? session.isRejected : false,
                 isUrged: session.isUrged ? session.isUrged : false,
                 readonly: session.readonly,
-                income: session.income,
+                income: {
+                    from: session.income.from,
+                    to: session.income.to,
+                    cc: session.income.cc,
+                    bcc: session.income.bcc,
+                    replyTo: session.income.replyTo,
+                    inReplyTo: session.income.inReplyTo,
+                    subject: session.income.subject,
+                    text: session.income.text,
+                    html: session.income.html,
+                    attachments: session.income.attachments,
+                    labels: null,
+                    deadline: session.income.deadline,
+                    time: session.income.time,
+                    messageId: session.income.messageId
+                },
                 reply: session.reply
             };
             if(ret.income && !ret.income.html) {
@@ -99,7 +129,17 @@ var detail = function(req, res, next) {
             ret.operations.sort(function (a, b){
                 return a.time.getTime() < b.time.getTime();
             });
-            res.json(ret);
+
+            getLabelsFromIdArray(session.income.labels, function(err, labels) {
+                if (err) {
+                    return res.json({
+                        code: 1,
+                        message: err.toString()
+                    });
+                }
+                ret.income.labels = labels;
+                res.json(ret);
+            });
         });
 };
 
@@ -162,7 +202,7 @@ var list = function(req, res, next){
                 });
             }
             ret.count = sessions.length;
-            sessions.forEach(function (session, index){
+            async.each(sessions, function(session, callback){
                 var list_element = {
                     id: session._id,
                     readonly: session.readonly,
@@ -180,7 +220,7 @@ var list = function(req, res, next){
                         subject: session.income.subject,
                         from: session.income.from,
                         to: session.income.to,
-                        labels: session.income.labels,
+                        labels: null,
                         deadline: session.income.deadline,
                         time: session.income.time
                     }
@@ -195,23 +235,39 @@ var list = function(req, res, next){
                         time: session.reply.time
                     }
                 }
-                ret.sessions.push(list_element);
-            });
-            ret.sessions.sort(function (a, b){
-                var A, B;
-                if(a.lastOperation) {
-                    A = a.lastOperation.time.getTime();
+                if (session.income) {
+                    getLabelsFromIdArray(session.income.labels, function(err, labels) {
+                        list_element.income.labels = labels;
+                        ret.sessions.push(list_element);
+                        callback();
+                    });
                 } else {
-                    A = a.income.time.getTime();
+                    ret.sessions.push(list_element);
+                    callback();
                 }
-                if(b.lastOperation) {
-                    B = b.lastOperation.time.getTime();
-                } else {
-                    B = b.income.time.getTime();
+            }, function(err) {
+                if (err) {
+                    return res.json({
+                        code: 1,
+                        message: err.toString()
+                    });
                 }
-                return A < B;
+                ret.sessions.sort(function (a, b){
+                    var A, B;
+                    if(a.lastOperation) {
+                        A = a.lastOperation.time.getTime();
+                    } else {
+                        A = a.income.time.getTime();
+                    }
+                    if(b.lastOperation) {
+                        B = b.lastOperation.time.getTime();
+                    } else {
+                        B = b.income.time.getTime();
+                    }
+                    return A < B;
+                });
+                res.json(ret);
             });
-            res.json(ret);
         });
 };
 
