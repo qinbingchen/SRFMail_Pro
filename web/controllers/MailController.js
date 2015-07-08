@@ -33,7 +33,9 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                         if ($scope.selected_mail.reply != null) {
                             $scope.reply_time = (new Date($scope.selected_mail.reply.time)).toLocaleString();
                         }
-
+                        if ($scope.selected_mail.income.deadline != null) {
+                            $scope.deadline_time = (new Date($scope.selected_mail.income.deadline)).toLocaleString();
+                        }
                     }
                 },
                 function () {
