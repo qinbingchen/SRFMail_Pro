@@ -47,10 +47,6 @@ var CATEGORY_LIST = [
                 display_name: "已分发",
                 hint: "表示已经分发完但尚未被处理人员处理的邮件列表"
             }
-            //, {
-            //    name: "processed",
-            //    display_name: "已处理"
-            //}
         ]
     }, {
         user_type: USER_TYPE.WORKER,
