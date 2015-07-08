@@ -40,16 +40,17 @@ var CATEGORY_LIST = [
         category: [
             {
                 name: "pending",
-                display_name: "待分发",
+                display_name: "未分发",
                 hint: "表示仍未被分发的邮件列表"
             }, {
                 name: "dispatched",
                 display_name: "已分发",
                 hint: "表示已经分发完但尚未被处理人员处理的邮件列表"
-            }, {
-                name: "processed",
-                display_name: "已处理"
             }
+            //, {
+            //    name: "processed",
+            //    display_name: "已处理"
+            //}
         ]
     }, {
         user_type: USER_TYPE.WORKER,
