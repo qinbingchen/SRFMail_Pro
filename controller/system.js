@@ -317,7 +317,10 @@ var detail = function(req, res) {
 };
 
 var getSettings = function(req, res) {
-    var ret = {};
+    var ret = {
+        code: 0,
+        message: 'success'
+    };
     async.parallel([
         function(cb) {
             System.model.findOne({
@@ -353,13 +356,10 @@ var getSettings = function(req, res) {
         if(err) {
             res.json({
                 code: 1,
-                message: err.toString()
+                message: err.toString(),
             });
         } else {
-            res.json({
-                code: 0,
-                message: 'success'
-            });
+            res.json(ret);
         }
     });
 };
