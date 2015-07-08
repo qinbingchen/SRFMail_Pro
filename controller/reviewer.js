@@ -90,7 +90,7 @@ var reject = function(req, res, next){
                     });
                 }
             });
-        })
+        });
 };
 
 var pass = function(req, res, next) {
