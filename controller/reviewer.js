@@ -90,7 +90,7 @@ var reject = function(req, res, next){
                     });
                 }
             });
-        })
+        });
 };
 
 var pass = function(req, res, next) {
@@ -137,8 +137,24 @@ var pass = function(req, res, next) {
             }
 
             if(subject || html || attachments) {
-                newMail = _.cloneDeep(mail);
-                delete newMail._id;
+                newMail = {
+                    subject: mail.subject,
+                    time: new Date(),
+                    labels: [],
+                    attachments: [],
+                    text: mail.text,
+                    html: mail.html,
+                    bcc: [],
+                    cc: [],
+                    to: [],
+                    from: []
+                };
+                ['labels', 'attachments', 'bcc', 'cc', 'from', 'to'].forEach(function(key) {
+                    mail[key].forEach(function(row) {
+                        delete row._id;
+                        newMail[key].push(row);
+                    });
+                });
                 if(subject){
                     newMail.subject = subject;
                 }

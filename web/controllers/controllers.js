@@ -204,13 +204,19 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                         break;
                     case EDIT_MODE.EDIT:
                         $http.post("/api/action/reviewer/pass", {
-                            id: mailServices.selected_mail,
-                            subject: $scope.recipient,
+                            id: mailServices.selected_mail_id,
+                            subject: $scope.subject,
                             html: $scope.content,
-                            attachments: []
+                            attachments: JSON.stringify([])
                         }).success(function (data, status, headers, config) {
-                            toastr.success("发送成功", "");
-                            $scope.dismiss_modal();
+                            if (data.code == 0) {
+                                toastr.success("发送成功", "");
+                                $scope.load_mail_list();
+                                $scope.dismiss_modal();
+                            } else {
+                                toastr.error("发送失败，请重试", "");
+                            }
+
                         }).error(function () {
 
                         });

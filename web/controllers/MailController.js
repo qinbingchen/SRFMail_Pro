@@ -6,6 +6,10 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.current_user_type = userServices.current_user_type;
         $scope.selected_category = mailServices.selected_category;
         $scope.selected_mail_id = mailServices.selected_mail_id;
+        $scope.fw_show = false;
+        $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
+        $scope.selected_category = mailServices.selected_category;
+
 
         $scope.$on("broadcast_mail_did_select", function () {
             $scope.current_user_type = userServices.current_user_type;
@@ -31,6 +35,8 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             }).success(function (data, status, headers, config) {
                 toastr.success('审核通过', '');
                 $scope.load_mail_list();
+            }).error(function () {
+                toastr.error('请重试', '');
             });
 
         };
@@ -49,7 +55,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 toastr.success('成功退回', '');
                 $scope.load_mail_list();
             }).error(function () {
-                alert("review refuse confirm is error");
+                toastr.error('请重试', '');
             });
 
         };
@@ -73,6 +79,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 $http.post("/api/action/dispatcher/urge", {
                     id: $scope.selected_mail_id
                 }).success(function (data, status, headers, config) {
+                    toastr.success('成功提醒','');
                     console.log(data);
                 }).error(function (data, status, headers, config) {
                     console.log(data);
@@ -81,9 +88,16 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
         $scope.show_dispatch = function () {
             $scope.dispatch_show = !$scope.dispatch_show;
+            $scope.label_show = false;
         };
-
         $scope.dispatch_show = false;
+
+        $scope.show_label = function () {
+            $scope.label_show = !$scope.label_show;
+            $scope.dispatch_show = false;
+        }
+        $scope.label_show = false;
+
 
         $scope.show_compose = function () {
             $scope.$emit("emit_show_compose");
@@ -96,4 +110,27 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.show_edit = function () {
             $scope.$emit("emit_show_edit");
         };
+
+
+        $scope.show_fw = function () {
+            $scope.fw_show = !$scope.fw_show;
+        };
+
+        $scope.worker_sendback = function () {
+
+            $scope.work_sendback_flag = !$scope.work_sendback_flag;
+
+            $http.post('/api/action/worker/redirect', {
+                'id': $scope.selected_mail_id
+            }).success(function () {
+                toastr.success('成功退回', '');
+                $scope.load_mail_list();
+                $scope.work_sendback_flag = !$scope.work_sendback_flag;
+
+            }).error(function () {
+                toastr.error('退回失败，请重试', '');
+                $scope.work_sendback_flag = !$scope.work_sendback_flag;
+            });
+        };
+
     }]);

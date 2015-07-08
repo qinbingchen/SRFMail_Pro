@@ -26,8 +26,10 @@ var submit = function(req, res, next) {
     var attachments = req.body.attachments;
 
     try {
-        recipients = JSON.parse(recipients);
-        if(attachments) {
+        if (recipients) {
+            recipients = JSON.parse(recipients);
+        }
+        if (attachments) {
             attachments = JSON.parse(attachments);
         }
     } catch (e) {
@@ -40,12 +42,14 @@ var submit = function(req, res, next) {
         });
     }
 
-    for(var i = 0; i < recipients.length; i++) {
-        if(!EmailRegex.test(recipients[i])) {
-            return res.json({
-                code: 1,
-                message: 'Invalid Email Address: ' + recipients[i]
-            })
+    if (recipients) {
+        for(var i = 0; i < recipients.length; i++) {
+            if(!EmailRegex.test(recipients[i])) {
+                return res.json({
+                    code: 1,
+                    message: 'Invalid Email Address: ' + recipients[i]
+                })
+            }
         }
     }
 
@@ -134,22 +138,26 @@ var submit = function(req, res, next) {
             attachments: []
         });
 
-        recipients.forEach(function(row) {
-            repliedMail.to.push({
-                name: row.slice(0, row.indexOf('@')),
-                address: row
+        if (recipients) {
+            recipients.forEach(function(row) {
+                repliedMail.to.push({
+                    name: row.slice(0, row.indexOf('@')),
+                    address: row
+                });
             });
-        });
+        }
 
-        attachments.forEach(function(row) {
-            repliedMail.attachments.push({
-                cid: row.contentId,
-                path: path.join(__dirname, '../attachments', row.saveId),
-                filename: row.name,
-                contentType: row.contentType
+        if (attachments) {
+            attachments.forEach(function(row) {
+                repliedMail.attachments.push({
+                    cid: row.contentId,
+                    path: path.join(__dirname, '../attachments', row.saveId),
+                    filename: row.name,
+                    contentType: row.contentType
+                });
             });
-        });
-
+        }
+        
         repliedMail.save(function(err) {
             if (err) {
                 Log.e({req: req}, err);
@@ -297,7 +305,7 @@ var redirect = function(req, res, next) {
                     });
                     return cb(new Error('Invalid session id'));
                 }
-                if(!session.income) {
+                if(!_session.income) {
                     res.json({
                         code: 1,
                         message: 'Session you wrote couldn\'t be redirected.'

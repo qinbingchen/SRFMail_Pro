@@ -3,20 +3,24 @@ var cluster = require('cluster');
 if(cluster.isMaster) {
     var i;
     var os = require('os');
-    var ThreadNum = os.cpus.length > 3 ? os.cpus.length : 3;
+    var ThreadNum = os.cpus.length > 4 ? os.cpus.length : 4;
     var Threads = [];
     var Log = require('./lib/log')('[APP]');
     for(i = 0; i < ThreadNum; i++) {
         var worker = cluster.fork();
         Threads.push(worker);
-        setAutoRestart(worker);
     }
     Threads[0].send('receive');
     Threads[1].send('send');
-    for(i = 2; i < ThreadNum; i++) {
+    Threads[2].send('socket);');
+    setAutoRestart(Threads[0], 'receive');
+    setAutoRestart(Threads[1], 'send');
+    setAutoRestart(Threads[2], 'socket');
+    for(i = 3; i < ThreadNum; i++) {
         Threads[i].send('web');
+        setAutoRestart(Threads[i], 'web');
     }
-    function setAutoRestart(worker) {
+    function setAutoRestart(worker, message) {
         worker.on('exit', function (code, signal) {
             if (signal) {
                 Log.e("worker was killed by signal: " + signal);
@@ -29,7 +33,7 @@ if(cluster.isMaster) {
             worker = cluster.fork();
             Threads.push(worker);
             setAutoRestart(worker);
-            worker.send('web');
+            worker.send(message);
         });
     }
 } else {
@@ -63,6 +67,9 @@ if(cluster.isMaster) {
                 break;
             case 'send':
                 require('./server/send').start();
+                break;
+            case 'socket':
+                require('./server/socket').start();
                 break;
         }
     })

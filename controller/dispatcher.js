@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
+var Label = require('../model').label;
 var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
@@ -233,6 +234,99 @@ var urge = function(req, res, next) {
     });
 };
 
+var list_label = function(req, res, next) {
+    var list = {
+        labels: []
+    };
+    Label.model.find({})
+        .populate("labels")
+        .exec(function(err, labels){
+            if(err){
+                return res.json({
+                    code: 1,
+                    message: "couldn't load labels!"
+                });
+            }
+            labels.forEach(function(label){
+                list.labels.push({
+                    name: label.name,
+                    color: label.color
+                })
+            })
+
+            res.json(list);
+        })
+}
+
+var is_valid_color = function(color_str){
+    if(color_str.length != 7){
+        return false;
+    }
+    if(color_str[0] != '#')return false;
+    for(var i = 1 ; i < 7 ; i ++){
+        var c = color_str[i];
+        if(!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))){
+            return false;
+        }
+    }
+    return true;
+}
+
+var set_all_label = function(req, res, next){
+    var labels = req.body.labels;
+    try {
+        labels = JSON.parse(req.body.labels);
+    } catch (e) {
+        return res.json({
+            code: 1,
+            message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
+            + ' ParseError: ' + e.toString()
+            + ' Labels: ' + req.body.labels
+        });
+    }
+    Label.model.remove({name: 'fuck'}, function(err){
+        if(err) {
+            return res.json({
+                code: 1,
+                message: 'remove failed'
+            })
+        }
+        var cnt = 0;
+        labels.forEach(function(label){
+            if(!label.name){
+                return res.json({
+                    code: 1,
+                    message: 'invalid name in labels'
+                })
+            }
+            if(!label.color || !is_valid_color(label.color)){
+                label.color = '#C0C0C0'
+            }
+            var newLabel = {
+                name: label.name,
+                color: label.color
+            }
+            newLabel = new Label.model(newLabel);
+
+            newLabel.save(function(err) {
+                if(err){
+                    return res.json({
+                        code: 1,
+                        message: 'cannot save label' + newLabel.name
+                    })
+                }
+                cnt ++;
+                if(cnt == labels.length){
+                    return res.json({
+                        code: 0,
+                        message: "success"
+                    })
+                }
+            });
+        });
+    });
+}
+
 var set_label = function(req, res, next) {
     var sessionId = req.body.id;
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
@@ -302,19 +396,38 @@ var set_label = function(req, res, next) {
         }
 
         labels = labels.getUnique();
-        incomeMail.labels = labels;
-        incomeMail.save(function(err) {
-            if (err) {
-                return res.json({
-                    code: 1,
-                    message: err.toString()
-                });
-            }
-            return res.json({
-                code: 0,
-                message: labels.length == 0 ? "Success: All labels removed." : "Success: Labels set to: " + labels.join(', ') + "."
-            });
-        });
+        var labels_id = [];
+        var cnt = 0;
+        labels.forEach(function(label){
+            Label.model.findOne({
+                name: label
+            }, function(err, _label){
+                cnt += 1;
+                if(err) {
+                    Log.e({req: req}, err);
+                    return res.json({
+                        code: 1,
+                        message: 'couldn\'t find label with name ' + label
+                    });
+                }
+                if(_label)labels_id.push(_label._id);
+                if(cnt == labels.length){
+                    incomeMail.labels = labels_id;
+                    incomeMail.save(function(err) {
+                        if (err) {
+                            return res.json({
+                                code: 1,
+                                message: err.toString()
+                            });
+                        }
+                        return res.json({
+                            code: 0,
+                            message: labels.length == 0 ? "Success: All labels removed." : "Success: Labels set to: " + labels.join(', ') + "."
+                        });
+                    });
+                }
+            })
+        })
     });
 };
 
@@ -346,4 +459,7 @@ router.use(function(req, res, next) {
 router.route('/dispatch').post(dispatch);
 router.route('/urge').post(urge);
 router.route('/set_label').post(set_label);
+router.route('/set_all_labels').post(set_all_label);
+router.route('/list_labels').get(list_label);
+
 module.exports = router;
