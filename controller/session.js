@@ -193,6 +193,7 @@ var list = function(req, res, next){
         .populate('reviewer', 'username')
         .populate('income')
         .populate('reply')
+        .populate('operations.mail')
         .exec(function(err, sessions){
             if (err) {
                 Log.e({req: req}, err);
@@ -215,6 +216,36 @@ var list = function(req, res, next){
                     isUrged: session.isUrged ? session.isUrged : false,
                     lastOperation: session.operations ? (session.operations.length > 0 ? session.operations[session.operations.length-1] : undefined) : undefined
                 };
+                var receiverName, operatorName;
+                async.parallel([
+                    function(callback){
+                        if(list_element.lastOperation && list_element.lastOperation.receiver){
+                            User.model.findById(list_element.lastOperation.receiver)
+                                .exec(function(err, receiver){
+                                    receiverName = receiver.username;
+                                    callback(err);
+                                })
+                        }
+                    },
+                    function(callback){
+                        if(list_element.lastOperation && list_element.lastOperation.operator){
+                            User.model.findById(list_element.lastOperation.operator)
+                                .exec(function(err, operator){
+                                    receiverName = operator.username;
+                                    callback(err);
+                                })
+                        }
+                    }
+                ], function(err){
+                    if(err){
+                        return res.json({
+                            code: 1,
+                            message: err.toString()
+                        });
+                        list_element.receiver = receiverName;
+                        list_element.operator = operatorName;
+                    }
+                })
                 if(session.income) {
                     list_element.income = {
                         subject: session.income.subject,
