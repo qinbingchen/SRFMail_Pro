@@ -75,14 +75,25 @@ var detail = function(req, res, next) {
                     inReplyTo: session.income.inReplyTo,
                     subject: session.income.subject,
                     text: session.income.text,
-                    html: session.income.html,
+                    html: util.fetchContent(session.income.html),
                     attachments: session.income.attachments,
                     labels: null,
                     deadline: session.income.deadline,
-                    time: session.income.time,
-                    messageId: session.income.messageId
+                    time: session.income.time
                 } : undefined,
-                reply: session.reply
+                reply: session.reply ? {
+                    from: session.reply.from,
+                    to: session.reply.to,
+                    cc: session.reply.cc,
+                    bcc: session.reply.bcc,
+                    replyTo: session.reply.replyTo,
+                    inReplyTo: session.reply.inReplyTo,
+                    subject: session.reply.subject,
+                    text: session.reply.text,
+                    html: util.fetchContent(session.reply.html),
+                    attachments: session.reply.attachments,
+                    time: session.reply.time
+                } : undefined
             };
             if(ret.income && !ret.income.html) {
                 ret.income.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
@@ -119,6 +130,9 @@ var detail = function(req, res, next) {
                 }
                 if(row.mail && !row.mail.html) {
                     op.mail.html = '<p style="padding: 20px 0">' + row.mail.text + '</p>'
+                }
+                if(row.mail && row.mail.html) {
+                    op.mail.html = util.fetchContent(op.mail.html);
                 }
                 if(row.mail && row.mail.attachments) {
                     op.mail.attachments.forEach(function(attachment, index) {

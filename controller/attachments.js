@@ -8,7 +8,7 @@ var router = new require('express').Router();
 var download = function(req, res, next) {
     var id = req.query.id;
     Attachment.model.findOne({
-        saveId: id
+        contentId: id
     }, function(err, file) {
         if(err) {
             Log.e({req: req}, err);
@@ -17,10 +17,15 @@ var download = function(req, res, next) {
                 message: err.toString()
             })
         }
-        var fileStream = fs.createReadStream(path.join(__dirname, '../attachments', file.saveId));
-        res.header('Content-Type', file.contentType);
-        res.header('Content-Disposition', 'attachment;filename=' + file.name);
-        fileStream.pipe(res);
+        fs.exists(path.join(__dirname, '../attachments', file.saveId), function(err, exist) {
+            if(err || !exist) {
+                return res.status(404).send('');
+            }
+            var fileStream = fs.createReadStream(path.join(__dirname, '../attachments', file.saveId));
+            res.header('Content-Type', file.contentType);
+            res.header('Content-Disposition', 'attachment;filename=' + file.name);
+            fileStream.pipe(res);
+        });
     });
 };
 
