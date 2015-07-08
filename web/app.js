@@ -27,19 +27,32 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
                     success();
                 } else {
                     console.log(data);
-                    error()
+                    error();
                 }
             }).error(function (data, status, headers, config) {
                 console.log(data);
-                error()
+                error();
             });
         };
 
-        this.logout = function () {
-            $cookies.remove("connect.sid");
-            $cookies.remove("user_type");
-            $cookies.remove("user_id");
-            $cookies.remove("user_name");
+        this.logout = function (success, error) {
+            $http.post("/api/user/logout")
+                .success(function (data, status, headers, config) {
+                    if (data.code == 0) {
+                        $cookies.remove("connect.sid");
+                        $cookies.remove("user_type");
+                        $cookies.remove("user_id");
+                        $cookies.remove("user_name");
+                        success();
+                    } else {
+                        console.log(data);
+                        error();
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log(data);
+                    error();
+                }
+            );
         };
     }
 ]);
@@ -150,7 +163,8 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                     }).error(function (data, status, headers, config) {
                         console.log(data);
                         error()
-                    });
+                    }
+                );
             }
         };
     }

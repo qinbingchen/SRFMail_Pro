@@ -28,32 +28,62 @@
       padding: 0; }
       .mail-list-section .body .mail-list .mail {
         height: 100px;
-        padding: 10px 10px 10px 30px;
-        border-bottom: 1px solid #d6d6d6; }
-        .mail-list-section .body .mail-list .mail .info {
-          height: 23px;
-          line-height: 23px; }
-          .mail-list-section .body .mail-list .mail .info .sender {
-            display: inline-block;
-            font-size: 17px;
+        padding: 10px 10px 10px 0;
+        border-bottom: 1px solid #d6d6d6;
+        cursor: default;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none; }
+        .mail-list-section .body .mail-list .mail .left-section {
+          display: inline-block;
+          vertical-align: top;
+          padding-left: 8px;
+          width: 30px; }
+          .mail-list-section .body .mail-list .mail .left-section i.fa.urged {
+            color: #fa9751; }
+        .mail-list-section .body .mail-list .mail .right-section {
+          display: inline-block;
+          vertical-align: top;
+          width: 314px; }
+          .mail-list-section .body .mail-list .mail .right-section .info {
+            height: 23px;
+            line-height: 23px; }
+            .mail-list-section .body .mail-list .mail .right-section .info .sender {
+              display: inline-block;
+              font-size: 17px;
+              color: #333; }
+            .mail-list-section .body .mail-list .mail .right-section .info .time {
+              display: inline-block;
+              float: right;
+              text-align: right;
+              font-size: 13px;
+              color: #5b5b5b; }
+          .mail-list-section .body .mail-list .mail .right-section .subject {
+            height: 22px;
+            line-height: 22px;
+            font-size: 15px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             color: #333; }
-          .mail-list-section .body .mail-list .mail .info .time {
-            display: inline-block;
-            float: right;
-            text-align: right;
-            font-size: 13px;
-            color: #5b5b5b; }
-        .mail-list-section .body .mail-list .mail .subject {
-          height: 22px;
-          line-height: 22px;
-          font-size: 15px;
-          color: #333; }
+          .mail-list-section .body .mail-list .mail .right-section .label-list {
+            margin-top: 8px;
+            white-space: nowrap;
+            overflow: hidden; }
+            .mail-list-section .body .mail-list .mail .right-section .label-list .label {
+              display: inline-block;
+              margin-right: 5px;
+              padding: 0 5px 2px;
+              border-radius: 3px;
+              text-align: center;
+              font-size: 11px;
+              color: #fff; }
       .mail-list-section .body .mail-list .mail.selected {
         background-color: #2b91e3;
         color: #fff; }
-        .mail-list-section .body .mail-list .mail.selected .info .sender {
+        .mail-list-section .body .mail-list .mail.selected .right-section .info .sender {
           color: #fff; }
-        .mail-list-section .body .mail-list .mail.selected .info .time {
+        .mail-list-section .body .mail-list .mail.selected .right-section .info .time {
           color: #fff; }
-        .mail-list-section .body .mail-list .mail.selected .subject {
+        .mail-list-section .body .mail-list .mail.selected .right-section .subject {
           color: #fff; }

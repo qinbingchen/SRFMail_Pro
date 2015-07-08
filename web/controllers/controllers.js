@@ -30,8 +30,13 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         };
 
         $scope.logout = function () {
-            userServices.logout();
-            location.reload()
+            userServices.logout(
+                function () {
+                    location.reload();
+                },
+                function () {}
+            );
+
         };
 
         $scope.load_mail_list = function () {
@@ -113,10 +118,10 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         $scope.check_partial_load_status();
 
         $scope.edit_mode = EDIT_MODE.COMPOSE;
-        var editor = new wysihtml5.Editor("editor", {
-            toolbar: "toolbar",
-            parserRules:  wysihtml5ParserRules
-        });
+        //var editor = new wysihtml5.Editor("editor", {
+        //    toolbar: "toolbar",
+        //    parserRules:  wysihtml5ParserRules
+        //});
 
         $http.get("/api/user/list_reviewers")
             .success(function (data, status, headers, config) {
@@ -131,9 +136,8 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.subject = "";
             $scope.need_review = false;
             $scope.reviewer = "";
+            $scope.content = "";
             $("select#reviewer").select2("destroy");
-            //$scope.content = "312";
-
         });
 
         $scope.$on("broadcast_show_reply", function () {
@@ -142,19 +146,15 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.subject = "Re: " + mailServices.selected_mail.income.subject;
             $scope.need_review = false;
             $scope.reviewer = "";
+            $scope.content = mailServices.selected_mail.income.html;
             $("select#reviewer").select2("destroy");
         });
 
         $scope.$on("broadcast_show_edit", function () {
             $scope.edit_mode = EDIT_MODE.EDIT;
-            // 在审核修改的时候将邮件内容写入弹出框
-
-            var data = mailServices.selected_mail;
-            $scope.recipient = data.reply.to[0].address;
-            $scope.subject = data.reply.subject;
-            $scope.content = data.reply.html;
-
-
+            $scope.recipient = mailServices.selected_mail.reply.to[0].address;
+            $scope.subject = mailServices.selected_mail.reply.subject;
+            $scope.content = mailServices.selected_mail.reply.html;
         });
 
         $scope.switch_review = function () {
@@ -169,7 +169,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         };
 
         $scope.submit = function () {
-            if (!$scope.compose_form.$valid) {
+            if ($scope.compose_form.$valid) {
                 switch ($scope.edit_mode) {
                     case EDIT_MODE.COMPOSE:
                         $http.post("/api/action/worker/submit", {
@@ -216,7 +216,6 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                             } else {
                                 toastr.error("发送失败，请重试", "");
                             }
-
                         }).error(function () {
 
                         });

@@ -17,19 +17,23 @@
     <script src="node_modules/socket.io/node_modules/socket.io-client/socket.io.js"></script>
 
     <!-- http://necolas.github.io/normalize.css -->
-    <link href="node_modules/normalize.css/normalize.css" rel="stylesheet" media="all">
+    <link href="node_modules/normalize.css/normalize.css" rel="stylesheet" media="all" />
 
     <!-- http://fortawesome.github.io/Font-Awesome/ -->
-    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="all" />
 
     <!-- http://codeseven.github.io/toastr -->
-    <link href="node_modules/toastr/build/toastr.min.css" rel="stylesheet" media="all"/>
+    <link href="node_modules/toastr/build/toastr.min.css" rel="stylesheet" media="all" />
     <script src="node_modules/toastr/build/toastr.min.js"></script>
 
     <!-- https://select2.github.io -->
-    <link href="node_modules/select2/dist/css/select2.min.css" rel="stylesheet" media="all">
+    <link href="node_modules/select2/dist/css/select2.min.css" rel="stylesheet" media="all" />
     <script src="node_modules/select2/dist/js/select2.min.js"></script>
     <script src="node_modules/select2/dist/js/i18n/zh-CN.js"></script>
+
+    <!-- http://xdsoft.net/jqplugins/datetimepicker/ -->
+    <link href="node_modules/jquery-datetimepicker/jquery.datetimepicker.css" rel="stylesheet" media="all" />
+    <script src="node_modules/jquery-datetimepicker/jquery.datetimepicker.js"></script>
 
     <!-- http://wysihtml.com -->
     <script src="node_modules/wysihtml/dist/wysihtml.min.js"></script>
@@ -37,7 +41,7 @@
     <script src="node_modules/wysihtml/parser_rules/advanced_and_extended.js"></script>
 
     <!-- https://github.com/renfeisong/SessionHistoryKit -->
-    <link href="SessionHistoryKit/history-kit.css" rel="stylesheet" media="all">
+    <link href="SessionHistoryKit/history-kit.css" rel="stylesheet" media="all" />
     <script src="SessionHistoryKit/history-kit.js"></script>
 
     <script src="constants.js"></script>
@@ -50,11 +54,11 @@
     <script src="controllers/SelectLabelController.js"></script>
     <script src="controllers/SelectWorkerFWController.js"></script>
     
-    <link href="css/global.css" rel="stylesheet" media="all">
-    <link href="css/side-bar.css" rel="stylesheet" media="all">
-    <link href="css/mail-list.css" rel="stylesheet" media="all">
-    <link href="css/mail.css" rel="stylesheet" media="all">
-    <link href="css/select-worker.css" rel="stylesheet" media="all">
+    <link href="css/global.css" rel="stylesheet" media="all" />
+    <link href="css/side-bar.css" rel="stylesheet" media="all" />
+    <link href="css/mail-list.css" rel="stylesheet" media="all" />
+    <link href="css/mail.css" rel="stylesheet" media="all" />
+    <link href="css/select-worker.css" rel="stylesheet" media="all" />
     
     <title>SRF Mail Pro</title>
 </head>
@@ -67,7 +71,8 @@
 
 </ng-include><ng-include src="'partial/modals/modal-login.html'">
 </ng-include><ng-include src="'partial/modals/modal-compose.html'">
-</ng-include>
+
+</ng-include><ng-include src="'partial/popover.html'"></ng-include>
 
 </body>
 </html>

@@ -16,29 +16,28 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $scope.selected_category = mailServices.selected_category;
             $scope.selected_mail_id = mailServices.selected_mail_id;
 
-
             mailServices.load_mail(
                 function () {
                     $scope.selected_mail = mailServices.selected_mail;
-                    var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
-                    sessionHistory.setOperations(mailServices.selected_mail.operations, {});
-                    sessionHistory.draw();
-                  
-
-                    if ($scope.selected_mail != null) {
-                        if ($scope.selected_mail.income != null) {
-                            $scope.income_time = (new Date($scope.selected_mail.income.time)).toLocaleString();
-
+                    if ($scope.selected_mail_id != "" && $scope.selected_mail.operations.length > 0) {
+                        var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
+                        sessionHistory.setOperations(mailServices.selected_mail.operations, {});
+                        sessionHistory.draw();
+                    }
+                    if ($scope.selected_mail_id != "") {
+                        if ($scope.selected_mail.income) {
+                            var time = new Date($scope.selected_mail.income.time);
+                            $scope.income_time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate()
+                                + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
                         }
-                        if ($scope.selected_mail.reply != null) {
-                            $scope.reply_time = (new Date($scope.selected_mail.reply.time)).toLocaleString();
+                        if ($scope.selected_mail.reply) {
+                            var time = new Date($scope.selected_mail.reply.time);
+                            $scope.reply_time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate()
+                                + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
                         }
-
                     }
                 },
-                function () {
-
-                }
+                function () {}
             );
         });
 
@@ -133,7 +132,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         };
 
         $scope.worker_sendback = function () {
-
             $scope.work_sendback_flag = !$scope.work_sendback_flag;
 
             $http.post('/api/action/worker/redirect', {

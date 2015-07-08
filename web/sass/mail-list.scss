@@ -39,52 +39,93 @@
 
       .mail {
         height: 100px;
-        padding: 10px 10px 10px 30px;
+        padding: 10px 10px 10px 0;
         border-bottom: 1px solid #d6d6d6;
+        cursor: default;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
 
-        .info {
-          height: 23px;
-          line-height: 23px;
+        .left-section {
+          display: inline-block;
+          vertical-align: top;
+          padding-left: 8px;
+          width: 30px;
 
-          .sender {
-            display: inline-block;
-            font-size: 17px;
-            color: #333;
-          }
-
-          .time {
-            display: inline-block;
-            float: right;
-            text-align: right;
-            font-size: 13px;
-            color: #5b5b5b;
+          i.fa.urged {
+            color: #fa9751;
           }
         }
 
-        .subject {
-          height: 22px;
-          line-height: 22px;
-          font-size: 15px;
-          color: #333;
+        .right-section {
+          display: inline-block;
+          vertical-align: top;
+          width: 314px;
+
+          .info {
+            height: 23px;
+            line-height: 23px;
+
+            .sender {
+              display: inline-block;
+              font-size: 17px;
+              color: #333;
+            }
+
+            .time {
+              display: inline-block;
+              float: right;
+              text-align: right;
+              font-size: 13px;
+              color: #5b5b5b;
+            }
+          }
+
+          .subject {
+            height: 22px;
+            line-height: 22px;
+            font-size: 15px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color: #333;
+          }
+
+          .label-list {
+            margin-top: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+
+            .label {
+              display: inline-block;
+              margin-right: 5px;
+              padding: 0 5px 2px;
+              border-radius: 3px;
+              text-align: center;
+              font-size: 11px;
+              color: #fff;
+            }
+          }
         }
       }
 
       .mail.selected {
         background-color: #2b91e3;
         color: #fff;
+        .right-section {
+          .info {
+            .sender {
+              color: #fff;
+            }
 
-        .info {
-          .sender {
-            color: #fff;
+            .time {
+              color: #fff;
+            }
           }
 
-          .time {
+          .subject {
             color: #fff;
           }
-        }
-
-        .subject {
-          color: #fff;
         }
       }
     }

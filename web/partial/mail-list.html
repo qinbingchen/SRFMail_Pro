@@ -8,13 +8,21 @@
     <div class="body">
         <ul class="mail-list">
             <li class="mail" ng-repeat="mail in filtered_mail_list"
-                ng-class="{'selected': mail.id == selected_mail_id, 'highlight': mail.isUrged && current_user_type == 2}"
+                ng-class="{'selected': mail.id == selected_mail_id}"
                 ng-click="select_mail(mail)">
-                <div class="info">
-                    <div class="sender">{{mail.reply ? mail.reply.from[0].name : mail.income.from[0].name}}</div>
-                    <div class="time">{{mail.reply ? mail.reply.time : mail.income.time}}</div>
+                <div class="left-section">
+                    <i class="fa fa-clock-o urged" ng-if="mail.deadline"></i>
+                    <i class="fa fa-clock-o urged"></i>
+                </div><div class="right-section">
+                    <div class="info">
+                        <div class="sender">{{mail.reply ? mail.reply.from[0].name : mail.income.from[0].name}}</div>
+                        <div class="time">{{mail.reply ? mail.reply.time : mail.income.time}}</div>
+                    </div>
+                    <div class="subject">{{mail.reply ? mail.reply.subject : mail.income.subject}}</div>
+                    <div class="label-list" ng-if="mail.income.labels.length > 0">
+                        <div class="label" ng-repeat="label in mail.income.labels" style="background-color: {{label.color}}">{{label.name}}</div>
+                    </div>
                 </div>
-                <div class="subject">{{mail.reply ? mail.reply.subject : mail.income.subject}}</div>
             </li>
         </ul>
     </div>

@@ -10,6 +10,7 @@
         "gulp": "^3.9.0",
         "gulp-sass": "^2.0.3",
         "jquery": "^2.1.4",
+        "jquery-datetimepicker": "^2.4.0",
         "angular": "^1.4.1",
         "angular-sanitize": "^1.4.1",
         "angular-cookies": "^1.4.1",

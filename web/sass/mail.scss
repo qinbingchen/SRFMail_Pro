@@ -11,22 +11,14 @@
 
     .toolbar {
       height: 44px;
-      padding-top: 8px;
+      padding: 11px 0 0 25px;
 
-      button {
-        margin-left: 25px;
-        border: none;
-        background: none;
-        color: #2674ff;
-      }
+      button.btn {
+        margin-right: 25px;
 
-      button:not(:disabled):hover {
-        cursor: pointer;
-        color: #1d5fcc;
-      }
-
-      button:disabled {
-        color: #bbd3fd;
+        i.fa {
+          margin-right: 5px;
+        }
       }
     }
   }
