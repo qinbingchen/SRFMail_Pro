@@ -91,8 +91,6 @@ SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
                                 return mail.status == STATUS.NEW;
                             case "dispatched":
                                 return mail.status == STATUS.DISPATCHED;
-                            case "processed":
-                                return mail.status == STATUS.WAITINGFORREVIEW || mail.status == STATUS.WAITINGFORSEND || mail.status == STATUS.SUCCESS;
                             default:
                                 return false;
                         }

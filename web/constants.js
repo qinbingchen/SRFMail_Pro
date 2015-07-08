@@ -44,9 +44,6 @@ var CATEGORY_LIST = [
             }, {
                 name: "dispatched",
                 display_name: "已分发"
-            }, {
-                name: "processed",
-                display_name: "已处理"
             }
         ]
     }, {
