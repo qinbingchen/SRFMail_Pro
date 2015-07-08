@@ -20,12 +20,12 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 
 	this.operations = [];
 	this.dots = [];
+	this.height = 150;
 
     options = options || {};
 
 	/* Configurable */
 	this.width = options.width || 750;
-	this.height = options.height || 100;
 	this.mainColor = options.mainColor || '#FE9509';
 	this.tipBackgroundColor = options.tipBackgroundColor || '#000000';
 	this.tipTextColor = options.tipTextColor || '#ffffff';
@@ -294,7 +294,16 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 };
 
 SessionHistoryKit.SessionHistory.prototype.setOperations = function(_operations) {
-	this.operations = _operations;
+	var op = [];
+	for (var i = _operations.length - 1; i >= 0; --i) {
+		op.push({
+			type: _operations[i].type,
+			operator: _operations[i].operator,
+			receiver: _operations[i].receiver,
+			time: _operations[i].time
+		});
+	}
+	this.operations = op;
 };
 
 SessionHistoryKit.SessionHistory.prototype.handleMouseMove = function(event) {
@@ -353,6 +362,6 @@ SessionHistoryKit.SessionHistory.prototype.draw = function() {
 	}
 
 	var x = Math.max(this.hoverRadius, this.radius, (ctx.measureText('宋').width + 5) / 2 + 2);
-	var y = this.height - 60; // card's height is ~50
+	var y = this.height - 70;
 	this.drawStream(ctx, x, y);
 };
