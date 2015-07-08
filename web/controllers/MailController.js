@@ -7,7 +7,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.selected_category = mailServices.selected_category;
         $scope.selected_mail_id = mailServices.selected_mail_id;
         $scope.fw_show = false;
-        $scope.clicked = false;
         $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
 
         $scope.$on("broadcast_mail_did_select", function () {
@@ -78,7 +77,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 $http.post("/api/action/dispatcher/urge", {
                     id: $scope.selected_mail_id
                 }).success(function (data, status, headers, config) {
-                    $scope.clicked = true;
                     toastr.success('成功提醒','');
                     console.log(data);
                 }).error(function (data, status, headers, config) {
