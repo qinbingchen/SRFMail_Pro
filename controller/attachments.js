@@ -66,7 +66,7 @@ var upload = function(req, res) {
     });
 
     form.on('close', function() {
-        Attachment.create(files, function(err) {
+        Attachment.model.create(files, function(err) {
             if(err) {
                 Log.e(err);
                 return res.json({
