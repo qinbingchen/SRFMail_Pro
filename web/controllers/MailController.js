@@ -40,9 +40,9 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     $scope.deadline_time = "";
                     $scope.selected_mail = mailServices.selected_mail;
                     if ($scope.selected_mail_id != "" && $scope.selected_mail.operations.length > 0) {
-                        //var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
-                        //sessionHistory.setOperations(mailServices.selected_mail.operations, {});
-                        //sessionHistory.draw();
+                        var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
+                        sessionHistory.setOperations(mailServices.selected_mail.operations, {});
+                        sessionHistory.draw();
                     }
                     if ($scope.selected_mail_id != "") {
                         if ($scope.selected_mail.income) {

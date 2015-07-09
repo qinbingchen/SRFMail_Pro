@@ -72,13 +72,17 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
                 .success(function (data, status, headers, config) {
                     that.mail_list = data["sessions"];
                     that.mail_list.map(function (mail) {
+                        var effectiveDate = new Date();
                         if (mail.lastOperation) {
-                            var time = new Date(mail.lastOperation.time);
-                            mail.display_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate();
+                            effectiveDate = new Date(mail.lastOperation.time);
+                        } else if (mail.income) {
+                            effectiveDate = new Date(mail.income.time);
                         } else {
-                            var time = new Date(mail.income.time);
-                            mail.display_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate();
+                            console.error('warning: mail dont have valid date');
                         }
+                        mail.effectiveDate = effectiveDate;
+                        mail.display_time = effectiveDate.getFullYear() + '/' + (effectiveDate.getMonth() + 1) + '/' + effectiveDate.getDate()
+                            + ' ' + ('0' + effectiveDate.getHours()).slice(-2) + ':' + ('0' + effectiveDate.getMinutes()).slice(-2);
                     });
                     success();
                 }).error(function (data, status, headers, config) {
@@ -91,7 +95,11 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
         this.select_category = function (category) {
             this.selected_category = category;
             this.filter_mail_list();
-            // TODO SORT MAIL LIST
+
+            console.log(this.filtered_mail_list);
+            this.filtered_mail_list.sort(function(aMail, anotherMail) {
+                return aMail.effectiveDate < anotherMail.effectiveDate;
+            });
         };
 
         this.filter_mail_list = function () {
