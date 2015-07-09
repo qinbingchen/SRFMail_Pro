@@ -72,13 +72,12 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
                 .success(function (data, status, headers, config) {
                     that.mail_list = data["sessions"];
                     that.mail_list.map(function (mail) {
-                        if (mail.income) {
+                        if (mail.lastOperation) {
+                            var time = new Date(mail.lastOperation.time);
+                            mail.display_time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
+                        } else {
                             var time = new Date(mail.income.time);
-                            mail.income.time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
-                        }
-                        if (mail.reply) {
-                            var time = new Date(mail.reply.time);
-                            mail.reply.time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
+                            mail.display_time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
                         }
                     });
                     success();
