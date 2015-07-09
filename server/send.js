@@ -88,7 +88,7 @@ function FetchAndSend() {
                                 operator: null,
                                 receiver: null,
                                 type: Session.Type.MarkFailed,
-                                time: new Date(),
+                                time: new Date(Date.now() + 1000),
                                 mail: session.reply
                             });
                         } else {
@@ -104,7 +104,7 @@ function FetchAndSend() {
                                 operator: null,
                                 receiver: null,
                                 type: Session.Type.MarkFailed,
-                                time: new Date(),
+                                time: new Date(Date.now() + 1000),
                                 mail: session.reply
                             });
                         }
@@ -131,7 +131,7 @@ function FetchAndSend() {
                             operator: null,
                             receiver: null,
                             type: Session.Type.MarkSuccess,
-                            time: new Date(),
+                            time: new Date(Date.now() + 1000),
                             mail: session.reply
                         });
                     }
