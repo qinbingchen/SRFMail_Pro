@@ -365,7 +365,7 @@ var redirect = function(req, res, next) {
                     operations: {
                         type: Session.Type.Redirect,
                         operator: req.session.user._id,
-                        receiver: session.dispatcher,
+                        receiver: null,
                         time: new Date(),
                         mail: session.income
                     }
