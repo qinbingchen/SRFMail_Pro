@@ -3,7 +3,7 @@ var cluster = require('cluster');
 if(cluster.isMaster) {
     var i;
     var os = require('os');
-    var ThreadNum = os.cpus.length > 3 ? os.cpus.length : 3guanbi ;
+    var ThreadNum = os.cpus.length > 3 ? os.cpus.length : 3;
     var Threads = [];
     var Log = require('./lib/log')('[APP]');
     for(i = 0; i < ThreadNum; i++) {
