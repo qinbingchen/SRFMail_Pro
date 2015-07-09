@@ -78,6 +78,18 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                             }
                         );
                     }
+                    if (!$scope.label_list) {
+                        $scope.label_list = [];
+                        $http.get("/api/action/dispatcher/list_labels")
+                            .success(function (data) {
+                                data.labels.map(function (label) {
+                                    $scope.label_list.push(label.name);
+                                });
+                            }).error(function (data, status, headers, config) {
+                                console.log(data);
+                            }
+                        );
+                    }
                 },
                 function () {}
             );
@@ -448,8 +460,33 @@ SRFMailProControllers.controller("LabelPopoverController", ["$scope", "$http", "
 
         $scope.$on("broadcast_show_label", function () {
             $scope.position_popover("label");
+            $("select#label-select").select2({
+                placeholder: "添加标签...",
+                data: $scope.label_list
+            });
             $scope.show_popover = true;
         });
+
+        $scope.submit = function () {
+            var url = "/api/action/dispatcher/set_label";
+            $http.post(url, {
+                id: mailServices.selected_mail_id,
+                labels: JSON.stringify($("select#label-select").val())
+            }).success(function (data, status, headers, config) {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    $scope.show_popover = false;
+                } else {
+                    console.log(data);
+                }
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+        };
+
+        $scope.show_labelmanage=function(){
+            $scope.$emit("emit_show_labelmanage");
+        };
     }
 ]);
 
@@ -462,16 +499,12 @@ SRFMailProControllers.controller("ForwardPopoverController", ["$scope", "$http",
         $http.get("/api/user/list_workers")
             .success(function (data) {
                 $scope.forward_worker_list = data.workers;
-
             }).error(function (data, status, headers, config) {
                 console.log(data);
             });
 
-
         $scope.$on("broadcast_show_forward", function () {
             $scope.position_popover("forward");
-
-
             $("select#select-worker").select2({
                 placeholder: "选择处理人...",
                 data: $scope.forward_worker_list
@@ -481,19 +514,15 @@ SRFMailProControllers.controller("ForwardPopoverController", ["$scope", "$http",
 
 
         $scope.confirm_fw = function () {
-
             $http.post('/api/action/worker/redirect', {
                 'id': $scope.selected_mail_id,
                 'user': $("#select-worker").select2("val")
             }).success(function () {
                 toastr.success('转发成功', '');
                 $scope.load_mail_list();
-
-
             }).error(function () {
                 toastr.error('转发失败，请重试', '');
             });
-
             $scope.show_popover = false;
         };
 

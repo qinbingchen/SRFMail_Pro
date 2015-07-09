@@ -130,13 +130,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             });
         };
 
-        $scope.show_label = function () {
-            $scope.label_show = !$scope.label_show;
-            $scope.dispatch_show = false;
-        };
-        $scope.label_show = false;
-
-
         $scope.show_compose = function () {
             $scope.$emit("emit_show_compose");
         };
@@ -148,7 +141,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.show_edit = function () {
             $scope.$emit("emit_show_edit");
         };
-
 
         $scope.worker_sendback = function () {
             $scope.work_sendback_flag = !$scope.work_sendback_flag;

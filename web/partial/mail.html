@@ -7,8 +7,8 @@
                     ng-click="show_dispatch()">
                 <i class="fa fa-mail-forward fa-lg"></i>分发邮件
             </button>
-            <button class="btn" ng-click="show_label()" ng-show="current_user_type == 1">
-                <i class="fa fa-tags fa-lg"></i>主题标签
+            <button id="show-label" class="btn" ng-click="show_label()" ng-show="current_user_type == 1">
+                <i class="fa fa-tags fa-lg"></i>添加标签
             </button>
             <button class="btn" ng-click="remind()" ng-disabled="selected_mail.isUrged || selected_mail.status != 1"
                     ng-show="current_user_type == 1"><i class="fa fa-bell fa-lg"></i>提醒
@@ -59,18 +59,8 @@
     </div>
 
     <div class="body">
-
-        <div class="bubble" ng-show="label_show">
-            <div class="tri"></div>
-            <div class="tri-inner"></div>
-            <ng-include src="'partial/select-label.html'"></ng-include>
-        </div>
-
         <div class="mail" ng-if="selected_mail_id != ''">
-
             <section class="section-review">
-                <!--<div class="worker" ng-if="current_user_type == 2 && selected_mail.worker" >123</div>-->
-                <!--<div class="reviewer" ng-if="current_user_type == 2 && selected_mail.reviewer" >456</div>-->
                 <div class="worker" ng-if="selected_mail.worker && current_user_type == 3">处理人：{{selected_mail.worker}}</div>
                 <div class="reviewer" ng-if="selected_mail.reviewer && selected_mail.isRejected && current_user_type == 2">
                     <div>审核人：{{selected_mail.reviewer}}</div>
@@ -92,8 +82,7 @@
                 <div class="subject">{{selected_mail.income.subject}}</div>
                 <div class="time">{{income_time}}</div>
                 <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
-                <div class="label-list">
-                    标签：
+                <div class="label-list">标签：
                     <span class="label">label1</span>
                     <span class="label">label2</span>
                 </div>
@@ -123,7 +112,6 @@
 
 
             <style>
-
                 .section-content {
                     margin-top: 20px;
                 }
@@ -135,8 +123,6 @@
                     border: 0;
                     color: inherit;
                 }
-
-
 
             </style>
 
