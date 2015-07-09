@@ -14,6 +14,8 @@
         margin-right: 25px; }
         .mail-section .header .toolbar button.btn i.fa {
           margin-right: 5px; }
+      .mail-section .header .toolbar .user-name {
+        margin-right: 10px; }
   .mail-section .body {
     height: calc(100vh - 44px);
     overflow: scroll;

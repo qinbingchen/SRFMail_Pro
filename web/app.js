@@ -174,3 +174,15 @@ toastr.options = {
     "newestOnTop": true,
     "timeOut": "3000"
 };
+
+var redactor_options = {
+    lang: "zh_cn",
+    imageUpload: "/api/attachments/upload",
+    fileUpload: "/api/attachments/upload",
+    imageUploadCallback: function (image, json) {
+        $(image).attr("src", "/api/attachments/download?id=" + json.file);
+    },
+    fileUploadCallback: function (link, json) {
+        $(link).attr("href", "/api/attachments/download?id=" + json.file);
+    }
+};
