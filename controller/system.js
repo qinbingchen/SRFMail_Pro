@@ -2,7 +2,11 @@ var System = require('../model').system;
 var User = require('../model').user;
 var Log = require('../lib/log')();
 var async = require('async');
+var os = require('os');
 var mongoose = require('mongoose');
+var settings = require('../settings');
+var redis = require('redis');
+var client = redis.createClient(settings.redis.port, settings.redis.host);
 
 var router = require('express').Router();
 
@@ -356,7 +360,7 @@ var getSettings = function(req, res) {
         if(err) {
             res.json({
                 code: 1,
-                message: err.toString(),
+                message: err.toString()
             });
         } else {
             res.json(ret);
@@ -390,10 +394,54 @@ router.use(function(req, res, next) {
     });
 });
 
+var resend = function(req, res, next) {
+    var id = req.query.id;
+    Session.model.findById(mongoose.Types.ObjectId(id), function(err, session) {
+        if(err) {
+            return res.json({
+                code: 1,
+                message: err.toString()
+            });
+        }
+        client.LPUSH(['MailQueue', session.reply.toString()], function(err) {
+            if(err) {
+                res.json({
+                    code: 1,
+                    message: err.toString()
+                });
+            } else {
+                res.json({
+                    code: 0,
+                    message: 'success'
+                });
+            }
+        })
+    })
+};
+
+var systemInfo = function(req, res, next) {
+    res.json({
+        code: 0,
+        message: 'success',
+        cpus: os.cpus(),
+        type: os.type(),
+        platform: os.platform(),
+        arch: os.arch(),
+        release: os.release(),
+        uptime: os.uptime(),
+        loadavg: os.loadavg(),
+        totalmem: os.totalmem(),
+        freemem: os.freemem(),
+        networkInterfaces: os.networkInterfaces()
+    });
+};
+
 router.route('/user/list').get(getUserList);
 router.route('/user/detail').get(detail);
 router.route('/user/add').post(addUser);
 router.route('/user/remove').post(removeUser);
 router.route('/user/modify').post(update);
 router.route('/settings').get(getSettings).post(setSettings);
+router.route('/resend').post(resend);
+router.route('/info').get(systemInfo);
 module.exports = router;
