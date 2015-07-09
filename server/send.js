@@ -107,6 +107,11 @@ function FetchAndSend() {
                                 time: new Date(Date.now() + 1000),
                                 mail: session.reply
                             });
+                            setTimeout(function() {
+                                client.LPUSH(['MailQueue', data[1].toString()], function(err) {
+                                    err && Log.e(err);
+                                });
+                            }, 30000);
                         }
                     } else {
                         if(session.status == Session.Status.TempError) {
