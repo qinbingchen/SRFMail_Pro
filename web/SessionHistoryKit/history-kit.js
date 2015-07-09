@@ -13,11 +13,6 @@
 var SessionHistoryKit = SessionHistoryKit || {};
 
 SessionHistoryKit.SessionHistory = function(containerId, options) {
-	this.container = document.getElementById(containerId);
-	if (!this.container) {
-		console.error('Couldn\'t find HTML node with ID ' + containerId + '.');
-	}
-
 	this.operations = [];
 	this.dots = [];
 	this.height = 180;
@@ -65,6 +60,13 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 	};
 
 	this.initCanvas = function() {
+		this.container = document.getElementById(containerId);
+
+		if (!this.container) {
+			console.error('Couldn\'t find HTML node with ID ' + containerId + '.');
+			return null;
+		}
+
 		while (this.container && this.container.hasChildNodes()) {
 			var child = this.container.childNodes[0];
 			this.container.removeChild(child);
@@ -295,7 +297,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 
 SessionHistoryKit.SessionHistory.prototype.setOperations = function(_operations) {
 	var op = [];
-	for (var i = _operations.length - 1; i >= 0; --i) {
+	for (var i = 0; i < _operations.length; ++i) {
 		op.push({
 			type: _operations[i].type,
 			operator: _operations[i].operator,
@@ -303,6 +305,14 @@ SessionHistoryKit.SessionHistory.prototype.setOperations = function(_operations)
 			time: _operations[i].time
 		});
 	}
+	op.sort(function(op1, op2) {
+		var date1 = new Date(op1.time);
+		var date2 = new Date(op2.time);
+		if (date1.getTime() == date2.getTime()) {
+			return 0;
+		}
+		return date1.getTime() < date2.getTime() ? -1 : 1;
+	});
 	this.operations = op;
 };
 

@@ -22,18 +22,64 @@
     background-color: #fff; }
     .mail-section .body .mail {
       padding: 10px 20px; }
-      .mail-section .body .mail .info {
+      .mail-section .body .mail .divider {
+        background: #cfcfd3;
+        height: 4px;
+        width: 100%;
+        margin: 10px 0 10px; }
+      .mail-section .body .mail .section-title {
+        font-size: 20px;
+        margin: 10px 0;
+        color: #333; }
+      .mail-section .body .mail .section-review .reviewer {
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border: 1px solid #faebcc; }
+      .mail-section .body .mail .section-review .worker {
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        color: #31708f;
+        background-color: #d9edf7;
+        border: 1px solid #bce8f1; }
+      .mail-section .body .mail .section-info {
         border-bottom: 1px solid #cfcfd3;
         padding-bottom: 10px; }
-        .mail-section .body .mail .info .subject {
+        .mail-section .body .mail .section-info .status {
+          margin-left: 10px;
+          padding: 5px 8px 3px;
+          color: #fff; }
+          .mail-section .body .mail .section-info .status i.fa {
+            margin-right: 5px; }
+        .mail-section .body .mail .section-info .readonly {
+          background-color: #888; }
+        .mail-section .body .mail .section-info .urged {
+          background-color: #fa9751; }
+        .mail-section .body .mail .section-info .subject {
           font-size: 27px; }
-        .mail-section .body .mail .info .time {
+        .mail-section .body .mail .section-info .time {
           margin-top: 6px;
           font-size: 15px;
           color: #888; }
-        .mail-section .body .mail .info .sender {
+          .mail-section .body .mail .section-info .time .deadline {
+            color: #fa9751;
+            padding-left: 20px; }
+        .mail-section .body .mail .section-info .sender,
+        .mail-section .body .mail .section-info .recipient {
           margin-top: 6px;
           font-size: 15px; }
+        .mail-section .body .mail .section-info .label-list {
+          margin-top: 6px;
+          font-size: 15px; }
+          .mail-section .body .mail .section-info .label-list .label {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 0 5px 2px;
+            border-radius: 3px;
+            text-align: center;
+            font-size: 11px;
+            color: #fff; }
       .mail-section .body .mail .original-income {
         padding: 10px 20px;
         border-top: 1px solid #cfcfd3;

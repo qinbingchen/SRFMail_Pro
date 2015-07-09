@@ -50,11 +50,15 @@
         .left-section {
           display: inline-block;
           vertical-align: top;
-          padding-left: 8px;
+          padding-left: 5px;
           width: 30px;
 
           i.fa.urged {
             color: #fa9751;
+          }
+
+          i.fa.readonly {
+            color: #888;
           }
         }
 

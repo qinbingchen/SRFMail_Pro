@@ -7,6 +7,7 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
         $scope.selected_mail_id = mailServices.selected_mail_id;
 
         $scope.$on("broadcast_category_did_select", function () {
+            $scope.current_user_type = mailServices.current_user_type;
             $scope.filtered_mail_list = mailServices.filtered_mail_list;
             if ($scope.filtered_mail_list.length != 0) {
                 $scope.select_mail($scope.filtered_mail_list[0]);
@@ -21,7 +22,6 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
             mailServices.selected_mail_id = mail.id;
             $scope.selected_mail_id = mailServices.selected_mail_id;
             $scope.$emit("emit_mail_did_select");
-            console.log(mail);
         };
     }
 ]);

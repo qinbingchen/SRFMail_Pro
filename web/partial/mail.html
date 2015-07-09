@@ -66,27 +66,44 @@
             <ng-include src="'partial/select-label.html'"></ng-include>
         </div>
 
-
         <div class="mail" ng-if="selected_mail_id != ''">
-            <section class="section-mail-title">
-                <div class="info" ng-if="selected_mail.reply">
-                    <div class="subject">{{selected_mail.reply.subject}}</div>
-                    <div class="time mail-field"><span class="secondary">时间：</span>{{reply_time}}</div>
-                    <div class="recipient mail-field"><span class="secondary">收件人：</span> {{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
-                </div>
-                <div class="info" ng-if="!selected_mail.reply">
-                    <div class="subject">{{selected_mail.income.subject}}</div>
-                    <div class="time mail-field"><span class="secondary">时间：</span>{{income_time}}<span class="deadline">（最晚处理日期：2020年12月1日 23:59:59）</span> </div>
-                    <div class="sender mail-field"><span class="secondary">发件人：</span> {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
-                    <div class="recipient mail-field"><span class="secondary">收件人：</span> {{selected_mail.income.to[0].name}} <{{selected_mail.income.to[0].address}}></div>
-                    <div class="labels"><span class="secondary">标签：</span> <span class="label">label1</span><span class="label">label2</span></div>
-                    <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
+
+            <section class="section-review">
+                <!--<div class="worker" ng-if="current_user_type == 2 && selected_mail.worker" >123</div>-->
+                <!--<div class="reviewer" ng-if="current_user_type == 2 && selected_mail.reviewer" >456</div>-->
+                <div class="worker" ng-if="selected_mail.worker && current_user_type == 3">处理人：{{selected_mail.worker}}</div>
+                <div class="reviewer" ng-if="selected_mail.reviewer && selected_mail.isRejected && current_user_type == 2">
+                    <div>审核人：{{selected_mail.reviewer}}</div>
+                    <div>审核意见：{{selected_mail.reviewer}}</div>
                 </div>
             </section>
+
+            <section class="section-info" ng-if="selected_mail.reply">
+                <div class="status urged right" ng-if="selected_mail.deadline"><i class="fa fa-clock-o"></i>时限：{{deadline_time}}</div>
+                <div class="status readonly right" ng-if="selected_mail.readonly"><i class="fa fa-lock"></i>只读</div>
+                <div class="subject">{{selected_mail.reply.subject}}</div>
+                <div class="time">{{reply_time}}</div>
+                <div class="recipient">收件人：{{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
+            </section>
+
+            <section class="section-info" ng-if="!selected_mail.reply">
+                <div class="status urged right" ng-if="selected_mail.deadline"><i class="fa fa-clock-o"></i>时限：{{deadline_time}}</div>
+                <div class="status readonly right" ng-if="selected_mail.readonly"><i class="fa fa-lock"></i>只读</div>
+                <div class="subject">{{selected_mail.income.subject}}</div>
+                <div class="time">{{income_time}}</div>
+                <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
+                <div class="label-list">
+                    标签：
+                    <span class="label">label1</span>
+                    <span class="label">label2</span>
+                </div>
+            </section>
+
             <section class="section-content">
                 <div class="content" ng-bind-html="selected_mail.reply.html" ng-if="selected_mail.reply"></div>
                 <div class="content" ng-bind-html="selected_mail.income.html" ng-if="!selected_mail.reply"></div>
             </section>
+
             <section class="section-income">
                 <div class="original-income" ng-if="selected_mail.reply && selected_mail.income">
                     <div class="divider"></div>
@@ -95,28 +112,18 @@
                     <div class="time">时间：{{income_time}}</div>
                     <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
                     <div class="content" ng-bind-html="selected_mail.income.html"></div>
-                    <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
                 </div>
             </section>
-            <section class="section-history">
-                <div class="operation-history-container" ng-if="selected_mail.operations.length > 0">
-                    <div class="divider"></div>
-                    <div class="section-title">邮件历史记录</div>
-                    <div id="operation-history"></div>
-                </div>
+
+            <section class="section-history" ng-if="selected_mail.operations.length > 0">
+                <div class="divider"></div>
+                <div class="section-title">邮件历史记录</div>
+                <div id="operation-history"></div>
             </section>
 
 
             <style>
-                span.secondary {
-                    color: #888
-                }
-                .subject {
-                    margin: 0 0 10px;
-                }
-                .mail-field {
-                    margin-top: 0 !important;
-                }
+
                 .section-content {
                     margin-top: 20px;
                 }
@@ -128,28 +135,9 @@
                     border: 0;
                     color: inherit;
                 }
-                .section-title {
-                    font-size: 20px;
-                    margin:10px 0 30px;
-                    color:#333;
-                }
-                .divider {
-                    background:#eee;
-                    height:4px;
-                    width:100%;
-                    margin:10px 0 10px;
-                }
-                .label {
-                    background: #6F41A7;
-                    font-size: 13px;
-                    padding: 4px 7px;
-                    margin:0 7px 0 0;
-                    color: white;
-                }
-                .deadline {
-                    color: #C83E51;
-                    padding-left: 20px;
-                }
+
+
+
             </style>
 
         </div>

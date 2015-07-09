@@ -38,10 +38,12 @@
         .mail-list-section .body .mail-list .mail .left-section {
           display: inline-block;
           vertical-align: top;
-          padding-left: 8px;
+          padding-left: 5px;
           width: 30px; }
           .mail-list-section .body .mail-list .mail .left-section i.fa.urged {
             color: #fa9751; }
+          .mail-list-section .body .mail-list .mail .left-section i.fa.readonly {
+            color: #888; }
         .mail-list-section .body .mail-list .mail .right-section {
           display: inline-block;
           vertical-align: top;

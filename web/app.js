@@ -72,14 +72,17 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
                 .success(function (data, status, headers, config) {
                     that.mail_list = data["sessions"];
                     that.mail_list.map(function (mail) {
-                        if (mail.income) {
-                            var time = new Date(mail.income.time);
-                            mail.income.time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
+                        var effectiveDate = new Date();
+                        if (mail.lastOperation) {
+                            effectiveDate = new Date(mail.lastOperation.time);
+                        } else if (mail.income) {
+                            effectiveDate = new Date(mail.income.time);
+                        } else {
+                            console.error('warning: mail dont have valid date');
                         }
-                        if (mail.reply) {
-                            var time = new Date(mail.reply.time);
-                            mail.reply.time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate();
-                        }
+                        mail.effectiveDate = effectiveDate;
+                        mail.display_time = effectiveDate.getFullYear() + '/' + (effectiveDate.getMonth() + 1) + '/' + effectiveDate.getDate()
+                            + ' ' + ('0' + effectiveDate.getHours()).slice(-2) + ':' + ('0' + effectiveDate.getMinutes()).slice(-2);
                     });
                     success();
                 }).error(function (data, status, headers, config) {
@@ -92,7 +95,13 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
         this.select_category = function (category) {
             this.selected_category = category;
             this.filter_mail_list();
-            // TODO SORT MAIL LIST
+
+            this.filtered_mail_list.sort(function(aMail, anotherMail) {
+                if (aMail.effectiveDate.getTime() == anotherMail.effectiveDate.getTime()) {
+                    return 0;
+                }
+                return aMail.effectiveDate.getTime() < anotherMail.effectiveDate.getTime() ? 1 : -1;
+            });
         };
 
         this.filter_mail_list = function () {

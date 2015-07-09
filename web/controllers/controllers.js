@@ -40,7 +40,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 },
                 function () {}
             );
-
         };
 
         $scope.load_mail_list = function () {
@@ -210,7 +209,6 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
          var url_labels = "/api/action/dispatcher/list_labels";
         $http.get(url_labels).success(function (data) {
                 $scope.theme_labels=data.labels;
-           $scope.theme_labels=[{"name":"important", "color":"#FF0000"}];
         }).error(function (data, status, headers, config) {
             console.log(data);
     });
@@ -219,7 +217,6 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
         
         setTimeout(function()
         {
-            
             $scope.exist_labels[0]=new Object();
             $scope.exist_labels[0].name=$scope.theme_labels[0].name;
             $scope.exist_labels[0].color=$scope.theme_labels[0].color;
@@ -265,8 +262,6 @@ $('.tag').each(function()
     
 
     }]);
-    
-
 
 SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
     function ($scope, $http, $cookies, userServices, mailServices) {
