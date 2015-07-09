@@ -110,7 +110,7 @@ var detail = function(req, res, next) {
                 ret.income.html = util.fetchContent(ret.income.html);
             }
             if(ret.reply) {
-                if(!ret.reply.html) {
+                if(!ret.reply.html && ret.income) {
                     ret.reply.html = '<p style="padding: 20px 0">' + ret.income.text + '</p>'
                 }
                 if(ret.reply.attachments) {
