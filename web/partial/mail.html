@@ -1,4 +1,4 @@
-<div class="mail-section" ng-controller="MailController">
+<div class="mail-section" ng-controller="MailController" style="position: relative">
     <div class="header">
         <div class="toolbar">
             <!-- dispatcher -->
@@ -90,7 +90,7 @@
                 <div class="status urged right" ng-if="selected_mail.deadline"><i class="fa fa-clock-o"></i>时限：{{deadline_time}}</div>
                 <div class="status readonly right" ng-if="selected_mail.readonly"><i class="fa fa-lock"></i>只读</div>
                 <div class="subject">{{selected_mail.reply.subject}}</div>
-                <div class="time">{{reply_time}}</div>
+                <!--<div class="time">{{reply_time}}</div>-->
                 <div class="recipient">收件人：{{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
             </section>
 
@@ -155,5 +155,27 @@
             <div class="text">未选取邮件</div>
         </div>
 
+        <div id="mail-loading-mask" class="mail-loading-mask">
+            <div class="container">
+                <i class="fa fa-2x fa-circle-o-notch fa-spin"></i>
+            </div>
+        </div>
+        <style>
+            .mail-loading-mask {
+                background: white;
+                position:absolute;
+                top:0;
+                left:0;
+                right:0;
+                bottom:0;
+                opacity:0.8;
+                z-index: 8888;
+            }
+            .mail-loading-mask .container {
+                left: calc(50% - 28px);
+                top: calc(50vh - 50px);
+                position: relative;
+            }
+        </style>
     </div>
 </div>
