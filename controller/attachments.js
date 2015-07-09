@@ -35,10 +35,9 @@ var upload = function(req, res) {
     var count = 0;
     var ret = {
         code: 0,
-        message: 'success',
-        file: {}
+        message: 'success'
     };
-    var files = [];
+    var file;
 
     form.on('part', function(part) {
         if (!part.filename) {
@@ -48,14 +47,14 @@ var upload = function(req, res) {
         if (part.filename) {
             var name = uuid.v1();
             var stream = fs.createWriteStream(path.join(__dirname, '../attachments', name));
-            ret.file[part.filename] = name;
-            files.push({
+            ret.file = name;
+            file = {
                 saveId: name,
                 name: part.filename,
                 contentType: part.headers['content-type'],
                 contentId: name,
                 type: Attachment.Type.Out
-            });
+            };
             part.pipe(stream);
         }
         part.on('error', function(err) {
@@ -66,13 +65,16 @@ var upload = function(req, res) {
     });
 
     form.on('close', function() {
-        Attachment.model.create(files, function(err) {
+        if(!file) {
+            return res.json(ret);
+        }
+        Attachment.model.create(file, function(err) {
             if(err) {
                 Log.e(err);
                 return res.json({
                     code: 1,
                     message: err.toString()
-                })
+                });
             }
             res.json(ret);
         });
