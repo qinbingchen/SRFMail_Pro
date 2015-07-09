@@ -187,20 +187,22 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
             var label_text=$('#label_name').val();
             var label_color=$('.simple_color_custom_chooser_css').val();
 
+              if (!$('#tags').tagExist(label_text))
+              {
+                $('#tags').addTag(label_text);
             var exist_labels_length=$scope.exist_labels.length;
             $scope.exist_labels[exist_labels_length]=new Object();
             $scope.exist_labels[exist_labels_length].name=label_text;
             $scope.exist_labels[exist_labels_length].color=label_color;
-
-            $('#tags').addTag(label_text);
-            update_labels();
+        }
+          update_labels();
         }
 
            $(document).ready(function(){
                 $('.simple_color_custom_chooser_css').simpleColor({ 
                     chooserCSS: { 'background-color': 'black', 'opacity': '0.8' },
                     colors:['800000','8B0000','C71585','4B0882','800080','000080','D2691E','FF0000','FFC0CB','7B68EE','F5DEB3','FFFF00','32CD32','00BFFF','ADD8E6','D3D3D3'],
-                    boxWidth:'20px',
+                    boxWidth:'200px',
                     boxHeight:'20px',
                     columns:18 });    
             });
