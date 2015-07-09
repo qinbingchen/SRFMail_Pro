@@ -39,7 +39,7 @@ textarea {
 .right {
   float: right; }
 
-.loading-mask {
+.global-loading-mask {
   background: #fff;
   position: absolute;
   top: 0;
@@ -48,11 +48,24 @@ textarea {
   bottom: 0;
   opacity: 0.8;
   z-index: 9999; }
+  .global-loading-mask .container {
+    left: calc(50% - 28px);
+    top: calc(50vh - 50px);
+    position: relative; }
 
-.loading-mask .container {
-  left: calc(50% - 28px);
-  top: calc(50vh - 50px);
-  position: relative; }
+.mail-loading-mask {
+  background: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.8;
+  z-index: 8888; }
+  .mail-loading-mask .container {
+    left: calc(50% - 28px);
+    top: calc(50vh - 50px);
+    position: relative; }
 
 /* select2 begin */
 .select2-selection,

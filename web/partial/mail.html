@@ -61,19 +61,17 @@
     <div class="body">
         <div class="mail" ng-if="selected_mail_id != ''">
             <section class="section-review">
-                <!--<div class="worker" ng-if="current_user_type == 2 && selected_mail.worker" >123</div>-->
-                <!--<div class="reviewer" ng-if="current_user_type == 2 && selected_mail.reviewer" >456</div>-->
-                <div class="worker" ng-if="selected_mail.worker && current_user_type == 3" style="border-radius: 5px">该邮件由 {{selected_mail.worker}} 于 {{selected_mail.operations[0].displayTime}} 处理。</div>
+                <div class="worker" ng-if="selected_mail.worker && current_user_type == 3" style="border-radius: 5px">
+                    该邮件由 {{selected_mail.worker}} 于 {{selected_mail.operations[0].displayTime}} 处理。
+                </div>
                 <div class="reviewer" ng-if="selected_mail.reviewer && selected_mail.isRejected && current_user_type == 2" style="padding: 15px 20px;border-radius: 4px;">
-                    <div>
-                        <div style="display: inline-block; margin-right: 15px; margin-top: 3px; vertical-align: top">
-                            <i class="fa fa-2x fa-exclamation-triangle"></i>
-                        </div>
-                        <div style="display: inline-block;">
-                            <span style="font-weight: 700">审核意见</span>
-                            <div>{{selected_mail.reviewer}}</div>
-                            <div>— {{selected_mail.reviewer}} {{selected_mail.operations[0].displayTime}}</div>
-                        </div>
+                    <div style="display: inline-block; margin-right: 15px; margin-top: 3px; vertical-align: top">
+                        <i class="fa fa-2x fa-exclamation-triangle"></i>
+                    </div>
+                    <div style="display: inline-block;">
+                        <span style="font-weight: 700">审核意见</span>
+                        <div>{{selected_mail.reviewer}}</div>
+                        <div>— {{selected_mail.reviewer}} {{selected_mail.operations[0].displayTime}}</div>
                     </div>
                 </div>
             </section>
@@ -133,7 +131,6 @@
                     border: 0;
                     color: inherit;
                 }
-
             </style>
 
         </div>
@@ -143,27 +140,10 @@
             <div class="text">未选取邮件</div>
         </div>
 
-        <div id="mail-loading-mask" class="mail-loading-mask">
+        <div class="mail-loading-mask" ng-show="show_mail_loader">
             <div class="container">
                 <i class="fa fa-2x fa-circle-o-notch fa-spin"></i>
             </div>
         </div>
-        <style>
-            .mail-loading-mask {
-                background: white;
-                position:absolute;
-                top:0;
-                left:0;
-                right:0;
-                bottom:0;
-                opacity:0.8;
-                z-index: 8888;
-            }
-            .mail-loading-mask .container {
-                left: calc(50% - 28px);
-                top: calc(50vh - 50px);
-                position: relative;
-            }
-        </style>
     </div>
 </div>

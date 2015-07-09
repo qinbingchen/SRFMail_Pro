@@ -30,6 +30,8 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         };
 
         $scope.$on("broadcast_mail_did_select", function () {
+            $scope.show_mail_loader = true;
+
             $scope.current_user_type = userServices.current_user_type;
             $scope.current_user_name = userServices.current_user_name;
             $scope.selected_category = mailServices.selected_category;
@@ -61,6 +63,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                                 + " " + time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
                         }
                     }
+                    $scope.show_mail_loader = false;
                 },
                 function () {}
             );

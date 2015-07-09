@@ -2,6 +2,10 @@ var SRFMailProControllers = angular.module("SRFMailProControllers", []);
 
 SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
     function ($scope, $http, $cookies, userServices, mailServices) {
+        $scope.show_global_loader = false;
+        $scope.show_login_loader = false;
+        $scope.show_mail_loader = false;
+
         $scope.partial_load_status = {
             side_bar: false,
             mail_list: false,
