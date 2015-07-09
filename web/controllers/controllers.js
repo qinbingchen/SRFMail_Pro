@@ -86,9 +86,13 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                         $scope.label_list = [];
                         $http.get("/api/action/dispatcher/list_labels")
                             .success(function (data) {
-                                data.labels.map(function (label) {
-                                    $scope.label_list.push(label.name);
-                                });
+                                if (data.code == 0) {
+                                    data.labels.map(function (label) {
+                                        $scope.label_list.push(label.name);
+                                    });
+                                } else {
+                                    console.log(data);
+                                }
                             }).error(function (data, status, headers, config) {
                                 console.log(data);
                             }
@@ -412,14 +416,24 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
 
         $scope.$on("broadcast_show_dispatch", function () {
             $scope.position_popover("dispatch");
-            $("select#dispatch-readreply").select2({
-                placeholder: "选择处理人...",
-                data: $scope.worker_list
-            });
-            $("select#dispatch-readonly").select2({
-                placeholder: "选择查看人...",
-                data: $scope.worker_list
-            });
+            var $readreply = $("select#dispatch-readreply");
+            var $readonly = $("select#dispatch-readonly");
+            if ($readreply.hasClass("select2-hidden-accessible")) {
+                $readreply.select2("val", "");
+            } else {
+                $readreply.select2({
+                    placeholder: "选择处理人...",
+                    data: $scope.worker_list
+                });
+            }
+            if ($readonly.hasClass("select2-hidden-accessible")) {
+                $readonly.select2("val", "");
+            } else {
+                $readonly.select2({
+                    placeholder: "选择查看人...",
+                    data: $scope.worker_list
+                });
+            }
             $("#dispatch-deadline").datetimepicker({
                 minDate: 0,
                 lang: "zh-cn",
@@ -438,25 +452,16 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
         });
 
         $scope.submit = function () {
-            var readreply, readonly;
-            if ($("select#dispatch-readreply").val() == null) {
-                readreply = JSON.stringify([]);
-            } else {
-                readreply = JSON.stringify($("select#dispatch-readreply").val());
-            }
-            if ($("select#dispatch-readonly").val() == null) {
-                readonly = JSON.stringify([]);
-            } else {
-                readonly = JSON.stringify($("select#dispatch-readonly").val());
-            }
+            var readreply = $("select#dispatch-readreply").val();
+            var readonly = $("select#dispatch-readonly").val();
             var deadline = $scope.deadline;
             if (deadline && deadline != "") {
                 deadline = new Date(deadline).toISOString();
             }
             $http.post("/api/action/dispatcher/dispatch", {
                 id: mailServices.selected_mail_id,
-                readreply: readreply,
-                readonly: readonly,
+                readreply: readreply == null || readreply == "" ? JSON.stringify([]) : JSON.stringify(readreply),
+                readonly: readonly == null || readonly == "" ? JSON.stringify([]) : JSON.stringify(readonly),
                 deadline: deadline
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
@@ -482,27 +487,35 @@ SRFMailProControllers.controller("LabelPopoverController", ["$scope", "$http", "
 
         $scope.$on("broadcast_show_label", function () {
             $scope.position_popover("label");
-            $("select#label-select").select2({
-                placeholder: "添加标签...",
-                data: $scope.label_list
-            });
+            var $label_select = $("select#label-select");
+            if ($label_select.hasClass("select2-hidden-accessible")) {
+                $label_select.select2("val", "");
+            } else {
+                $label_select.select2({
+                    placeholder: "添加标签...",
+                    data: $scope.label_list
+                });
+            }
             $scope.show_popover = true;
         });
 
         $scope.submit = function () {
-            var url = "/api/action/dispatcher/set_label";
-            $http.post(url, {
+            var labels = $("select#label-select").val();
+            $http.post("/api/action/dispatcher/set_label", {
                 id: mailServices.selected_mail_id,
-                labels: JSON.stringify($("select#label-select").val())
+                labels: labels == null || labels == "" ? JSON.stringify([]) : JSON.stringify(labels)
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
                     $scope.show_popover = false;
+                    toastr.success("标签添加成功");
                 } else {
                     console.log(data);
+                    toastr.error("标签添加失败");
                 }
             }).error(function (data, status, headers, config) {
                 console.log(data);
+                toastr.error("标签添加失败");
             });
         };
 

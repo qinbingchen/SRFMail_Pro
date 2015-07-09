@@ -11,8 +11,11 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
         this.current_user_type = $cookies.get("user_type") == undefined ? USER_TYPE.NONE : parseInt($cookies.get("user_type"));
         this.current_user_id = $cookies.get("user_id") == undefined ? "" : $cookies.get("user_id");
         this.current_user_name = $cookies.get("user_name") == undefined ? "" : $cookies.get("user_name");
+        this.current_user_display_name = $cookies.get("user_display_name") == undefined ? "" : $cookies.get("user_display_name");
 
         this.login = function (username, password, success, error) {
+            $cookies.put("user_name", username);
+            this.current_user_name = username;
             $http.post("/api/user/login", {
                 user: username,
                 password: password
@@ -20,10 +23,10 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
                 if (data.code == 0) {
                     $cookies.put("user_type", data.role);
                     $cookies.put("user_id", data.id);
-                    $cookies.put("user_name", data.name);
+                    $cookies.put("user_display_name", data.name);
                     that.current_user_type = data.role;
                     that.current_user_id = data.id;
-                    that.current_user_name = data.name;
+                    that.current_user_display_name = data.name;
                     success();
                 } else {
                     console.log(data);
@@ -43,6 +46,7 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
                         $cookies.remove("user_type");
                         $cookies.remove("user_id");
                         $cookies.remove("user_name");
+                        $cookies.remove("user_display_name");
                         success();
                     } else {
                         console.log(data);

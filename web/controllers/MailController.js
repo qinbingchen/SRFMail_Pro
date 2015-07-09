@@ -5,6 +5,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
         $scope.current_user_type = userServices.current_user_type;
         $scope.current_user_name = userServices.current_user_name;
+        $scope.current_user_display_name = userServices.current_user_display_name;
         $scope.selected_category = mailServices.selected_category;
         $scope.selected_mail_id = mailServices.selected_mail_id;
         $scope.fw_show = false;
@@ -34,6 +35,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
             $scope.current_user_type = userServices.current_user_type;
             $scope.current_user_name = userServices.current_user_name;
+            $scope.current_user_display_name = userServices.current_user_display_name;
             $scope.selected_category = mailServices.selected_category;
             $scope.selected_mail_id = mailServices.selected_mail_id;
 
