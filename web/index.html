@@ -44,31 +44,23 @@
     <link href="SessionHistoryKit/history-kit.css" rel="stylesheet" media="all" />
     <script src="SessionHistoryKit/history-kit.js"></script>
 
-    <!--jscolorpicker-->
-<script src="colorpicker/jquery.simple-color.js"></script>
-<script src="jQuery-tags-input/jquery.tagsinput.js"></script>
-<link rel="stylesheet" type="text/css" href="jQuery-tags-input/jquery.tagsinput.css" />
+    <!-- jscolorpicker -->
+    <link rel="stylesheet" type="text/css" href="jQuery-tags-input/jquery.tagsinput.css" />
+    <script src="colorpicker/jquery.simple-color.js"></script>
+    <script src="jQuery-tags-input/jquery.tagsinput.js"></script>
 
     <script src="constants.js"></script>
     <script src="app.js"></script>
-    <script src="controllers/controllers.js"></script>
-    <script src="controllers/SideBarController.js"></script>
-    <script src="controllers/MailListController.js"></script>
-    <script src="controllers/MailController.js"></script>
+    <script src="controllers.js"></script>
     <script src="controllers/SelectLabelController.js"></script>
-    <script src="controllers/SelectWorkerFWController.js"></script>
-    
+
     <link href="css/global.css" rel="stylesheet" media="all" />
     <link href="css/side-bar.css" rel="stylesheet" media="all" />
     <link href="css/mail-list.css" rel="stylesheet" media="all" />
     <link href="css/mail.css" rel="stylesheet" media="all" />
-    <link href="css/select-worker.css" rel="stylesheet" media="all" />
     <link href="css/pick-color.css" rel="stylesheet" media="all" />
     
     <title>SRF Mail Pro</title>
-    <style>
-
-    </style>
 </head>
 
 <body ng-controller="GlobalController">
@@ -83,8 +75,7 @@
 </ng-include><ng-include src="'partial/mail-list.html'">
 </ng-include><ng-include src="'partial/mail.html'"></ng-include>
 
-<ng-include src="'partial/modals/modal-login.html'"></ng-include>
-<ng-include src="'partial/modals/modal-compose.html'"></ng-include>
+<ng-include src="'partial/modal.html'"></ng-include>
 <ng-include src="'partial/popover.html'"></ng-include>
 <ng-include src="'partial/modals/modal-labelmanage.html'"></ng-include>
 

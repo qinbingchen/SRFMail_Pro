@@ -175,6 +175,258 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
     }
 ]);
 
+SRFMailProControllers.controller("SideBarController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
+    function ($scope, $http, $cookies, userServices, mailServices) {
+        $scope.partial_load_status.side_bar = true;
+        $scope.check_partial_load_status();
+
+        $scope.category_list = CATEGORY_LIST;
+        $scope.selected_category = mailServices.selected_category;
+        $scope.current_user_type = userServices.current_user_type;
+
+        $scope.select_category = function (category) {
+            mailServices.select_category(category);
+            $scope.selected_category = mailServices.selected_category;
+            $scope.$emit("emit_category_did_select");
+        };
+
+        $scope.$on("mail_list_did_load", function () {
+            $scope.current_user_type = userServices.current_user_type;
+            $scope.select_category(CATEGORY_LIST[userServices.current_user_type].category[0]);
+        })
+    }]);
+
+SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
+    function ($scope, $http, $cookies, userServices, mailServices) {
+        $scope.partial_load_status.mail_list = true;
+        $scope.check_partial_load_status();
+
+        $scope.current_user_type = mailServices.current_user_type;
+        $scope.selected_mail_id = mailServices.selected_mail_id;
+
+        $scope.$on("broadcast_category_did_select", function () {
+            $scope.current_user_type = mailServices.current_user_type;
+            $scope.filtered_mail_list = mailServices.filtered_mail_list;
+            if ($scope.filtered_mail_list.length != 0) {
+                $scope.select_mail($scope.filtered_mail_list[0]);
+            } else {
+                mailServices.selected_mail_id = "";
+                $scope.selected_mail_id = mailServices.selected_mail_id;
+                $scope.$emit("emit_mail_did_select");
+            }
+        });
+
+        $scope.select_mail = function (mail) {
+            mailServices.selected_mail_id = mail.id;
+            $scope.selected_mail_id = mailServices.selected_mail_id;
+            $scope.$emit("emit_mail_did_select");
+        };
+    }
+]);
+
+SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies", "$sanitize", "userServices", "mailServices",
+    function ($scope, $http, $cookies, $sanitize, userServices, mailServices) {
+        $scope.partial_load_status.mail = true;
+        $scope.check_partial_load_status();
+
+        $scope.current_user_type = userServices.current_user_type;
+        $scope.current_user_name = userServices.current_user_name;
+        $scope.current_user_display_name = userServices.current_user_display_name;
+        $scope.selected_category = mailServices.selected_category;
+        $scope.selected_mail_id = mailServices.selected_mail_id;
+
+        $scope.$on("broadcast_mail_did_select", function () {
+            $scope.show_mail_loader = true;
+
+            $scope.current_user_type = userServices.current_user_type;
+            $scope.current_user_name = userServices.current_user_name;
+            $scope.current_user_display_name = userServices.current_user_display_name;
+            $scope.selected_category = mailServices.selected_category;
+            $scope.selected_mail_id = mailServices.selected_mail_id;
+
+            mailServices.load_mail(
+                function () {
+                    $scope.deadline_time = "";
+                    $scope.selected_mail = mailServices.selected_mail;
+                    if ($scope.selected_mail_id != "" && $scope.selected_mail.operations.length > 0) {
+                        var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
+                        sessionHistory.setOperations(mailServices.selected_mail.operations, {});
+                        sessionHistory.draw();
+                    }
+                    if ($scope.selected_mail_id != "") {
+                        if ($scope.selected_mail.income) {
+                            var time = new Date($scope.selected_mail.income.time);
+                            $scope.income_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                                + " " + time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
+                            if ($scope.selected_mail.income.deadline) {
+                                var time = new Date($scope.selected_mail.income.deadline);
+                                $scope.deadline_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                                    + " " + time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
+                            }
+                        }
+                        if ($scope.selected_mail.reply) {
+                            var time = new Date($scope.selected_mail.reply.time);
+                            $scope.reply_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                                + " " + time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
+                        }
+                    }
+                    $scope.show_mail_loader = false;
+                },
+                function () {}
+            );
+        });
+
+        $scope.show_dispatch = function () {
+            $scope.$emit("emit_show_dispatch");
+        };
+
+        $scope.show_label = function () {
+            $scope.$emit("emit_show_label");
+        };
+
+        $scope.show_forward = function () {
+            $scope.$emit("emit_show_forward");
+        };
+
+        $scope.show_reject = function () {
+            $scope.$emit("emit_show_reject");
+        };
+
+        $scope.remind = function () {
+            $http.post("/api/action/dispatcher/urge", {
+                id: $scope.selected_mail_id
+            }).success(function (data, status, headers, config) {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("提醒成功");
+                } else {
+                    console.log(data);
+                    toastr.error("提醒失败");
+                }
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+                toastr.error("提醒失败");
+            });
+        };
+
+        $scope.pass = function () {
+            $http.post("/api/action/worker/pass", {
+                id: mailServices.selected_mail_id
+            }).success(function (data, status, headers, config) {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("邮件已处理");
+                } else {
+                    console.log(data);
+                    toastr.error("出现错误");
+                }
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+                toastr.error("出现错误");
+            });
+        };
+
+        $scope.send_back = function () {
+            $http.post('/api/action/worker/redirect', {
+                id: mailServices.selected_mail_id
+            }).success(function () {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("退回成功");
+                } else {
+                    console.log(data);
+                    toastr.error("退回失败");
+                }
+            }).error(function () {
+                console.log(data);
+                toastr.error("退回失败");
+            });
+        };
+
+        $scope.review_pass = function () {
+            if ($scope.review_reject_show) {
+                $scope.review_reject_show = false;
+            }
+            $http.post("/api/action/reviewer/pass", {
+                id: mailServices.selected_mail_id
+            }).success(function (data, status, headers, config) {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("审核通过");
+                } else {
+                    console.log(data);
+                    toastr.error("出现错误");
+                }
+            }).error(function () {
+                console.log(data);
+                toastr.error("出现错误");
+            });
+
+        };
+
+        $scope.show_compose = function () {
+            $scope.$emit("emit_show_compose");
+        };
+
+        $scope.show_reply = function () {
+            $scope.$emit("emit_show_reply");
+        };
+
+        $scope.show_edit = function () {
+            $scope.$emit("emit_show_edit");
+        };
+
+    }
+]);
+
+SRFMailProControllers.controller("SelectLabelController", ["$scope", "$http", "$cookies",
+    function ($scope, $http, $cookies) {
+
+        $scope.send_label=function(){
+            var label_selected = $("#themelabel").select2("val");
+            if(label_selected!=null)
+            {
+                var labels="[\""+label_selected[0]+"\"";
+                for(i=1;i<label_selected.length;i++)
+                {
+                    labels+=",\""+label_selected[i]+"\"";
+                }
+                labels+="]";
+
+                var url = "/api/action/dispatcher/set_label";
+                $http.post(url, {
+                    id: $scope.selected_mail_id,
+                    labels: labels
+                }).success(function (data, status, headers, config) {
+                    if (data.code == 0) {
+                        location.reload();
+                    } else {
+                        console.log(data);
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log(data);
+                });
+            }
+        };
+
+        $scope.show_labelmanage=function(){
+            $scope.$emit("emit_show_labelmanage");
+        }
+
+        var url_labels = "/api/action/dispatcher/list_labels";
+        $http.get(url_labels).success(function (data) {
+            $scope.theme_labels=data.labels;
+
+        }).error(function (data, status, headers, config) {
+            console.log(data);
+        });
+
+
+        setTimeout(function() {
+            $(".select-labels").select2();
+        }, 0);
+    }]);
+
 SRFMailProControllers.controller("ModalController", ["$scope",
     function ($scope) {
         $scope.prevent_dismiss = function (e) {
@@ -320,26 +572,26 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.subject = "Re: " + mailServices.selected_mail.income.subject;
             $scope.need_review = false;
             $scope.reviewer = "";
-            $scope.content = mailServices.selected_mail.income.html;
             $("textarea#compose-content").redactor(redactor_options);
+            $("textarea#compose-content").redactor("code.set", mailServices.selected_mail.income.html);
         });
 
         $scope.$on("broadcast_show_edit", function () {
             $scope.edit_mode = EDIT_MODE.EDIT;
             $scope.recipient = mailServices.selected_mail.reply.to[0].address;
             $scope.subject = mailServices.selected_mail.reply.subject;
-            $scope.content = mailServices.selected_mail.reply.html;
             $("textarea#compose-content").redactor(redactor_options);
+            $("textarea#compose-content").redactor("code.set", mailServices.selected_mail.reply.html);
         });
 
         $scope.switch_review = function () {
             if ($scope.need_review) {
                 $("select#reviewer").select2({
                     data: $scope.reviewer_list,
-                    placeholder: "请选择审核人"
+                    placeholder: "请选择审核人..."
                 });
             } else {
-                $("select#reviewer").select2("destroy");
+                $("select#reviewer").select2("val", "");
             }
         };
 
@@ -499,7 +751,6 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
             });
         }
     }]);
-
 
 SRFMailProControllers.controller("LabelPopoverController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
     function ($scope, $http, $cookies, userServices, mailServices) {

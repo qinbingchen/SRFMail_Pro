@@ -34,7 +34,7 @@
                 <i class="fa fa-reply fa-lg"></i>回复
             </button>
             <button class="btn" ng-click="pass()"
-                    ng-show="current_user_type == 2 && selected_category.name == 'pending' || selected_category.name == 'rejected'"
+                    ng-show="current_user_type == 2 && (selected_category.name == 'pending' || selected_category.name == 'rejected')"
                     ng-disabled="selected_mail_id == ''">
                 <i class="fa fa-check-circle-o fa-lg"></i>标记处理
             </button>
@@ -133,7 +133,7 @@
                 </div>
             </section>
 
-            <section class="section-history" ng-if="selected_mail.operations.length > 0">
+            <section class="section-history" ng-show="selected_mail.operations.length > 0">
                 <div class="divider"></div>
                 <div class="section-title">邮件历史记录</div>
                 <div id="operation-history"></div>
