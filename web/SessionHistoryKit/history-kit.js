@@ -28,7 +28,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 	this.lineWidth = options.lineWidth || 2;
 	this.radius = options.radius || 4;
 	this.hoverRadius = options.hoverRadius || 8;
-	this.spacingCoefficient = options.spacingCoefficient || 0.001;
+	this.spacingCoefficient = options.spacingCoefficient || 0.025;
 	this.maxSpacing = options.maxSpacing || 200;
 	this.minSpacing = options.minSpacing || 30;
 
