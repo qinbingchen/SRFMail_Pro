@@ -1,4 +1,4 @@
-var SB_HOST = 'http://localhost:8844'; // SmartBackstage Host
+var SB_HOST = ''; // SmartBackstage Host
 
 toastr.options = {
     "closeButton": true,
