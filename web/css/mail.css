@@ -81,9 +81,15 @@
             font-size: 11px;
             color: #fff; }
       .mail-section .body .mail .original-income {
-        padding: 10px 20px;
-        border-top: 1px solid #cfcfd3;
         color: #888; }
+        .mail-section .body .mail .original-income .label-list .label {
+          display: inline-block;
+          margin-right: 5px;
+          padding: 0 5px 2px;
+          border-radius: 3px;
+          text-align: center;
+          font-size: 11px;
+          color: #fff; }
     .mail-section .body .mail-empty {
       height: 100%;
       padding-top: calc((100vh - 233px) / 2);

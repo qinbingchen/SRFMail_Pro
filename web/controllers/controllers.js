@@ -339,21 +339,29 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         };
 
         $scope.submit = function () {
+            var html = $("textarea#compose-content").redactor("code.get");
             if ($scope.compose_form.$valid) {
                 switch ($scope.edit_mode) {
                     case EDIT_MODE.COMPOSE:
                         $http.post("/api/action/worker/submit", {
                             recipients: JSON.stringify([$scope.recipient]),
                             subject: $scope.subject,
-                            html: $scope.content,
+                            html: html,
                             attachments: JSON.stringify([]),
                             needReview: $scope.need_review,
                             reviewer: $scope.reviewer
                         }).success(function (data, status, headers, config) {
-                            $scope.load_mail_list();
-                            $scope.dismiss_modal();
+                            if (data.code == 0) {
+                                toastr.success("发送成功");
+                                $scope.load_mail_list();
+                                $scope.dismiss_modal();
+                            } else {
+                                console.log(data);
+                                toastr.error("发送失败");
+                            }
                         }).error(function (data, status, headers, config) {
                             console.log(data);
+                            toastr.error("发送失败");
                         });
                         break;
                     case EDIT_MODE.REPLY:
@@ -361,34 +369,42 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                             id: mailServices.selected_mail_id,
                             recipients: JSON.stringify([$scope.recipient]),
                             subject: $scope.subject,
-                            html: $scope.content,
+                            html: html,
                             attachments: JSON.stringify([]),
                             needReview: $scope.need_review,
                             reviewer: $scope.reviewer
                         }).success(function (data, status, headers, config) {
-                            $scope.load_mail_list();
-                            $scope.dismiss_modal();
+                            if (data.code == 0) {
+                                toastr.success("回复成功");
+                                $scope.load_mail_list();
+                                $scope.dismiss_modal();
+                            } else {
+                                console.log(data);
+                                toastr.error("回复失败");
+                            }
                         }).error(function (data, status, headers, config) {
                             console.log(data);
+                            toastr.error("回复失败");
                         });
                         break;
                     case EDIT_MODE.EDIT:
                         $http.post("/api/action/reviewer/pass", {
                             id: mailServices.selected_mail_id,
                             subject: $scope.subject,
-                            html: $scope.content,
+                            html: html,
                             attachments: JSON.stringify([])
                         }).success(function (data, status, headers, config) {
                             if (data.code == 0) {
-                                toastr.success("发送成功", "");
+                                toastr.success("发送成功");
                                 $scope.load_mail_list();
                                 $scope.dismiss_modal();
                             } else {
-                                console.log(data.code + "  " + data.message);
-                                toastr.error("发送失败，请重试", "");
+                                console.log(data);
+                                toastr.error("发送失败");
                             }
                         }).error(function () {
-
+                            console.log(data);
+                            toastr.error("发送失败");
                         });
                         break;
                     default :

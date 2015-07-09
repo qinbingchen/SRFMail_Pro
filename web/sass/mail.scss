@@ -126,9 +126,19 @@
       }
 
       .original-income {
-        padding: 10px 20px;
-        border-top: 1px solid #cfcfd3;
         color: #888;
+
+        .label-list {
+          .label {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 0 5px 2px;
+            border-radius: 3px;
+            text-align: center;
+            font-size: 11px;
+            color: #fff;
+          }
+        }
       }
     }
 

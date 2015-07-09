@@ -126,14 +126,13 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
                         } else {
                             switch (that.selected_category.name) {
                                 case "pending":
-                                    return mail.status == STATUS.DISPATCHED
-                                        && (mail.lastOperation.type == OPERATION_TYPE.DISPATCH || mail.lastOperation.type == OPERATION_TYPE.REDIRECT);
+                                    return mail.status == STATUS.DISPATCHED && mail.lastOperation.type != OPERATION_TYPE.REJECT;
                                 case "rejected":
                                     return mail.status == STATUS.DISPATCHED && mail.lastOperation.type == OPERATION_TYPE.REJECT;
                                 case "waiting_for_review":
                                     return mail.status == STATUS.WAITINGFORREVIEW;
                                 case "success":
-                                    return mail.status == STATUS.SUCCESS;
+                                    return mail.status == STATUS.WAITINGFORSEND || mail.status == STATUS.SUCCESS;
                                 default:
                                     return false;
                             }

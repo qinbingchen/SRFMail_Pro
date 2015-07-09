@@ -12,24 +12,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
         $scope.review_pass_flag = false;
 
-        $scope.selected_category = mailServices.selected_category;
-
-        $scope.show_dispatch = function () {
-            $scope.$emit("emit_show_dispatch");
-        };
-
-        $scope.show_label = function () {
-            $scope.$emit("emit_show_label");
-        };
-
-        $scope.show_forward = function () {
-            $scope.$emit("emit_show_forward");
-        };
-
-        $scope.show_reject = function () {
-            $scope.$emit("emit_show_reject");
-        };
-
         $scope.$on("broadcast_mail_did_select", function () {
             $scope.show_mail_loader = true;
 
@@ -71,6 +53,39 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             );
         });
 
+        $scope.show_dispatch = function () {
+            $scope.$emit("emit_show_dispatch");
+        };
+
+        $scope.show_label = function () {
+            $scope.$emit("emit_show_label");
+        };
+
+        $scope.show_forward = function () {
+            $scope.$emit("emit_show_forward");
+        };
+
+        $scope.show_reject = function () {
+            $scope.$emit("emit_show_reject");
+        };
+
+        $scope.pass = function () {
+            $http.post("/api/action/worker/pass", {
+                id: mailServices.selected_mail_id
+            }).success(function (data, status, headers, config) {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("邮件已处理");
+                } else {
+                    console.log(data);
+                    toastr.error("出现错误");
+                }
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+                toastr.error("出现错误");
+            });
+        };
+
         $scope.review_pass = function () {
             $scope.review_pass_flag = true;
             if ($scope.review_reject_show) {
@@ -110,17 +125,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $scope.review_reject_show = false;
         };
 
-        $scope.check = function () {
-            $http.post("/api/action/worker/pass", {
-                id: $scope.selected_mail_id
-            }).success(function (data, status, headers, config) {
-                if (data.code == 0)
-                    toastr.success('邮件已处理', '');
-            }).error(function (data, status, headers, config) {
-                toastr.error('失败，请重试', '');
-                console.log(data);
-            });
-        };
+
 
         $scope.remind = function () {
             $http.post("/api/action/dispatcher/urge", {
