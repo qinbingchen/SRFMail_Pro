@@ -5,7 +5,7 @@ exports = module.exports = {
         port: 6379
     },
     host: '123.57.64.46',
-    listen: 8844,
+    listen: 80,
     mail: {
         imap: {
             host: 'imap.163.com',
