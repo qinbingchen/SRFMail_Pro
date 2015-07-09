@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var router = require('express').Router();
 
 var getUserList = function(req, res) {
-    User.find({}).populate('defaultReviewer').exec(function(err, users) {
+    User.model.find({}).populate('defaultReviewer').exec(function(err, users) {
         if(err) {
             Log.e({req: req}, err);
             return res.json({
@@ -279,7 +279,7 @@ var setSettings = function(req, res) {
                 code: 0,
                 message: 'success'
             });
-            process.send('Restart Mail');
+            //process.send('Restart Mail');
         }
     });
 };
