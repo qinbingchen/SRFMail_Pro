@@ -81,7 +81,7 @@ io.on('connection', function(socket) {
     });
 });
 
-client.BRPOP(['ReceiveQueue', 0], function(err, data) {
+client.BRPOP(['DispatcherQueue', 0], function(err, data) {
     if(err) {
         return Log.e(err);
     }
