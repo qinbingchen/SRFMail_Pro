@@ -110,6 +110,11 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.show_modal("compose");
         });
 
+        $scope.$on("emit_show_labelmanage", function() {
+            $scope.$broadcast("broadcast_show_labelmanage");
+            $scope.show_modal("labelmanage");
+        });
+
         $("body").on("select2:open", "select", function () {
             $(this).siblings(".select2").addClass("selected");
         }).on("select2:close", "select", function () {
@@ -155,6 +160,127 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
         }
     }
 ]);
+
+SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
+    function ($scope, $http, $cookies, userServices, mailServices) {  
+        $scope.submit = function () {
+           $scope.labels_updated=new Object({"labels":$scope.exist_labels});
+            var url_labels_update = "/api/action/dispatcher/set_all_labels";
+            alert( JSON.stringify($scope.exist_labels));
+        $http.post(url_labels_update, {
+                            labels:JSON.stringify($scope.labels_updated)
+                        }).success(function (data, status, headers, config) {
+                            if(data.code!=0)
+                            {
+                                    console.log(data.message);
+                            }
+                            else
+                            {$scope.load_mail_list();
+                            $scope.dismiss_modal();
+
+                            }
+                            
+                        }).error(function (data, status, headers, config) {
+                            console.log(data);
+                        });
+    
+        }
+            $scope.exist_colors=new Array();
+           $(document).ready(function(){
+                $('.simple_color_custom_chooser_css').simpleColor({ 
+                    chooserCSS: { 'background-color': 'black', 'opacity': '0.8' },
+                    colors:['800000','8B0000','C71585','4B0882','800080','000080','D2691E','FF0000','FFC0CB','7B68EE','F5DEB3','FFFF00','32CD32','00BFFF','ADD8E6','D3D3D3'],
+                    onSelect: function(hex, element) {
+                        alert("You selected #" + hex + " for input #" + element.attr('class'));
+                        $scope.exist_labels[$scope.exist_labels.length]=new Object({"color":"#"+hex});
+                        var labels_id=0;
+                        $('.tag').each(function()
+          {
+            
+            
+            if(labels_id==$scope.exist_labels.length-1)
+                $scope.exist_labels[$scope.exist_labels.length-1].name=$(this).text().substr(0,$(this).text().length-3);
+            $(this).css("background-color",$scope.exist_labels[get_label_id($(this).text())].color);
+            labels_id++;
+          });  
+                      alert( JSON.stringify($scope.exist_labels));
+                    },
+                    boxWidth:'20px',
+                    boxHeight:'20px',
+                    columns:18 });    
+            });
+
+         var url_labels = "/api/action/dispatcher/list_labels";
+        $http.get(url_labels).success(function (data) {
+                $scope.theme_labels=data.labels;
+           
+        }).error(function (data, status, headers, config) {
+            console.log(data);
+    });
+
+        $scope.set_tags_enable=function(command){
+            if(command==1)
+            {
+               $('#tags').attr("disabled",true); 
+                $('#colors').removeAttr("disabled"); 
+            }
+            else
+             {
+                $('#colors').disabled=false;
+                $('#tags').disabled=true;
+            }
+        }
+        $scope.exist_labels=new Array();
+        
+        setTimeout(function()
+        {
+            
+            $scope.exist_labels[0]=new Object();
+            $scope.exist_labels[0].name=$scope.theme_labels[0].name;
+            $scope.exist_labels[0].color=$scope.theme_labels[0].color;
+            $scope.exist_labels_name=$scope.theme_labels[0].name;
+
+        for(i=1;i<$scope.theme_labels.length;i++)
+        {
+            $scope.exist_labels[i]=new Object();
+            $scope.exist_labels[i].name=$scope.theme_labels[i].name;
+            $scope.exist_labels[i].color=$scope.theme_labels[i].color;
+            $scope.exist_labels_name+=","+$scope.theme_labels[i].name;
+        }
+
+
+
+            $('#tags').tagsInput({
+                onAddTag:function(tag){
+                    console.log('增加了'+tag);
+                     $scope.set_tags_enable(1);           
+                                
+                }
+               });
+
+            $('#tags').importTags($scope.exist_labels_name);
+
+            $scope.label_id=0;
+            $('.tag').each(function()
+          {
+            $(this).css("background-color",$scope.exist_labels[get_label_id($(this).text())].color);
+            $scope.color_id++;
+          });
+        },2000); 
+    
+     var  get_label_id=function(label_text){
+            
+            label_text=label_text.substr(0 ,label_text.length-3);
+            for(j=0;j<$scope.exist_labels.length;j++)
+            {
+                if($scope.exist_labels[j].name==label_text)
+                    return j;
+            }
+    }
+
+    }]);
+    
+
 
 SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
     function ($scope, $http, $cookies, userServices, mailServices) {
