@@ -1,0 +1,24 @@
+<div ng-controller="ModalController">
+    <div ng-controller="LabelmanageModalController">
+        <div id="modal-labelmanage" class="modal-background">
+            <div class="modal" ng-click="prevent_dismiss($event)">
+                <div class="tags-pad-container">
+                        <div class="tags-pad" id='tags_pad'>
+                            <input name="tags" id="tags" value="{{exist_labels}}" />
+                        </div>        
+                        <div id="color_pad" > 
+                            <input class='simple_color_custom_chooser_css'  value='#ff6633'/>
+                        </div>
+                        <div class="add-label-container">
+                        <input class="label-name" id="label_name" />
+                        <button  ng-click="add_label()" class="btn">add</button>
+                        </div>
+                    <div class="submit-container">
+                        <a class="btn" ng-click="submit()">submit</a>
+                        <a class="btn" ng-click="dismiss_modal()">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
