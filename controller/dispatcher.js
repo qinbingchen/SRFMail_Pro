@@ -264,7 +264,7 @@ var is_valid_color = function(color_str){
     if(color_str[0] != '#')return false;
     for(var i = 1 ; i < 7 ; i ++){
         var c = color_str[i];
-        if(!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F'))){
+        if(!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f'))){
             return false;
         }
     }
