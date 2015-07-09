@@ -33,7 +33,7 @@
     <script src="includes/plugins/bootstrap3-editable/js/bootstrap-datepicker.js"></script><!-- Optional -->
     <script src="includes/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js"></script><!-- Optional -->
     <script src="includes/common.js"></script>
-    <title>SRFMail Pro 管理中心</title>
+    <title>SRFMail Pro 管理中心－发送队列</title>
 </head>
 <body>
 
@@ -46,7 +46,24 @@
 <div id="main" class="site-main">
     <div class="content-area">
         <div id="primary" class="site-content">
-
+            <div id="loading-mask" class="loading-mask" style="">
+                <div class="container">
+                    <i class="fa fa-2x fa-circle-o-notch fa-spin"></i>
+                </div>
+            </div>
+            <table id="queue-table" class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>最后更新</th>
+                    <th>标题</th>
+                    <th>分发者</th>
+                    <th>处理/撰写者</th>
+                    <th>发送状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
     <div id="secondary" class="site-sidebar">
@@ -57,11 +74,62 @@
         </ul>
     </div>
 </div>
-<footer id="colophon" class="site-footer">&copy; 2016 SRFMail Pro</footer>
-
 <script>
+    var table = $('#queue-table').DataTable({
+        order: [[ 4, "desc" ]],
+        aoColumnDefs: [{
+            bSortable: false,
+            aTargets: ['nosort']
+        }]
+    });
+    var datetimeFromDate = function(_date) {
+        var date = new Date(_date);
+        return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日 ' + date.getHours() + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    };
+    var labelFromStatus = function(status) {
+        switch(status) {
+            case 3:
+                return '<span class="status label blue-label">等待发送</span>';
+            case 4:
+                return '<span class="status label green-label">成功</span>';
+            case 5:
+                return '<span class="status label red-label">发送失败</span>';
+            case 6:
+                return '<span class="status label gray-label">发送失败（等待自动重试）</span>';
+        }
+        return '<span class="status label gray-label">未知</span>';
+    };
+    $.ajax(SB_HOST + '/api/session/get_list', {
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            if (data.code != 0) {
+                toastr.error(data.message);
+                //return;
+            }
+            $('#loading-mask').hide();
 
+            data.sessions.forEach(function(session) {
+                if (session.status == '3' || session.status == '4' || session.status == '5' || session.stauts == '6') {
+                    if (!session.reply) {
+                        return;
+                    }
+                    session.lastOperation = session.lastOperation || {};
+                    table.row.add([
+                            datetimeFromDate(session.lastOperation.time),
+                            session.reply.subject || '无主题',
+                            session.dispatcher || '无（新邮件）',
+                            session.worker || '无',
+                            labelFromStatus(session.status)
+                    ]).draw();
+                }
+            });
+        },
+        error: function(jqXHR, status, err) {
+        }
+    });
 </script>
-
+<footer id="colophon" class="site-footer">&copy; 2016 SRFMail Pro</footer>
 </body>
 </html>
