@@ -35,6 +35,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
             mailServices.load_mail(
                 function () {
+                    $scope.deadline_time = "";
                     $scope.selected_mail = mailServices.selected_mail;
                     if ($scope.selected_mail_id != "" && $scope.selected_mail.operations.length > 0) {
                         var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
@@ -44,17 +45,20 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     if ($scope.selected_mail_id != "") {
                         if ($scope.selected_mail.income) {
                             var time = new Date($scope.selected_mail.income.time);
-                            $scope.income_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                            var month = time.getMonth() + 1;
+                            $scope.income_time = time.getFullYear() + "/" + month + "/" + time.getDate()
                                 + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
                         }
                         if ($scope.selected_mail.reply) {
                             var time = new Date($scope.selected_mail.reply.time);
-                            $scope.reply_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                            var month = time.getMonth() + 1;
+                            $scope.reply_time = time.getFullYear() + "/" + month + "/" + time.getDate()
                                 + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
                         }
                         if ($scope.selected_mail.income.deadline) {
                             var time = new Date($scope.selected_mail.income.deadline);
-                            $scope.deadline_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                            var month = time.getMonth() + 1;
+                            $scope.deadline_time = time.getFullYear() + "/" + month + "/" + time.getDate()
                                 + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
                         }
                     }
