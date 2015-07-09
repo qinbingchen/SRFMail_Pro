@@ -162,7 +162,10 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             }
             $("textarea#compose-content").redactor({
                 lang: "zh_cn",
-                imageUpload: "/api/attachments/upload"
+                imageUpload: "/api/attachments/upload",
+                imageUploadCallback: function(image, json) {
+                    $(image).attr("src", "/api/attachments/download?id=" + json.file);
+                }
             });
 
         });
