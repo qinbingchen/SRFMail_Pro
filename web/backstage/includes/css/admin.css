@@ -295,3 +295,8 @@ pre {
     top: calc(50vh - 50px);
     position: relative;
 }
+
+ul.site-navigation {
+    position:fixed;
+    width:195px;
+}
