@@ -68,32 +68,90 @@
 
 
         <div class="mail" ng-if="selected_mail_id != ''">
-            <div class="info" ng-if="selected_mail.reply">
-                <div class="subject">{{selected_mail.reply.subject}}</div>
-                <div class="time">{{reply_time}}</div>
-                <div class="recipient">收件人 {{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
-            </div>
-            <div class="info" ng-if="!selected_mail.reply">
-                <div class="subject">{{selected_mail.income.subject}}</div>
-                <div class="time">{{income_time}}</div>
-                <div class="sender">发件人 {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
-                <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
-            </div>
+            <section class="section-mail-title">
+                <div class="info" ng-if="selected_mail.reply">
+                    <div class="subject">{{selected_mail.reply.subject}}</div>
+                    <div class="time mail-field"><span class="secondary">时间：</span>{{reply_time}}</div>
+                    <div class="recipient mail-field"><span class="secondary">收件人：</span> {{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
+                </div>
+                <div class="info" ng-if="!selected_mail.reply">
+                    <div class="subject">{{selected_mail.income.subject}}</div>
+                    <div class="time mail-field"><span class="secondary">时间：</span>{{income_time}}<span class="deadline">（最晚处理日期：2020年12月1日 23:59:59）</span> </div>
+                    <div class="sender mail-field"><span class="secondary">发件人：</span> {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
+                    <div class="recipient mail-field"><span class="secondary">收件人：</span> {{selected_mail.income.to[0].name}} <{{selected_mail.income.to[0].address}}></div>
+                    <div class="labels"><span class="secondary">标签：</span> <span class="label">label1</span><span class="label">label2</span></div>
+                    <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
+                </div>
+            </section>
+            <section class="section-content">
+                <div class="content" ng-bind-html="selected_mail.reply.html" ng-if="selected_mail.reply"></div>
+                <div class="content" ng-bind-html="selected_mail.income.html" ng-if="!selected_mail.reply"></div>
+            </section>
+            <section class="section-income">
+                <div class="original-income" ng-if="selected_mail.reply && selected_mail.income">
+                    <div class="divider"></div>
+                    <div class="section-title">原始邮件</div>
+                    <div class="subject">主题：{{selected_mail.income.subject}}</div>
+                    <div class="time">时间：{{income_time}}</div>
+                    <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
+                    <div class="content" ng-bind-html="selected_mail.income.html"></div>
+                    <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
+                </div>
+            </section>
+            <section class="section-history">
+                <div class="operation-history-container" ng-if="selected_mail.operations.length > 0">
+                    <div class="divider"></div>
+                    <div class="section-title">邮件历史记录</div>
+                    <div id="operation-history"></div>
+                </div>
+            </section>
 
-            <div class="content" ng-bind-html="selected_mail.reply.html" ng-if="selected_mail.reply"></div>
-            <div class="content" ng-bind-html="selected_mail.income.html" ng-if="!selected_mail.reply"></div>
 
-            <div class="original-income" ng-if="selected_mail.reply && selected_mail.income">
-                <div class="subject">主题：{{selected_mail.income.subject}}</div>
-                <div class="time">时间：{{income_time}}</div>
-                <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
-                <div class="content" ng-bind-html="selected_mail.income.html"></div>
-                <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
-            </div>
+            <style>
+                span.secondary {
+                    color: #888
+                }
+                .subject {
+                    margin: 0 0 10px;
+                }
+                .mail-field {
+                    margin-top: 0 !important;
+                }
+                .section-content {
+                    margin-top: 20px;
+                }
+                .section-income .subject {
+                    margin-bottom: 0;
+                }
+                .mail-section .body .mail .original-income {
+                    padding: 0;
+                    border: 0;
+                    color: inherit;
+                }
+                .section-title {
+                    font-size: 20px;
+                    margin:10px 0 30px;
+                    color:#333;
+                }
+                .divider {
+                    background:#eee;
+                    height:4px;
+                    width:100%;
+                    margin:10px 0 10px;
+                }
+                .label {
+                    background: #6F41A7;
+                    font-size: 13px;
+                    padding: 4px 7px;
+                    margin:0 7px 0 0;
+                    color: white;
+                }
+                .deadline {
+                    color: #C83E51;
+                    padding-left: 20px;
+                }
+            </style>
 
-            <div class="operation-history-container" ng-if="selected_mail.operations.length > 0">
-                <div id="operation-history"></div>
-            </div>
         </div>
 
         <div class="mail-empty" ng-if="selected_mail_id == ''">

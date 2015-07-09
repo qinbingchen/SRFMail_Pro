@@ -1,0 +1,60 @@
+.modal {
+	width: 500px;
+	height: 400px
+}
+
+.tags-pad-container {
+	height: inherit;
+	text-align: center;
+}
+
+.tagsinput {
+	height: 150px;
+	width: 450px;
+	margin: 20px auto;
+}
+
+.color-panel {
+	display: block;
+	float: left;
+	width: 450px;
+	margin:  0 auto;
+}
+
+.simpleColorContainer, .add-label-container  {
+	width: 450px;
+	margin:  10px auto;
+}
+
+.simple_color_custom_chooser_css{
+	height: inherit;
+	width: 200px;
+	display: inline-block;
+}
+
+.label-name {
+	width: 200px;
+	float: left;
+}
+
+.submit-container {
+	margin-top: 10px;
+	width: 450px;
+	margin:  20px auto;
+}
+
+.add-label-container .btn {
+	margin-left: 20px;
+	font-weight: 900;
+	font-size: 20px;
+	line-height: 28px;
+	height: 28px;
+	display: inline-block;
+	float: left;
+}
+
+.submit-container .btn {
+	float: left;
+	margin-left: 100px;
+	font-weight: 900;
+}

@@ -21,6 +21,7 @@ SRFMailProControllers.controller("MailListController", ["$scope", "$http", "$coo
             mailServices.selected_mail_id = mail.id;
             $scope.selected_mail_id = mailServices.selected_mail_id;
             $scope.$emit("emit_mail_did_select");
+            console.log(mail);
         };
     }
 ]);

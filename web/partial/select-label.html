@@ -3,6 +3,8 @@
 		<select data-placeholder="添加主题标签" class="select-labels" id="themelabel" multiple="multiple">
 			<option ng-repeat="label in theme_labels" value="{{label.name}}">{{label.name}}</option>
 		</select>
+		<a class="btn" ng-click="show_labelmanage()">管理标签</a>
+
 		<a class="btn" ng-click="show_label()">取消</a>
 		<a class="btn" ng-click="send_label()">确认</a>
 	</div>

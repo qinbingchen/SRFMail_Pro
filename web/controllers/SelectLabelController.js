@@ -28,6 +28,10 @@ SRFMailProControllers.controller("SelectLabelController", ["$scope", "$http", "$
                 }                   
         };       
 
+        $scope.show_labelmanage=function(){
+            $scope.$emit("emit_show_labelmanage");
+        }     
+
         var url_labels = "/api/action/dispatcher/list_labels";
         $http.get(url_labels).success(function (data) {
                 $scope.theme_labels=data.labels;
@@ -36,9 +40,10 @@ SRFMailProControllers.controller("SelectLabelController", ["$scope", "$http", "$
             console.log(data);
     });
 
+    
         	setTimeout(function() {               
                $(".select-labels").select2();
-        }, 0);  
+        }, 0);           
     }]);
 
 
