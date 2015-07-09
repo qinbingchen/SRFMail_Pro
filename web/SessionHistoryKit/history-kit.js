@@ -65,7 +65,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 	};
 
 	this.initCanvas = function() {
-		while (this.container.hasChildNodes()) {
+		while (this.container && this.container.hasChildNodes()) {
 			var child = this.container.childNodes[0];
 			this.container.removeChild(child);
 		}
@@ -262,7 +262,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 	this.showDetailCard = function(pos, index) {
 		var operation = this.operations[index];
 		var date = new Date(operation.time);
-		document.getElementById('shk-session-timestamp').innerText = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
+		document.getElementById('shk-session-timestamp').innerText = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
 		document.getElementById('shk-session-operator').innerText = operation.operator || "SRFMail Pro";
 		document.getElementById('shk-session-detail').innerText = this.detailOfOperation(operation);
 
