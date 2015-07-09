@@ -70,6 +70,7 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
         this.load_mail_list = function (success, error) {
             $http.get("/api/session/get_list")
                 .success(function (data, status, headers, config) {
+                    $('#loading-mask').hide();
                     that.mail_list = data["sessions"];
                     that.mail_list.map(function (mail) {
                         var effectiveDate = new Date();
@@ -96,9 +97,11 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
             this.selected_category = category;
             this.filter_mail_list();
 
-            console.log(this.filtered_mail_list);
             this.filtered_mail_list.sort(function(aMail, anotherMail) {
-                return aMail.effectiveDate < anotherMail.effectiveDate;
+                if (aMail.effectiveDate.getTime() == anotherMail.effectiveDate.getTime()) {
+                    return 0;
+                }
+                return aMail.effectiveDate.getTime() < anotherMail.effectiveDate.getTime() ? 1 : -1;
             });
         };
 
