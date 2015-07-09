@@ -4,6 +4,7 @@
             <!-- dispatcher -->
             <button class="btn" id="show-dispatch"
                     ng-show="current_user_type == 1 && selected_category.name == 'pending'"
+                    ng-disabled="selected_mail_id = ''"
                     ng-click="show_dispatch()">
                 <i class="fa fa-mail-forward fa-lg"></i>分发邮件
             </button>

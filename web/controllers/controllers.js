@@ -438,20 +438,27 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
         });
 
         $scope.submit = function () {
+            var deadline = $scope.deadline;
+            if (deadline != "") {
+                deadline = new Date(deadline).toISOString();
+            }
             $http.post("/api/action/dispatcher/dispatch", {
                 id: mailServices.selected_mail_id,
                 readonly: JSON.stringify($("select#dispatch-readonly").val()),
                 readreply: JSON.stringify($("select#dispatch-readreply").val()),
-                deadline: $scope.deadline == "" ? new Date($scope.deadline).toISOString() : ""
+                deadline: deadline
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
                     $scope.show_popover = false;
+                    toastr.success("分发成功");
                 } else {
                     console.log(data);
+                    toastr.error("分发失败");
                 }
             }).error(function (data, status, headers, config) {
                 console.log(data);
+                toastr.error("分发失败");
             });
         }
     }]);
