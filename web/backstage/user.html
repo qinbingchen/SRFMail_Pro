@@ -1,0 +1,613 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+
+    <!-- backstage kit style sheets -->
+    <link rel="stylesheet" href="includes/css/reset.css" media="all">
+    <link rel="stylesheet" href="includes/css/font-awesome.css" media="all">
+    <link rel="stylesheet" href="includes/plugins/toastr-notifications/toastr.css" media="all">
+    <link rel="stylesheet" href="includes/plugins/icheck/grey.css" media="all">
+    <link rel="stylesheet" href="includes/plugins/select2/select2.css" media="all">
+    <link rel="stylesheet" href="includes/css/select2-custom.css" media="all">
+    <link rel="stylesheet" href="includes/css/table.css" media="all">
+    <link rel="stylesheet" href="includes/css/modal.css" media="all">
+    <link rel="stylesheet" href="includes/css/editable.css" media="all">
+    <link rel="stylesheet" href="includes/css/tab.css" media="all">
+    <link rel="stylesheet" href="includes/css/components.css" media="all">
+    <link rel="stylesheet" href="includes/css/admin.css" media="all">
+
+    <!-- backstage kit scripts -->
+    <script src="includes/plugins/jquery/jquery-2.1.1.min.js"></script>
+    <script src="includes/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="includes/plugins/jquery-validation/additional-methods.min.js"></script>
+    <script src="includes/plugins/jquery-validation/messages_zh.js"></script>
+    <script src="includes/plugins/toastr-notifications/toastr.min.js"></script>
+    <script src="includes/plugins/icheck/icheck.min.js"></script>
+    <script src="includes/plugins/select2/select2.min.js"></script>
+    <script src="includes/plugins/select2/select2_locale_zh-CN.js"></script>
+    <script src="includes/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="includes/plugins/datatables/js/dataTables.bootstrap.js"></script>
+    <script src="includes/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="includes/plugins/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <script src="includes/plugins/bootstrap3-editable/js/bootstrap-datepicker.js"></script><!-- Optional -->
+    <script src="includes/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js"></script><!-- Optional -->
+    <script src="includes/common.js"></script>
+    <title>SRFMail Pro 管理中心</title>
+    <style>
+        .dataTables_wrapper {
+            position:relative;
+            top:-46px;
+        }
+        .modal-backdrop {
+            opacity: 0.5 !important;
+        }
+        .modal-dialog {
+            z-index: 99999 !important;
+            margin-top: 70px;
+        }
+    </style>
+</head>
+<body>
+
+<header id="masthead" class="site-header">
+    <div class="inner">
+        <h1 class="site-title"><a class="site-title-link" href="index.html">SRFMail Pro 管理中心</a></h1>
+        <a href="#" class="log-out" title="Log Out" id="log-out"><i class="fa fa-sign-out"></i> 登出</a>
+    </div>
+</header>
+<div id="main" class="site-main">
+    <div class="content-area">
+        <div id="primary" class="site-content">
+            <div id="loading-mask" class="loading-mask" style="">
+                <div class="container">
+                    <i class="fa fa-2x fa-circle-o-notch fa-spin"></i>
+                </div>
+            </div>
+
+            <!-- navigation tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#user-manage" role="tab" data-toggle="tab">现有用户管理</a></li>
+                <li role="presentation"><a href="#user-add" role="tab" data-toggle="tab">添加用户</a></li>
+            </ul>
+
+            <!-- manage user -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="user-manage">
+                    <br>
+                    <h3>分发人员</h3>
+                    <table id="dispatcher-table" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th class="no-sort">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <h3>处理人员</h3>
+                    <table id="worker-table" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>默认审核人</th>
+                            <th class="no-sort">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <h3>审核人员</h3>
+                    <table id="reviewer-table" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th class="no-sort">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <h3>系统管理员</h3>
+                    <table id="admin-table" class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th class="no-sort">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- add user -->
+                <div role="tabpanel" class="tab-pane fade" id="user-add">
+                    <br>
+                    <form id="add-user">
+                        <div class="form-group">
+                            <div class="prompt">
+                                <label for="account">用户名</label>
+                            </div>
+                            <div class="control">
+                                <input class="form-control" type="text" name="account" id="account" style="width:336px" placeholder="用户名" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="prompt">
+                                <label for="password">密码</label>
+                            </div>
+                            <div class="control">
+                                <input class="form-control" type="password" name="password" id="password" style="width:336px" placeholder="密码" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="prompt">
+                                <label for="realname">真实姓名</label>
+                            </div>
+                            <div class="control">
+                                <input class="form-control" type="text" name="realname" id="realname" style="width:336px" placeholder="真实姓名" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="prompt">
+                                <label for="gender">性别</label>
+                            </div>
+                            <div class="control">
+                                <select id="gender" name="gender">
+                                    <option value="0">未知</option>
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="prompt">
+                                <label for="role">角色</label>
+                            </div>
+                            <div class="control">
+                                <select id="role" name="role">
+                                    <option value="0">系统管理员</option>
+                                    <option value="1">分发人员</option>
+                                    <option value="2">处理人员</option>
+                                    <option value="3">审核人员</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="reviewer-group">
+                            <div class="prompt">
+                                <label for="reviewer">默认审核人</label>
+                            </div>
+                            <div class="control">
+                                <select id="reviewer" name="reviewer">
+                                    <option value="undefined">无</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="add-user-button" type="submit" class="button submit-button green-button button-with-icon" name="submit"><i class="fa fa-user-plus"></i> 添加用户</button>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div id="secondary" class="site-sidebar">
+        <ul class="site-navigation">
+            <li class="module-navigation-item"><a href="system.html"><i class="fa fa-lg fa-fw fa-gear"></i>&nbsp; 系统配置</a></li>
+            <li class="module-navigation-item current"><a href="user.html"><i class="fa fa-lg fa-fw fa-users"></i>&nbsp; 用户管理</a></li>
+            <li class="module-navigation-item"><a href="queue.html"><i class="fa fa-lg fa-fw fa-send"></i>&nbsp; 发送队列</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-user-edit" tabindex="-1" role="dialog" aria-labelledby="modal-user-edit">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding-bottom: 0">
+                <ul class="nav nav-tabs" role="tablist" style="margin-bottom: -1px">
+                    <li role="presentation" class="active"><a href="#edit-detail" role="tab" data-toggle="tab">编辑个人信息</a></li>
+                    <li role="presentation"><a href="#edit-password" role="tab" data-toggle="tab">修改密码</a></li>
+                </ul>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <!-- 修改个人信息 -->
+                    <div role="tabpanel" class="tab-pane fade in active" id="edit-detail">
+                        <form method="post" id="edit-detail-form" style="max-width: 450px">
+                            <div class="form-group">
+                                <div class="prompt">
+                                    <label for="edit-account">用户名</label>
+                                </div>
+                                <div class="control">
+                                    <div id="edit-account" class="form-control"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="prompt">
+                                    <label for="edit-realname">真实姓名</label>
+                                </div>
+                                <div class="control">
+                                    <input class="form-control" type="text" name="edit-realname" id="edit-realname" style="width:336px" placeholder="真实姓名" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="prompt">
+                                    <label for="edit-gender">性别</label>
+                                </div>
+                                <div class="control">
+                                    <select id="edit-gender" name="edit-gender">
+                                        <option value="0">未知</option>
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="prompt">
+                                    <label for="edit-role">角色</label>
+                                </div>
+                                <div class="control">
+                                    <select id="edit-role" name="edit-role">
+                                        <option value="0">系统管理员</option>
+                                        <option value="1">分发人员</option>
+                                        <option value="2">处理人员</option>
+                                        <option value="3">审核人员</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="edit-reviewer-group">
+                                <div class="prompt">
+                                    <label for="edit-reviewer">默认审核人</label>
+                                </div>
+                                <div class="control">
+                                    <select id="edit-reviewer" name="edit-reviewer">
+                                        <option value="undefined">无</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 修改密码 -->
+                    <div role="tabpanel" class="tab-pane fade" id="edit-password">
+                        <form method="post" id="edit-password-form" style="max-width: 450px">
+                            <div class="form-group">
+                                <div class="prompt">
+                                    <label for="password1">新密码</label>
+                                </div>
+                                <div class="control">
+                                    <input class="form-control" type="password" name="password1" id="password1" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="prompt">
+                                    <label for="password2">确认新密码</label>
+                                </div>
+                                <div class="control">
+                                    <input class="form-control" type="password" name="password2" id="password2" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button gray-button" data-dismiss="modal">关闭</button>&nbsp;
+                <button type="submit" class="button green-button" id="save-user-info">更新用户信息</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="colophon" class="site-footer">&copy; 2016 SRFMail Pro</footer>
+
+<script>
+    var dispatcherTable, workerTable, reviewerTable, adminTable;
+    var getBtns = function(user, name, gender, role, reviewer) {
+        if (reviewer === null || typeof(reviewer) === 'undefined') {
+            reviewer = 'undefined';
+        }
+        return '<button class="button xs-button blue-button change-user-info" onclick="onChangeUserInfo(\'' + user + '\',\'' + name + '\',\'' + gender + '\',\'' + role + '\',\'' + reviewer + '\');" data-toggle="modal" data-target="#modal-user-edit"><i class="fa fa-pencil fa-fw"></i>  编辑用户信息</button> ' +
+        '<button class="button xs-button red-button delete-account" onclick="deleteUser(\'' + user + '\')"><i class="fa fa-trash fa-fw"></i>  删除</button>';
+    };
+    var onChangeUserInfo = function(user, name, gender, role, reviewer) {
+        $('#edit-account').text(user);
+        $('#edit-realname').val(name);
+        $('#edit-gender').select2('val', gender);
+        $('#edit-role').select2('val', role);
+        $('#edit-reviewer').select2('val', reviewer);
+    };
+    var deleteUser = function(user) {
+        $.ajax(SB_HOST + '/api/system/user/remove', {
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                user: user
+            },
+            success: function(data) {
+                if (data.code != 0) {
+                    toastr.error(data.message, '错误');
+                } else {
+                    toastr.success('用户 ' + user + ' 已被移除。', '成功');
+                    var t;
+                    if (t = dispatcherTable.row('.user-' + user)) t.remove().draw();
+                    else if (t = reviewerTable.row('.user-' + user)) t.remove().draw();
+                    else if (t = workerTable.row('.user-' + user)) t.remove().draw();
+                    else if (t = adminTable.row('.user-' + user)) t.remove().draw();
+                }
+            },
+            error: function() {
+            },
+            complete: function() {
+            }
+        });
+    };
+    $(document).ready(function() {
+        // conditional reviewers
+        var updateRG = function(e) {
+            if ($('#role').val() == '2') {
+                $('#reviewer-group').fadeIn();
+            } else {
+                $('#reviewer-group').fadeOut();
+            }
+        };
+        updateRG();
+        $('#role').on('change', updateRG);
+
+        // conditional edit reviewers
+        var updateERG = function(e) {
+            if ($('#edit-role').val() == '2') {
+                $('#edit-reviewer-group').fadeIn();
+            } else {
+                $('#edit-reviewer-group').fadeOut();
+            }
+        };
+        updateERG();
+        $('#edit-role').on('change', updateERG);
+
+        // modal - save
+        $('#save-user-info').click(function(e) {
+            e.preventDefault();
+            // construct user info
+            var userInfo = {
+                user: $('#edit-account').text(),
+                name: $('#edit-realname').val(),
+                gender: $('#edit-gender').val(),
+                role: $('#edit-role').val(),
+                defaultReviewer: $('#edit-reviewer').val()
+            };
+            var password1 = $('#password1').val();
+            var password2 = $('#password2').val();
+            if (password1 !== '' || password2 !== '') {
+                if (password1 === password2) {
+                    userInfo.password = password1;
+                } else {
+                    toastr.error('两次密码输入不一致', '错误');
+                    return;
+                }
+            }
+
+            // disable button
+            var $saveButton = $('#save-user-info');
+            $saveButton.css('transition', 'none');
+            $saveButton.attr('disabled', 'disabled');
+            $saveButton.addClass('disabled-button');
+            $.ajax(SB_HOST + '/api/system/user/modify', {
+                method: 'POST',
+                dataType: 'json',
+                data: userInfo,
+                success: function(data) {
+                    if (data.code != 0) {
+                        toastr.error(data.message, '失败');
+                    } else {
+                        toastr.success('用户信息已更新', '成功');
+                        setTimeout(function() {
+                            window.location = window.location;
+                        }, 1000);
+                    }
+                },
+                error: function(data) {
+                    toastr.error('无法连接服务器','更新失败');
+                },
+                complete: function(data) {
+                    $saveButton.removeAttr('disabled');
+                    $saveButton.removeClass('disabled-button');
+                    $saveButton.css('transition', 'background-color ease .25s');
+                }
+            });
+        });
+
+        // populate tables
+        $.ajax(SB_HOST + '/api/system/user/list', {
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                //console.log(data);
+                if (data.code != 0) {
+                    toastr.error(data.message);
+                    return;
+                }
+                $('#loading-mask').hide();
+
+                // initialize data table
+                dispatcherTable = $("#dispatcher-table").DataTable({
+                    bPaginate: false,
+                    order: [[ 0, "desc" ]],
+                    aoColumnDefs: [{
+                        bSortable: false,
+                        aTargets: ['nosort']
+                    }]
+                });
+                workerTable = $("#worker-table").DataTable({
+                    bPaginate: false,
+                    order: [[ 0, "desc" ]],
+                    aoColumnDefs: [{
+                        bSortable: false,
+                        aTargets: ['nosort']
+                    }]
+                });
+                reviewerTable = $("#reviewer-table").DataTable({
+                    bPaginate: false,
+                    order: [[ 0, "desc" ]],
+                    aoColumnDefs: [{
+                        bSortable: false,
+                        aTargets: ['nosort']
+                    }]
+                });
+                adminTable = $("#admin-table").DataTable({
+                    bPaginate: false,
+                    order: [[ 0, "desc" ]],
+                    aoColumnDefs: [{
+                        bSortable: false,
+                        aTargets: ['nosort']
+                    }]
+                });
+
+                // fill in data
+                data.dispatcher = data.dispatcher || [];
+                data.dispatcher.forEach(function(dispatcher) {
+                    dispatcherTable.row.add([
+                        dispatcher.username,
+                        dispatcher.name,
+                        ['未知','男','女'][dispatcher.gender],
+                        getBtns(dispatcher.username, dispatcher.name, dispatcher.gender, '1')
+                    ]).draw().nodes().to$().addClass('user-' + dispatcher.username);
+                });
+                data.worker = data.worker || [];
+                data.worker.forEach(function(worker) {
+                    workerTable.row.add([
+                        worker.username,
+                        worker.name,
+                        ['未知','男','女'][worker.gender],
+                        worker.defaultReviewer ? worker.defaultReviewer.username : '无',
+                        getBtns(worker.username, worker.name, worker.gender, '2', worker.defaultReviewer ? worker.defaultReviewer.username : null)
+                    ]).draw().nodes().to$().addClass('user-' + worker.username);
+                });
+                data.reviewer = data.reviewer || [];
+                data.reviewer.forEach(function(reviewer) {
+                    reviewerTable.row.add([
+                        reviewer.username,
+                        reviewer.name,
+                        ['未知','男','女'][reviewer.gender],
+                        getBtns(reviewer.username, reviewer.name, reviewer.gender, '3')
+                    ]).draw().nodes().to$().addClass('user-' + reviewer.username);
+                    var option1 = $('<option></option>').text(reviewer.username).val(reviewer.username);
+                    var option2 = $('<option></option>').text(reviewer.username).val(reviewer.username);
+                    var $sel1 = $('#edit-reviewer');
+                    var $sel2 = $('#reviewer');
+                    option1.appendTo($sel1);
+                    option2.appendTo($sel2);
+                    $sel1.trigger('change');
+                    $sel2.trigger('change');
+                });
+                data.system = data.system || [];
+                data.system.forEach(function(admin) {
+                    adminTable.row.add([
+                        admin.username,
+                        admin.name,
+                        ['未知','男','女'][admin.gender],
+                        getBtns(admin.username, admin.name, admin.gender, '0')
+                    ]).draw().nodes().to$().addClass('user-' + admin.username);
+                });
+            },
+            error: function(jqXHR, status, err) {
+            }
+        });
+
+        $form = $('#add-user');
+        $form.validate();
+        $('#add-user-button').click(function(event) {
+            event.preventDefault();
+            if (!$form.valid()) {
+                toastr.error('请填写所有用户信息','尚未提交');
+                return;
+            }
+
+            $add = $('#add-user-button');
+            $add.css('transition', 'none');
+            $add.attr('disabled', 'disabled');
+            $add.addClass('disabled-button');
+
+            var userInfo = {
+                user: $('#account').val(),
+                password: $('#password').val(),
+                name: $('#realname').val(),
+                gender: $('#gender').val(),
+                role: $('#role').val(),
+                reviewer: $('#reviewer').val()
+            };
+
+            //console.log(userInfo);
+
+            $.ajax(SB_HOST + '/api/system/user/add', {
+                method: 'POST',
+                data: userInfo,
+                dataType: 'json',
+                success: function(data) {
+                    if (data.code == 0) {
+                        toastr.success('用户已添加', '成功');
+                        switch (userInfo.role) {
+                            case '0':
+                                adminTable.row.add([
+                                    userInfo.user,
+                                    userInfo.name,
+                                    ['未知','男','女'][userInfo.gender],
+                                    getBtns(userInfo.user, userInfo.name, userInfo.gender, userInfo.role, null)
+                                ]).draw();
+                                break;
+                            case '1':
+                                dispatcherTable.row.add([
+                                    userInfo.user,
+                                    userInfo.name,
+                                    ['未知','男','女'][userInfo.gender],
+                                    getBtns(userInfo.user, userInfo.name, userInfo.gender, userInfo.role, null)
+                                ]).draw();
+                                break;
+                            case '2':
+                                workerTable.row.add([
+                                    userInfo.user,
+                                    userInfo.name,
+                                    ['未知','男','女'][userInfo.gender],
+                                    userInfo.reviewer ? userInfo.reviewer : '无',
+                                    getBtns(userInfo.user, userInfo.name, userInfo.gender, userInfo.role, userInfo.reviewer)
+                                ]).draw();
+                                break;
+                            case '3':
+                                reviewerTable.row.add([
+                                    userInfo.user,
+                                    userInfo.name,
+                                    ['未知','男','女'][userInfo.gender],
+                                    getBtns(userInfo.user, userInfo.name, userInfo.gender, userInfo.role, null)
+                                ]).draw();
+                                break;
+                        }
+                    } else {
+                        toastr.error(data.message, '失败');
+                    }
+                },
+                error: function() {
+                    toastr.error('服务器异常','失败');
+                },
+                complete: function() {
+                    $add.removeAttr('disabled');
+                    $add.removeClass('disabled-button');
+                    $add.css('transition', 'background-color ease .25s');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

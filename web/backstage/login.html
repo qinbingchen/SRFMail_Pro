@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <link rel="stylesheet" href="includes/css/reset.css" media="all">
+    <link rel="stylesheet" href="includes/css/font-awesome.css" media="all">
+    <link rel="stylesheet" href="includes/plugins/icheck/grey.css" media="all">
+    <link rel="stylesheet" href="includes/css/components.css" media="all">
+    <link rel="stylesheet" href="includes/css/admin.css" media="all">
+    <script type="text/javascript" src="includes/plugins/jquery/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="includes/plugins/icheck/icheck.min.js"></script>
+    <script src="includes/common.js"></script>
+    <title>SRFMail Pro 管理后代登录</title>
+</head>
+<body class="login">
+<h1 class="site-title">SRFMail Pro 管理中心</h1>
+<div class="content">
+    <h2>登录您的帐号</h2>
+    <div id="main-error" class="error" style="display: none;">错误提示</div>
+    <form>
+        <div class="input">
+            <i class="fa fa-user"></i>
+            <input id="username" name="username" type="text" class="form-control" placeholder="用户名">
+        </div>
+        <div class="input">
+            <i class="fa fa-lock"></i>
+            <input id="password" name="password" type="password" class="form-control" placeholder="密码">
+        </div>
+        <button id="submit-button" class="button submit-button green-button">登录 &nbsp;<i class="fa fa-sign-in"></i></button>
+    </form>
+</div>
+<script>
+    $('#submit-button').click(function(e) {
+        e.preventDefault();
+        $error = $('#main-error');
+        $error.hide();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        if (username == '' || password == '') {
+            $error.text('请输入用户名和密码');
+            $error.show();
+            return;
+        }
+
+        $button = $('#submit-button');
+        $button.css('transition', 'none');
+        $button.attr('disabled', 'disabled');
+        $button.addClass('disabled-button');
+        $.ajax(SB_HOST + '/api/user/login', {
+            method: 'POST',
+            data: {
+                user: username,
+                password: password
+            },
+            success: function(data) {
+                if (data.code != 0) {
+                    $error.text(data.message);
+                    $error.show();
+                    return;
+                }
+
+                if (data.role != 0) {
+                    $error.text('您当前没有管理员权限。');
+                    $error.show();
+                    return;
+                }
+
+                window.location = 'index.html';
+            },
+            error: function() {
+                $error.text('网络连接错误。');
+                $error.show();
+            },
+            complete: function() {
+                $button.removeAttr('disabled');
+                $button.removeClass('disabled-button');
+                $button.css('transition', 'background-color ease .25s');
+            }
+        });
+    });
+</script>
+</body>
+</html>

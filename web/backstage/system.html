@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+
+    <!-- backstage kit style sheets -->
+    <link rel="stylesheet" href="includes/css/reset.css" media="all">
+    <link rel="stylesheet" href="includes/css/font-awesome.css" media="all">
+    <link rel="stylesheet" href="includes/plugins/toastr-notifications/toastr.css" media="all">
+    <link rel="stylesheet" href="includes/plugins/icheck/grey.css" media="all">
+    <link rel="stylesheet" href="includes/plugins/select2/select2.css" media="all">
+    <link rel="stylesheet" href="includes/css/select2-custom.css" media="all">
+    <link rel="stylesheet" href="includes/css/table.css" media="all">
+    <link rel="stylesheet" href="includes/css/editable.css" media="all">
+    <link rel="stylesheet" href="includes/css/tab.css" media="all">
+    <link rel="stylesheet" href="includes/css/components.css" media="all">
+    <link rel="stylesheet" href="includes/css/admin.css" media="all">
+
+    <!-- backstage kit scripts -->
+    <script src="includes/plugins/jquery/jquery-2.1.1.min.js"></script>
+    <script src="includes/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="includes/plugins/jquery-validation/additional-methods.min.js"></script>
+    <script src="includes/plugins/jquery-validation/messages_zh.js"></script>
+    <script src="includes/plugins/toastr-notifications/toastr.min.js"></script>
+    <script src="includes/plugins/icheck/icheck.min.js"></script>
+    <script src="includes/plugins/select2/select2.min.js"></script>
+    <script src="includes/plugins/select2/select2_locale_zh-CN.js"></script>
+    <script src="includes/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="includes/plugins/datatables/js/dataTables.bootstrap.js"></script>
+    <script src="includes/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="includes/plugins/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <script src="includes/plugins/bootstrap3-editable/js/bootstrap-datepicker.js"></script><!-- Optional -->
+    <script src="includes/plugins/bootstrap3-editable/js/bootstrap-datepicker.zh-CN.js"></script><!-- Optional -->
+    <script src="includes/common.js"></script>
+    <title>SRFMail Pro 管理中心</title>
+</head>
+<body>
+
+<header id="masthead" class="site-header">
+    <div class="inner">
+        <h1 class="site-title"><a class="site-title-link" href="index.html">SRFMail Pro 管理中心</a></h1>
+        <a href="#" class="log-out" title="Log Out" id="log-out"><i class="fa fa-sign-out"></i> 登出</a>
+    </div>
+</header>
+<div id="main" class="site-main">
+    <div class="content-area">
+        <div id="primary" class="site-content">
+            <div id="loading-mask" class="loading-mask" style="">
+                <div class="container">
+                    <i class="fa fa-2x fa-circle-o-notch fa-spin"></i>
+                </div>
+            </div>
+            <h2>系统配置</h2>
+            <form id="system-configuration">
+                <div class="form-group">
+                    <div class="prompt">
+                        <label for="account">邮箱地址</label>
+                    </div>
+                    <div class="control">
+                        <input class="form-control" type="text" name="account" id="account" style="width:336px" placeholder="邮箱地址" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="prompt">
+                        <label for="password">邮箱密码</label>
+                    </div>
+                    <div class="control">
+                        <input class="form-control" type="password" name="password" id="password" style="width:336px" placeholder="邮箱密码" required>
+                        <br>
+                        <input class="form-control" type="checkbox" id="show-password" onclick="toggleDisplayPassword();"><label for="show-password" onclick="toggleDisplayPassword();">显示明文密码</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="prompt">
+                        <label for="imapaddr">IMAP 服务器地址</label>
+                    </div>
+                    <div class="control">
+                        <input class="form-control" type="text" name="imapaddr" id="imapaddr" style="width:250px" placeholder="IMAP 服务器地址" required>
+                        <div style="display: inline-block">:</div>
+                        <input class="form-control" type="text" name="imapport" id="imapport" style="width:75px" placeholder="端口" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="prompt">
+                        <label for="smtpaddr">SMTP 服务器地址</label>
+                    </div>
+                    <div class="control">
+                        <input class="form-control" type="text" name="smtpaddr" id="smtpaddr" style="width:250px" placeholder="SMTP 服务器地址" required>
+                        <div style="display: inline-block">:</div>
+                        <input class="form-control" type="text" name="smtpport" id="smtpport" style="width:75px" placeholder="端口" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="prompt">
+                        <label for="sendname">发件姓名</label>
+                    </div>
+                    <div class="control">
+                        <input class="form-control" type="text" name="sendname" id="sendname" style="width:336px" placeholder="发送邮件时显示的姓名" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="prompt">
+                        <label for="sendfrom">发件地址</label>
+                    </div>
+                    <div class="control">
+                        <input class="form-control" type="text" name="sendfrom" id="sendfrom" style="width:336px" placeholder="发送邮件时显示的地址" required>
+                    </div>
+                </div>
+                <button id="update-button" type="submit" class="button submit-button green-button button-with-icon" name="update-configuration"><i class="fa fa-check"></i> 更新设置</button>
+            </form>
+        </div>
+    </div>
+    <div id="secondary" class="site-sidebar">
+        <ul class="site-navigation">
+            <li class="module-navigation-item current"><a href="system.html"><i class="fa fa-lg fa-fw fa-gear"></i>&nbsp; 系统配置</a></li>
+            <li class="module-navigation-item"><a href="user.html"><i class="fa fa-lg fa-fw fa-users"></i>&nbsp; 用户管理</a></li>
+            <li class="module-navigation-item"><a href="queue.html"><i class="fa fa-lg fa-fw fa-send"></i>&nbsp; 发送队列</a></li>
+        </ul>
+    </div>
+</div>
+<footer id="colophon" class="site-footer">&copy; 2016 SRFMail Pro</footer>
+
+<script>
+    var toggleDisplayPassword = function() {
+        var display = $('#show-password').is(':checked');
+        if (!display) {
+            $('#password').attr('type', 'text');
+        } else {
+            $('#password').attr('type', 'password');
+        }
+    };
+
+    $(document).ready(function() {
+        var $form = $('#system-configuration');
+        $form.validate();
+
+        $('#update-button').click(function(event) {
+            event.preventDefault();
+            if (!$form.valid()) {
+                toastr.error('请填写所有配置项','尚未提交');
+                return;
+            }
+            $update = $('#update-button');
+            $update.css('transition', 'none');
+            $update.attr('disabled', 'disabled');
+            $update.addClass('disabled-button');
+            $.ajax(SB_HOST + '/api/system/settings', {
+                method: 'POST',
+                data: {
+                    mail: {
+                        username: $('#account').val(),
+                        password: $('#password').val(),
+                        imap: {
+                            host: $('#imapaddr').val(),
+                            port: $('#imapport').val()
+                        },
+                        smtp: {
+                            host: $('#smtpaddr').val(),
+                            port: $('#smtpport').val()
+                        }
+                    },
+                    sender: {
+                        name: $('#sendname').val(),
+                        address: $('#sendfrom').val()
+                    }
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.code == 0) {
+                        toastr.success('系统配置已更新', '成功');
+                    } else {
+                        toastr.error(data.message, '失败');
+                    }
+                },
+                error: function() {
+                    toastr.error('服务器异常','失败');
+                },
+                complete: function() {
+                    $update.removeAttr('disabled');
+                    $update.removeClass('disabled-button');
+                    $update.css('transition', 'background-color ease .25s');
+                }
+            });
+        });
+
+        $.ajax(SB_HOST + '/api/system/settings', {
+            method: 'GET',
+            dataType: 'json',
+            success: function(data, status, jqXHR) {
+                if (data.code != 0) {
+                    toastr.error(data.message);
+                    return;
+                }
+                $('#loading-mask').hide();
+                //console.log(data);
+                data.mail = data.mail || {};
+                data.sender = data.sender || {};
+                data.mail.smtp = data.mail.smtp || {};
+                data.mail.imap = data.mail.imap || {};
+                $('#account').val(data.mail.username || '');
+                $('#password').val(data.mail.password || '');
+                $('#imapaddr').val(data.mail.imap.host || '');
+                $('#smtpaddr').val(data.mail.smtp.host || '');
+                $('#imapport').val(data.mail.imap.port || '');
+                $('#smtpport').val(data.mail.smtp.port || '');
+                $('#sendname').val(data.sender.name || '');
+                $('#sendfrom').val(data.sender.address || '');
+            },
+            error: function(jqXHR, status, err) {
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
