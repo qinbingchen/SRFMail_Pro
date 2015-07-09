@@ -114,7 +114,7 @@
       }
 
       .mail.selected {
-        background-color: #2b91e3;
+        background-color: #2b91e3 !important;
         color: #fff;
         .right-section {
           .info {
@@ -131,6 +131,10 @@
             color: #fff;
           }
         }
+      }
+
+      .mail.highlighted {
+        background-color: #fcf8e3;;
       }
     }
   }
