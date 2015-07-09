@@ -283,43 +283,80 @@ var set_all_label = function(req, res, next){
             + ' Labels: ' + req.body.labels
         });
     }
-    Label.model.remove({}, function(err){
-        if(err) {
-            return res.json({
-                code: 1,
-                message: 'remove failed'
-            })
+    var newLabels = [];
+    async.each(labels, function (label, callback) {
+        if(!label.name){
+            callback(1);
+            return;
         }
-        var newLabels = [];
-        labels.forEach(function(label) {
-            if(!label.name){
+        if(!label.color || !is_valid_color(label.color)){
+            label.color = '#C0C0C0'
+        }
+        Label.model.findOne({name: label.name},function(err, db_label){
+            if (err) {
+                callback();
                 return;
             }
-            if(!label.color || !is_valid_color(label.color)){
-                label.color = '#C0C0C0'
-            }
-            newLabels.push({
-                name: label.name,
-                color: label.color
-            });
-        });
-        if(newLabels.length < labels.length) {
-            return res.json({
-                code: 1,
-                message: 'invalid label name'
-            });
-        }
-        Label.model.create(newLabels, function(err) {
-            if(err) {
-                return res.json({
-                    code: 1,
-                    message: 'Internal error'
+            if(db_label){
+                db_label.color = label.color;
+                db_label.save(function(err){
+                    if (err) {
+                        callback(1);
+                        return;
+                    }
+                })
+            }else{
+                newLabels.push({
+                    name: label.name,
+                    color: label.color
                 });
             }
-            res.json({
-                code: 0,
-                message: 'success'
-            });
+            callback();
+            return;
+        })
+    }, function(err){
+        if(err){
+            return res.json({
+                code: 1,
+                message: 'label filter failed'
+            })
+        }
+        Label.model.find({}, function(err, db_labels){
+            async.each(db_labels, function(label, callback){
+                var find = 0;
+                for(var i = 0 ; i < labels.length ; i ++){
+                    if(label.name == labels[i].name){
+                        find = 1;
+                        break;
+                    }
+                }
+                if(find == 0){
+                    label.remove(function(err){
+                        return callback(err);
+                    });
+                }else{
+                    return callback();
+                }
+            }, function(err){
+                if(err) {
+                    return res.json({
+                        code: 1,
+                        message: 'find failed'
+                    });
+                }
+                Label.model.create(newLabels, function(err) {
+                    if(err) {
+                        return res.json({
+                            code: 1,
+                            message: 'Internal error'
+                        });
+                    }
+                    res.json({
+                        code: 0,
+                        message: 'success'
+                    });
+                })
+            })
         });
     });
 };
