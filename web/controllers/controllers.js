@@ -166,9 +166,9 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
         $scope.submit = function () {
            $scope.labels_updated=new Object({"labels":$scope.exist_labels});
             var url_labels_update = "/api/action/dispatcher/set_all_labels";
-            alert( JSON.stringify($scope.exist_labels));
+            alert( JSON.stringify($scope.labels_updated));
         $http.post(url_labels_update, {
-                            labels:JSON.stringify($scope.labels_updated)
+                            labels: JSON.stringify($scope.labels_updated)
                         }).success(function (data, status, headers, config) {
                             if(data.code!=0)
                             {
