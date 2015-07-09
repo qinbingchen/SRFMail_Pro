@@ -244,6 +244,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                                 $scope.load_mail_list();
                                 $scope.dismiss_modal();
                             } else {
+                                console.log(data.code + "  " + data.message);
                                 toastr.error("发送失败，请重试", "");
                             }
                         }).error(function () {
@@ -344,10 +345,45 @@ SRFMailProControllers.controller("ForwardPopoverController", ["$scope", "$http",
         $scope.partial_load_status.popover_forward = true;
         $scope.check_partial_load_status();
 
+
+        $http.get("/api/user/list_workers")
+            .success(function (data) {
+                $scope.forward_worker_list = data.workers;
+
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+
+
         $scope.$on("broadcast_show_forward", function () {
             $scope.position_popover("forward");
+
+
+            $("select#select-worker").select2({
+                placeholder: "选择处理人...",
+                data: $scope.forward_worker_list
+            });
             $scope.show_popover = true;
         });
+
+
+        $scope.confirm_fw = function () {
+
+            $http.post('/api/action/worker/redirect', {
+                'id': $scope.selected_mail_id,
+                'user': $("#select-worker").select2("val")
+            }).success(function () {
+                toastr.success('转发成功', '');
+                $scope.load_mail_list();
+
+
+            }).error(function () {
+                toastr.error('转发失败，请重试', '');
+            });
+
+            $scope.show_popover = false;
+        };
+
     }
 ]);
 
@@ -360,5 +396,20 @@ SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", 
             $scope.position_popover("reject");
             $scope.show_popover = true;
         });
+
+
+        $scope.review_refuse_confirm = function () {
+            $scope.show_popover = false;
+            $http.post("/api/action/reviewer/reject", {
+                id: mailServices.selected_mail_id,
+                message: $scope.review_comment_textarea
+            }).success(function () {
+                toastr.success('成功退回', '');
+                $scope.load_mail_list();
+            }).error(function () {
+                toastr.error('请重试', '');
+            });
+
+        };
     }
 ]);

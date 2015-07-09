@@ -32,8 +32,11 @@
         <div class="outer-arrow"></div>
         <div class="inner-arrow"></div>
         <div class="body">
+            <select data-placeholder="选择处理人" class="select-workers" id="select-worker">
+            </select>
+
             <button class="btn right" ng-click="show_popover = false">取消</button>
-            <button class="btn right" ng-click="submit()">确认</button>
+            <button class="btn right" ng-click="confirm_fw()">确认</button>
         </div>
     </div>
 </div>
@@ -43,8 +46,12 @@
         <div class="outer-arrow"></div>
         <div class="inner-arrow"></div>
         <div class="body">
+            <label>拒绝意见</label>
+            <br/>
+            <textarea ng-model="review_comment_textarea"></textarea>
+            <br/>
             <button class="btn right" ng-click="show_popover = false">取消</button>
-            <button class="btn right" ng-click="submit()">确认</button>
+            <button class="btn right" ng-click="review_refuse_confirm()">确认</button>
         </div>
     </div>
 </div>
