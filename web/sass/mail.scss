@@ -35,9 +35,58 @@
     .mail {
       padding: 10px 20px;
 
+      .divider {
+        background: #cfcfd3;
+        height: 4px;
+        width: 100%;
+        margin: 10px 0 10px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        margin: 10px 0;
+        color: #333;
+      }
+
+      .section-review {
+        .reviewer {
+          margin-bottom: 10px;
+          padding: 5px 10px;
+          color: #8a6d3b;
+          background-color: #fcf8e3;
+          border: 1px solid #faebcc;
+        }
+
+        .worker {
+          margin-bottom: 10px;
+          padding: 5px 10px;
+          color: #31708f;
+          background-color: #d9edf7;
+          border: 1px solid #bce8f1;
+        }
+      }
+
       .section-info {
         border-bottom: 1px solid #cfcfd3;
         padding-bottom: 10px;
+
+        .status {
+          margin-left: 10px;
+          padding: 5px 8px 3px;
+          color: #fff;
+
+          i.fa {
+            margin-right: 5px;
+          }
+        }
+
+        .readonly {
+          background-color: #888;
+        }
+
+        .urged {
+          background-color: #fa9751;
+        }
 
         .subject {
           font-size: 27px;
@@ -54,8 +103,15 @@
           }
         }
 
+        .sender,
+        .recipient {
+          margin-top: 6px;
+          font-size: 15px;
+        }
+
         .label-list {
-          margin-top: 8px;
+          margin-top: 6px;
+          font-size: 15px;
 
           .label {
             display: inline-block;
@@ -67,20 +123,12 @@
             color: #fff;
           }
         }
-
-        .sender {
-          margin-top: 6px;
-          font-size: 15px;
-        }
       }
 
       .original-income {
         padding: 10px 20px;
         border-top: 1px solid #cfcfd3;
         color: #888;
-      }
-
-      .operation-history-container {
       }
     }
 

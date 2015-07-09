@@ -40,28 +40,25 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     $scope.deadline_time = "";
                     $scope.selected_mail = mailServices.selected_mail;
                     if ($scope.selected_mail_id != "" && $scope.selected_mail.operations.length > 0) {
-                        var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
-                        sessionHistory.setOperations(mailServices.selected_mail.operations, {});
-                        sessionHistory.draw();
+                        //var sessionHistory = new SessionHistoryKit.SessionHistory("operation-history");
+                        //sessionHistory.setOperations(mailServices.selected_mail.operations, {});
+                        //sessionHistory.draw();
                     }
                     if ($scope.selected_mail_id != "") {
                         if ($scope.selected_mail.income) {
                             var time = new Date($scope.selected_mail.income.time);
-                            var month = time.getMonth() + 1;
-                            $scope.income_time = time.getFullYear() + "/" + month + "/" + time.getDate()
-                                + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+                            $scope.income_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                                + " " + time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
+                            if ($scope.selected_mail.income.deadline) {
+                                var time = new Date($scope.selected_mail.income.deadline);
+                                $scope.deadline_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                                    + " " + time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
+                            }
                         }
                         if ($scope.selected_mail.reply) {
                             var time = new Date($scope.selected_mail.reply.time);
-                            var month = time.getMonth() + 1;
-                            $scope.reply_time = time.getFullYear() + "/" + month + "/" + time.getDate()
-                                + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
-                        }
-                        if ($scope.selected_mail.income.deadline) {
-                            var time = new Date($scope.selected_mail.income.deadline);
-                            var month = time.getMonth() + 1;
-                            $scope.deadline_time = time.getFullYear() + "/" + month + "/" + time.getDate()
-                                + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+                            $scope.reply_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                                + " " + time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2);
                         }
                     }
                 },

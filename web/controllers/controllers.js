@@ -40,7 +40,6 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 },
                 function () {}
             );
-
         };
 
         $scope.load_mail_list = function () {
@@ -218,7 +217,6 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
         
         setTimeout(function()
         {
-            
             $scope.exist_labels[0]=new Object();
             $scope.exist_labels[0].name=$scope.theme_labels[0].name;
             $scope.exist_labels[0].color=$scope.theme_labels[0].color;
@@ -264,8 +262,6 @@ $('.tag').each(function()
     
 
     }]);
-    
-
 
 SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
     function ($scope, $http, $cookies, userServices, mailServices) {

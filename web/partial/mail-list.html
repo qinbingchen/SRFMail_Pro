@@ -12,11 +12,11 @@
                 ng-click="select_mail(mail)">
                 <div class="left-section">
                     <i class="fa fa-clock-o fa-fw urged" ng-show="mail.deadline && current_user_type == 2"></i>
-                    <i class="fa fa-lock fa-fw readonly" ng-show="mail.readonly"></i>
+                    <i class="fa fa-lock fa-fw readonly" ng-show="mail.readonly && current_user_type == 2"></i>
                 </div><div class="right-section">
                     <div class="info">
                         <div class="sender">{{mail.reply ? mail.reply.from[0].name : mail.income.from[0].name}}</div>
-                        <div class="time">{{mail.reply ? mail.reply.time : mail.income.time}}</div>
+                        <div class="time">{{mail.display_time}}</div>
                     </div>
                     <div class="subject">{{mail.reply ? mail.reply.subject : mail.income.subject}}</div>
                     <div class="label-list" ng-if="mail.income.labels.length > 0">

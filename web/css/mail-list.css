@@ -43,7 +43,7 @@
           .mail-list-section .body .mail-list .mail .left-section i.fa.urged {
             color: #fa9751; }
           .mail-list-section .body .mail-list .mail .left-section i.fa.readonly {
-            color: #fa9751; }
+            color: #888; }
         .mail-list-section .body .mail-list .mail .right-section {
           display: inline-block;
           vertical-align: top;
