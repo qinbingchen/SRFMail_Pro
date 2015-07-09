@@ -7,7 +7,7 @@ var UserSchema = new schema({
     name: { type: String },
     gender: { type: Number },
     role: { type: Number },
-    defaultReviewer: { type: Schema.ObjectId, ref: 'User' }
+    defaultReviewer: { type: schema.ObjectId, ref: 'User' }
 });
 
 exports.model = mongoose.model('User', UserSchema);
