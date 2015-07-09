@@ -385,12 +385,14 @@ var set_label = function(req, res, next) {
             });
         }
 
+        /*
         if (session.status != Session.Status.New) {
             return res.json({
                 code: 1,
                 message: "Error: Couldn't set labels for session with status other than 0 (new). The session's status is " + session.status + ". Only new (not yet dispatched) sessions can be set a label. Please, check your session ID."
             });
         }
+        */
 
         labels = labels.getUnique();
         var labels_id = [];

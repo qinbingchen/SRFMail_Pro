@@ -96,9 +96,11 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
             this.selected_category = category;
             this.filter_mail_list();
 
-            console.log(this.filtered_mail_list);
             this.filtered_mail_list.sort(function(aMail, anotherMail) {
-                return aMail.effectiveDate < anotherMail.effectiveDate;
+                if (aMail.effectiveDate.getTime() == anotherMail.effectiveDate.getTime()) {
+                    return 0;
+                }
+                return aMail.effectiveDate.getTime() < anotherMail.effectiveDate.getTime() ? 1 : -1;
             });
         };
 
