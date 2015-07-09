@@ -173,6 +173,8 @@ var detail = function(req, res, next) {
 
 var list = function(req, res, next){
     var ret = {
+        code: 0,
+        message: 'success',
         count: 0,
         sessions: []
     };
