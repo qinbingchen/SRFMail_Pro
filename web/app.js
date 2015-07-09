@@ -70,7 +70,6 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
         this.load_mail_list = function (success, error) {
             $http.get("/api/session/get_list")
                 .success(function (data, status, headers, config) {
-                    $('#loading-mask').hide();
                     that.mail_list = data["sessions"];
                     that.mail_list.map(function (mail) {
                         var effectiveDate = new Date();
