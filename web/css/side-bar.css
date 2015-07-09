@@ -10,7 +10,12 @@
     line-height: 44px;
     padding-left: 20px;
     border-bottom: 1px solid #a6c4db;
-    font-family: "Open Sans Semibold"; }
+    font-family: "Open Sans Semibold";
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
   .side-bar-section .mail-category-list {
     margin: 0;
     padding: 0;
@@ -22,7 +27,12 @@
       list-style: none;
       border-top: 1px solid #e4f2fc;
       border-bottom: 1px solid #cde3f1;
-      color: #465d6f; }
+      color: #465d6f;
+      cursor: default;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none; }
     .side-bar-section .mail-category-list .mail-category:first-child.selected {
       border-top: 1px solid #cae8fb; }
     .side-bar-section .mail-category-list .before-selected {

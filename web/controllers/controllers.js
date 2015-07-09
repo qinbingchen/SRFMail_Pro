@@ -163,8 +163,12 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $("textarea#compose-content").redactor({
                 lang: "zh_cn",
                 imageUpload: "/api/attachments/upload",
-                imageUploadCallback: function(image, json) {
+                fileUpload: "/api/attachments/upload",
+                imageUploadCallback: function (image, json) {
                     $(image).attr("src", "/api/attachments/download?id=" + json.file);
+                },
+                fileUploadCallback: function (link, json) {
+                    $(link).attr("href", "/api/attachments/download?id=" + json.file);
                 }
             });
 
@@ -177,7 +181,6 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.need_review = false;
             $scope.reviewer = "";
             $scope.content = mailServices.selected_mail.income.html;
-            $("select#reviewer").select2("destroy");
         });
 
         $scope.$on("broadcast_show_edit", function () {

@@ -245,6 +245,6 @@ textarea {
 
 .redactor-box {
   margin: 0; }
-
-.redactor-editor {
-  height: calc(100vh - 310px) !important; }
+  .redactor-box .redactor-editor {
+    height: calc(100vh - 310px) !important;
+    max-height: calc(100vh - 310px) !important; }
