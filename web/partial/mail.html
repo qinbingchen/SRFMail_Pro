@@ -68,25 +68,29 @@
 
 
         <div class="mail" ng-if="selected_mail_id != ''">
-            <section class="section-mail-title">
-                <div class="info" ng-if="selected_mail.reply">
-                    <div class="subject">{{selected_mail.reply.subject}}</div>
-                    <div class="time mail-field"><span class="secondary">时间：</span>{{reply_time}}</div>
-                    <div class="recipient mail-field"><span class="secondary">收件人：</span> {{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
-                </div>
-                <div class="info" ng-if="!selected_mail.reply">
-                    <div class="subject">{{selected_mail.income.subject}}</div>
-                    <div class="time mail-field"><span class="secondary">时间：</span>{{income_time}}<span class="deadline">（最晚处理日期：2020年12月1日 23:59:59）</span> </div>
-                    <div class="sender mail-field"><span class="secondary">发件人：</span> {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
-                    <div class="recipient mail-field"><span class="secondary">收件人：</span> {{selected_mail.income.to[0].name}} <{{selected_mail.income.to[0].address}}></div>
-                    <div class="labels"><span class="secondary">标签：</span> <span class="label">label1</span><span class="label">label2</span></div>
-                    <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
-                </div>
+
+            <section class="section-info" ng-if="selected_mail.reply">
+                <div class="subject">{{selected_mail.reply.subject}}</div>
+                <div class="time"><span class="">时间：</span>{{reply_time}}</div>
+                <div class="recipient"><span class="">收件人：</span> {{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
             </section>
+
+            <section class="section-info" ng-if="!selected_mail.reply">
+                <div class="subject">{{selected_mail.income.subject}}</div>
+                <div class="time">
+                    时间：{{income_time}}
+                    <span class="deadline" ng-if="selected_mail.income.deadline">（最晚处理时间：{{deadline_time}}）</span>
+                </div>
+                <div class="sender"><span class="">发件人：</span> {{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
+                <div class="recipient"><span class="">收件人：</span> {{selected_mail.income.to[0].name}} <{{selected_mail.income.to[0].address}}></div>
+                <div class="labels"><span class="">标签：</span> <span class="label">label1</span><span class="label">label2</span></div>
+            </section>
+
             <section class="section-content">
                 <div class="content" ng-bind-html="selected_mail.reply.html" ng-if="selected_mail.reply"></div>
                 <div class="content" ng-bind-html="selected_mail.income.html" ng-if="!selected_mail.reply"></div>
             </section>
+
             <section class="section-income">
                 <div class="original-income" ng-if="selected_mail.reply && selected_mail.income">
                     <div class="divider"></div>
@@ -95,7 +99,6 @@
                     <div class="time">时间：{{income_time}}</div>
                     <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
                     <div class="content" ng-bind-html="selected_mail.income.html"></div>
-                    <!--<div class="deadline" ng-show="deadline_time">时限：{{deadline_time}}</div>-->
                 </div>
             </section>
             <section class="section-history">
@@ -112,7 +115,7 @@
                     color: #888
                 }
                 .subject {
-                    margin: 0 0 10px;
+                    /*margin: 0 0 10px;*/
                 }
                 .mail-field {
                     margin-top: 0 !important;
