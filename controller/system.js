@@ -1,4 +1,5 @@
 var System = require('../model').system;
+var Session = require('../model').session;
 var User = require('../model').user;
 var Log = require('../lib/log')();
 var async = require('async');
@@ -395,12 +396,24 @@ router.use(function(req, res, next) {
 });
 
 var resend = function(req, res, next) {
-    var id = req.query.id;
+    var id = req.body.id;
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return res.json({
+            code: 1,
+            message: 'Invalid session id'
+        });
+    }
     Session.model.findById(mongoose.Types.ObjectId(id), function(err, session) {
         if(err) {
             return res.json({
                 code: 1,
                 message: err.toString()
+            });
+        }
+        if(!session) {
+            return res.json({
+                code: 1,
+                message: 'Session not found'
             });
         }
         client.LPUSH(['MailQueue', session.reply.toString()], function(err) {
