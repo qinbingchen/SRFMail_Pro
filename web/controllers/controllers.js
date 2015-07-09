@@ -44,7 +44,10 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 function() {
                     $scope.load_mail_list();
                 },
-                function() {}
+                function() {
+                    toastr.error("登陆失败");
+                    $scope.show_login_loader = false;
+                }
             );
         };
 
@@ -53,7 +56,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 function () {
                     location.reload();
                 },
-                function () {}
+                function () {
+                    location.reload();
+                }
             );
         };
 
@@ -546,37 +551,39 @@ SRFMailProControllers.controller("ForwardPopoverController", ["$scope", "$http",
         $scope.partial_load_status.popover_forward = true;
         $scope.check_partial_load_status();
 
-
-        $http.get("/api/user/list_workers")
-            .success(function (data) {
-                $scope.forward_worker_list = data.workers;
-            }).error(function (data, status, headers, config) {
-                console.log(data);
-            });
-
         $scope.$on("broadcast_show_forward", function () {
             $scope.position_popover("forward");
-            $("select#select-worker").select2({
-                placeholder: "选择处理人...",
-                data: $scope.forward_worker_list
-            });
+            var $forward_select = $("select#forward-select");
+            if ($forward_select.hasClass("select2-hidden-accessible")) {
+                $forward_select.select2("val", "");
+            } else {
+                $forward_select.select2({
+                    placeholder: "选择处理人...",
+                    data: $scope.worker_list
+                });
+            }
             $scope.show_popover = true;
         });
 
-
-        $scope.confirm_fw = function () {
+        $scope.submit = function () {
             $http.post('/api/action/worker/redirect', {
-                'id': $scope.selected_mail_id,
-                'user': $("#select-worker").select2("val")
+                id: mailServices.selected_mail_id,
+                user: $("#forward-select").select2("val")
             }).success(function () {
-                toastr.success('转发成功', '');
-                $scope.load_mail_list();
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    $scope.show_popover = false;
+                    toastr.success("转发成功");
+                } else {
+                    console.log(data);
+                    toastr.error("转发失败");
+                }
             }).error(function () {
-                toastr.error('转发失败，请重试', '');
+                console.log(data);
+                toastr.error("转发失败");
             });
             $scope.show_popover = false;
         };
-
     }
 ]);
 
@@ -594,12 +601,19 @@ SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", 
             $scope.show_popover = false;
             $http.post("/api/action/reviewer/reject", {
                 id: mailServices.selected_mail_id,
-                message: $scope.review_comment_textarea
+                message: $scope.review_comment
             }).success(function () {
-                toastr.success('成功退回', '');
-                $scope.load_mail_list();
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    $scope.show_popover = false;
+                    toastr.success("转发成功");
+                } else {
+                    console.log(data);
+                    toastr.error("转发失败");
+                }
             }).error(function () {
-                toastr.error('请重试', '');
+                console.log(data);
+                toastr.error("转发失败");
             });
 
         };

@@ -8,9 +8,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.current_user_display_name = userServices.current_user_display_name;
         $scope.selected_category = mailServices.selected_category;
         $scope.selected_mail_id = mailServices.selected_mail_id;
-        $scope.fw_show = false;
-        $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
-        $scope.review_pass_flag = false;
 
         $scope.$on("broadcast_mail_did_select", function () {
             $scope.show_mail_loader = true;
@@ -75,13 +72,14 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
-                    toastr.success("成功提醒");
+                    toastr.success("提醒成功");
                 } else {
                     console.log(data);
+                    toastr.error("提醒失败");
                 }
             }).error(function (data, status, headers, config) {
                 console.log(data);
-                toastr.error('提醒失败，请重试', '');
+                toastr.error("提醒失败");
             });
         };
 
@@ -102,48 +100,43 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             });
         };
 
+        $scope.send_back = function () {
+            $http.post('/api/action/worker/redirect', {
+                id: mailServices.selected_mail_id
+            }).success(function () {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("退回成功");
+                } else {
+                    console.log(data);
+                    toastr.error("退回失败");
+                }
+            }).error(function () {
+                console.log(data);
+                toastr.error("退回失败");
+            });
+        };
+
         $scope.review_pass = function () {
-            $scope.review_pass_flag = true;
             if ($scope.review_reject_show) {
                 $scope.review_reject_show = false;
             }
             $http.post("/api/action/reviewer/pass", {
                 id: mailServices.selected_mail_id
             }).success(function (data, status, headers, config) {
-                toastr.success('审核通过', '');
-                $scope.load_mail_list();
-                $scope.review_pass_flag = false;
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("审核通过");
+                } else {
+                    console.log(data);
+                    toastr.error("出现错误");
+                }
             }).error(function () {
-                toastr.error('请重试', '');
-                $scope.review_pass_flag = false;
+                console.log(data);
+                toastr.error("出现错误");
             });
 
         };
-
-        $scope.review_refuse = function () {
-            $scope.review_reject_show = !$scope.review_reject_show;
-        };
-
-        $scope.review_refuse_confirm = function () {
-            $scope.review_reject_show = false;
-            $http.post("/api/action/reviewer/reject", {
-                id: mailServices.selected_mail_id,
-                message: $scope.review_comment_textarea
-            }).success(function () {
-                toastr.success('成功退回', '');
-                $scope.load_mail_list();
-            }).error(function () {
-                toastr.error('请重试', '');
-            });
-
-        };
-        $scope.review_refuse_cancel = function () {
-            $scope.review_reject_show = false;
-        };
-
-
-
-
 
         $scope.show_compose = function () {
             $scope.$emit("emit_show_compose");
@@ -155,21 +148,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
         $scope.show_edit = function () {
             $scope.$emit("emit_show_edit");
-        };
-
-        $scope.worker_sendback = function () {
-            $scope.work_sendback_flag = !$scope.work_sendback_flag;
-
-            $http.post('/api/action/worker/redirect', {
-                'id': $scope.selected_mail_id
-            }).success(function () {
-                toastr.success('成功退回', '');
-                $scope.load_mail_list();
-                $scope.work_sendback_flag = !$scope.work_sendback_flag;
-            }).error(function () {
-                toastr.error('退回失败，请重试', '');
-                $scope.work_sendback_flag = !$scope.work_sendback_flag;
-            });
         };
 
     }]);

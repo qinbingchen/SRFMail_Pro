@@ -14,8 +14,6 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
         this.current_user_display_name = $cookies.get("user_display_name") == undefined ? "" : $cookies.get("user_display_name");
 
         this.login = function (username, password, success, error) {
-            $cookies.put("user_name", username);
-            this.current_user_name = username;
             $http.post("/api/user/login", {
                 user: username,
                 password: password
@@ -23,9 +21,11 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
                 if (data.code == 0) {
                     $cookies.put("user_type", data.role);
                     $cookies.put("user_id", data.id);
+                    $cookies.put("user_name", username);
                     $cookies.put("user_display_name", data.name);
                     that.current_user_type = data.role;
                     that.current_user_id = data.id;
+                    that.current_user_name = username;
                     that.current_user_display_name = data.name;
                     success();
                 } else {
@@ -39,14 +39,14 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
         };
 
         this.logout = function (success, error) {
+            $cookies.remove("connect.sid");
+            $cookies.remove("user_type");
+            $cookies.remove("user_id");
+            $cookies.remove("user_name");
+            $cookies.remove("user_display_name");
             $http.post("/api/user/logout")
                 .success(function (data, status, headers, config) {
                     if (data.code == 0) {
-                        $cookies.remove("connect.sid");
-                        $cookies.remove("user_type");
-                        $cookies.remove("user_id");
-                        $cookies.remove("user_name");
-                        $cookies.remove("user_display_name");
                         success();
                     } else {
                         console.log(data);
@@ -144,7 +144,7 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
                             switch (that.selected_category.name) {
                                 case "pending":
                                     return mail.status == STATUS.WAITINGFORREVIEW;
-                                case "sent":
+                                case "passed":
                                     return mail.status == STATUS.WAITINGFORSEND || mail.status == STATUS.SUCCESS;
                                 case "rejected":
                                     return mail.status == STATUS.DISPATCHED;
