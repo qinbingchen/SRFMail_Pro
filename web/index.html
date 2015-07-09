@@ -66,10 +66,34 @@
     <link href="css/pick-color.css" rel="stylesheet" media="all" />
     
     <title>SRF Mail Pro</title>
+    <style>
+        .loading-mask {
+            background: white;
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            opacity:0.8;
+            z-index: 99999;
+        }
+
+        .loading-mask .container {
+            left: 50%;
+            left: calc(50% - 28px);
+            top: 50vh;
+            top: calc(50vh - 50px);
+            position: relative;
+        }
+    </style>
 </head>
 
 <body ng-controller="GlobalController">
-
+<div id="loading-mask" class="loading-mask" style="">
+    <div class="container">
+        <i class="fa fa-2x fa-circle-o-notch fa-spin"></i>
+    </div>
+</div>
 <ng-include src="'partial/side-bar.html'">
 </ng-include><ng-include src="'partial/mail-list.html'">
 </ng-include><ng-include src="'partial/mail.html'">
