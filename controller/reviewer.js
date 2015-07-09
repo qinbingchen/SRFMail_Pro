@@ -111,16 +111,36 @@ var pass = function(req, res, next) {
         });
     }
 
+    try {
+        attachments = JSON.parse(attachments);
+    } catch (e) {
+        return res.json({
+            code: 1,
+            message: 'Error: Invalid JSON received, please ensure that the attachments parameters hold valid JSON string representation.'
+            + ' ParseError: ' + e.toString()
+            + ' Attachments: ' + attachments
+        });
+    }
+
     async.series([
         function(callback) {
             Session.model.findById(mongoose.Types.ObjectId(sessionId), function(err, _session) {
                 session = _session;
+                if (!session) {
+                    return callback(new Error("Couldn't find session with ID " + sessionId));
+                }
+                if (session.status != Session.Status.WaitingForReview) {
+                    return callback(new Error("The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."));
+                }
                 callback(err, 'get session');
             });
         },
         function(callback) {
             Mail.model.findById(mongoose.Types.ObjectId(session.reply), function(err, _mail) {
                 mail = _mail;
+                if (!mail) {
+                    return callback(new Error("Couldn't find reply mail with ID " + session.reply + " from session with ID " + session._id));
+                }
                 callback(err, 'get mail');
             });
         },
@@ -140,18 +160,6 @@ var pass = function(req, res, next) {
             }
         },
         function(callback) {
-            if (!session) {
-                return callback(new Error("Couldn't find session with ID " + sessionId));
-            }
-
-            if (!mail) {
-                return callback(new Error("Couldn't find reply mail with ID " + session.reply + " from session with ID " + session._id));
-            }
-
-            if (session.status != Session.Status.WaitingForReview) {
-                return callback(new Error("The session's status is " + session.status + " therefore couldn't be reviewed. Aborting."));
-            }
-
             if(subject || html || attachments) {
                 newMail = {
                     subject: mail.subject,
@@ -167,7 +175,7 @@ var pass = function(req, res, next) {
                 };
                 ['labels', 'attachments', 'bcc', 'cc', 'from', 'to'].forEach(function(key) {
                     mail[key].forEach(function(row) {
-                        delete row._id;
+                        if(row._id) delete row._id;
                         newMail[key].push(row);
                     });
                 });
