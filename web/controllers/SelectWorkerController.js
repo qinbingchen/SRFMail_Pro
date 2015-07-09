@@ -61,6 +61,17 @@ SRFMailProControllers.controller("PopoverDispatchController", ["$scope", "$http"
                 console.log(data);
             });
 
+        setTimeout(function() {
+               $(".select-workers").select2({
+                    data: $scope.workers
+                });              
+
+                $('#deadline-time').datetimepicker({
+                    controlType: 'select',
+                    oneLine: true,
+                    timeFormat: 'hh:mm tt'
+                });
+        }, 2000);  
     }
 ]);
 
