@@ -92,7 +92,13 @@ SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
         this.select_category = function (category) {
             this.selected_category = category;
             this.filter_mail_list();
-            // TODO SORT MAIL LIST
+
+            //console.log(this.filtered_mail_list);
+            this.filtered_mail_list.sort(function(aMail, anotherMail) {
+                var aDate = new Date(aMail.lastOperation.time || aMail.income.time);
+                var anotherDate = new Date(anotherMail.lastOperation.time || anotherMail.income.time);
+                return aDate < anotherDate;
+            });
         };
 
         this.filter_mail_list = function () {
