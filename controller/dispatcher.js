@@ -274,17 +274,17 @@ var is_valid_color = function(color_str){
 
 var set_all_label = function(req, res, next){
     var labels = req.body.labels;
-    try {
-        labels = JSON.parse(req.body.labels);
-    } catch (e) {
-        return res.json({
-            code: 1,
-            message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
-            + ' ParseError: ' + e.toString()
-            + ' Labels: ' + req.body.labels
-        });
-    }
-    Label.model.remove({name: 'fuck'}, function(err){
+    //try {
+    //    labels = JSON.parse(req.body.labels);
+    //} catch (e) {
+    //    return res.json({
+    //        code: 1,
+    //        message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
+    //        + ' ParseError: ' + e.toString()
+    //        + ' Labels: ' + req.body.labels
+    //    });
+    //}
+    Label.model.remove({}, function(err){
         if(err) {
             return res.json({
                 code: 1,
