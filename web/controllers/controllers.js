@@ -210,7 +210,6 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
          var url_labels = "/api/action/dispatcher/list_labels";
         $http.get(url_labels).success(function (data) {
                 $scope.theme_labels=data.labels;
-           $scope.theme_labels=[{"name":"important", "color":"#FF0000"}];
         }).error(function (data, status, headers, config) {
             console.log(data);
     });
