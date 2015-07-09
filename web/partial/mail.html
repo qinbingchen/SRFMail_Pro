@@ -72,9 +72,17 @@
                 <!--<div class="worker" ng-if="current_user_type == 2 && selected_mail.worker" >123</div>-->
                 <!--<div class="reviewer" ng-if="current_user_type == 2 && selected_mail.reviewer" >456</div>-->
                 <div class="worker" ng-if="selected_mail.worker && current_user_type == 3">处理人：{{selected_mail.worker}}</div>
-                <div class="reviewer" ng-if="selected_mail.reviewer && selected_mail.isRejected && current_user_type == 2">
-                    <div>审核人：{{selected_mail.reviewer}}</div>
-                    <div>审核意见：{{selected_mail.reviewer}}</div>
+                <div class="reviewer" ng-if="selected_mail.reviewer && selected_mail.isRejected && current_user_type == 2" style="padding: 15px 20px;border-radius: 4px;">
+                    <div>
+                        <div style="display: inline-block; margin-right: 15px; margin-top: 3px; vertical-align: top">
+                            <i class="fa fa-2x fa-exclamation-triangle"></i>
+                        </div>
+                        <div style="display: inline-block;">
+                            <span style="font-weight: 700">审核意见</span>
+                            <div>{{selected_mail.reviewer}}</div>
+                            <div>— {{selected_mail.reviewer}}</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
