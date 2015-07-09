@@ -14,6 +14,18 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $scope.$emit("emit_show_dispatch");
         };
 
+        $scope.show_label = function () {
+            $scope.$emit("emit_show_label");
+        };
+
+        $scope.show_forward = function () {
+            $scope.$emit("emit_show_forward");
+        };
+
+        $scope.show_reject = function () {
+            $scope.$emit("emit_show_reject");
+        };
+
         $scope.$on("broadcast_mail_did_select", function () {
             $scope.current_user_type = userServices.current_user_type;
             $scope.selected_category = mailServices.selected_category;

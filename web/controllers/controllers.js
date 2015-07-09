@@ -69,6 +69,14 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.$broadcast("broadcast_show_label");
         });
 
+        $scope.$on("emit_show_forward", function () {
+            $scope.$broadcast("broadcast_show_forward");
+        });
+
+        $scope.$on("emit_show_reject", function () {
+            $scope.$broadcast("broadcast_show_reject");
+        });
+
         $scope.$on("emit_show_compose", function() {
             $scope.$broadcast("broadcast_show_compose");
             $scope.show_modal("compose");
@@ -250,7 +258,9 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
 SRFMailProControllers.controller("PopoverController", ["$scope",
     function ($scope) {
         $scope.position_popover = function (name) {
+            console.log(name);
             $button = $("#show-" + name);
+            console.log($button);
             var left = $button.offset().left + $button.width() / 2 - 110;
             $("#popover-" + name).css("left", left + "px");
         };
