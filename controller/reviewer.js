@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Session = require('../model').session;
 var Mail = require('../model').mail;
 var User = require('../model').user;
+var Attachment = require('../model').attachment;
 var _ = require('lodash');
 var async = require('async');
 var router = new require('express').Router();
@@ -122,6 +123,21 @@ var pass = function(req, res, next) {
                 mail = _mail;
                 callback(err, 'get mail');
             });
+        },
+        function(callback) {
+            if(attachments && attachments.length > 0) {
+                Attachment.model.find({
+                    saveId: {
+                        $in: attachments
+                    }
+                }, function(err, items) {
+                    attachments = items;
+                    callback(err);
+                });
+            } else {
+                attachments = undefined;
+                callback();
+            }
         },
         function(callback) {
             if (!session) {
