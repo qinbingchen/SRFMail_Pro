@@ -4,15 +4,21 @@
             <!-- dispatcher -->
             <button class="btn" id="show-dispatch"
                     ng-show="current_user_type == 1 && selected_category.name == 'pending'"
-                    ng-disabled="selected_mail_id = ''"
+                    ng-disabled="selected_mail_id == ''"
                     ng-click="show_dispatch()">
                 <i class="fa fa-mail-forward fa-lg"></i>分发邮件
             </button>
-            <button id="show-label" class="btn" ng-click="show_label()" ng-show="current_user_type == 1">
+            <button id="show-label" class="btn"
+                    ng-show="current_user_type == 1"
+                    ng-disabled="selected_mail_id == ''"
+                    ng-click="show_label()" >
                 <i class="fa fa-tags fa-lg"></i>添加标签
             </button>
-            <button class="btn" ng-click="remind()" ng-disabled="selected_mail.isUrged || selected_mail.status != 1"
-                    ng-show="current_user_type == 1"><i class="fa fa-bell fa-lg"></i>提醒
+            <button class="btn"
+                    ng-show="current_user_type == 1 && selected_category.name == 'dispatched'"
+                    ng-disabled="selected_mail_id == '' || selected_mail.isUrged"
+                    ng-click="remind()">
+                <i class="fa fa-bell fa-lg"></i>提醒
             </button>
 
             <!-- worker -->
