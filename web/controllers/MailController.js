@@ -8,6 +8,8 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.selected_mail_id = mailServices.selected_mail_id;
         $scope.fw_show = false;
         $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
+        $scope.review_pass_flag = false;
+
         $scope.selected_category = mailServices.selected_category;
 
         $scope.show_dispatch = function () {
@@ -62,6 +64,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         });
 
         $scope.review_pass = function () {
+            $scope.review_pass_flag = true;
             if ($scope.review_reject_show) {
                 $scope.review_reject_show = false;
             }
@@ -70,8 +73,10 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             }).success(function (data, status, headers, config) {
                 toastr.success('审核通过', '');
                 $scope.load_mail_list();
+                $scope.review_pass_flag = false;
             }).error(function () {
                 toastr.error('请重试', '');
+                $scope.review_pass_flag = false;
             });
 
         };
@@ -139,10 +144,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $scope.$emit("emit_show_edit");
         };
 
-
-        $scope.show_fw = function () {
-            $scope.fw_show = !$scope.fw_show;
-        };
 
         $scope.worker_sendback = function () {
             $scope.work_sendback_flag = !$scope.work_sendback_flag;
