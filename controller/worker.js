@@ -122,7 +122,7 @@ var submit = function(req, res, next) {
             }
         },
         function(callback) {
-            System.findOne({
+            System.model.findOne({
                 key: 'sender'
             }, function(err, val) {
                 if(err) {
