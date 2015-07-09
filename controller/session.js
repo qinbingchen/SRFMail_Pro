@@ -124,12 +124,14 @@ var detail = function(req, res, next) {
                 ret.reply.html = util.fetchContent(ret.reply.html);
             }
             session.operations.forEach(function(row) {
+                var displayDate = new Date(row.time);
                 var op = {
                     operator: row.operator ? row.operator.username : undefined,
                     receiver: row.receiver ? row.receiver.username : undefined,
                     type: row.type,
                     message: row.message,
-                    time: row.time
+                    time: row.time,
+                    displayTime: displayDate.getFullYear() + '/' + (displayDate.getMonth() + 1) + '/' + displayDate.getDate() + ' ' + displayDate.getHours() + ':' + ('0' + displayDate.getMinutes()).slice(-2) + ':' + ('0' + displayDate.getMinutes()).slice(-2)
                 };
                 if(row.mail) {
                     op.mail = row.mail;
