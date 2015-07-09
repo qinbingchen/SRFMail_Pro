@@ -14,7 +14,6 @@ if(cluster.isMaster) {
     Threads[1].send('send');
     setAutoRestart(Threads[0], 'receive');
     setAutoRestart(Threads[1], 'send');
-    setAutoRestart(Threads[2], 'socket');
     for(i = 2; i < ThreadNum; i++) {
         Threads[i].send('web');
         Threads[i].on('message', function(msg) {
