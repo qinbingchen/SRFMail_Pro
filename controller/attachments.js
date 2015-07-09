@@ -4,6 +4,7 @@ var Attachment = require('../model').attachment;
 var Log = require('../lib/log')();
 var multiparty = require('multiparty');
 var router = new require('express').Router();
+var uuid = require('uuid');
 
 var download = function(req, res, next) {
     var id = req.query.id;
