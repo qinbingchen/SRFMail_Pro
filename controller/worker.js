@@ -130,7 +130,7 @@ var submit = function(req, res, next) {
                     return cb(err);
                 }
                 sender = val.value;
-                cb();
+                callback();
             });
         }
     ], function(err) {
