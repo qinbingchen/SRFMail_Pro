@@ -48,6 +48,24 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 function () {
                     $scope.dismiss_modal();
                     $scope.$broadcast("mail_list_did_load");
+                    if (!$scope.reviewer_list) {
+                        $http.get("/api/user/list_reviewers")
+                            .success(function (data, status, headers, config) {
+                                $scope.reviewer_list = data["reviewers"];
+                            }).error(function (data, status, headers, config) {
+                                console.log(data);
+                            }
+                        );
+                    }
+                    if (!$scope.worker_list) {
+                        $http.get("/api/user/list_workers")
+                            .success(function (data) {
+                                $scope.worker_list = data.workers;
+                            }).error(function (data, status, headers, config) {
+                                console.log(data);
+                            }
+                        );
+                    }
                 },
                 function () {}
             );
@@ -106,6 +124,9 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.dismiss_modal = function () {
             $(".modal").removeClass("show");
             $(".modal-background").removeClass("show");
+            if ($(".redactor-box").length > 0) {
+                $("textarea#compose-content").redactor("core.destroy");
+            }
         };
 
     }
@@ -129,8 +150,7 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
                 function() {
                     $scope.load_mail_list();
                 },
-                function() {
-                }
+                function() {}
             );
         }
     }
@@ -143,13 +163,6 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
 
         $scope.edit_mode = EDIT_MODE.COMPOSE;
 
-        $http.get("/api/user/list_reviewers")
-            .success(function (data, status, headers, config) {
-                $scope.reviewer_list = data["reviewers"];
-            }).error(function (data, status, headers, config) {
-                console.log(data);
-            });
-
         $scope.$on("broadcast_show_compose", function () {
             $scope.edit_mode = EDIT_MODE.COMPOSE;
             $scope.recipient = "";
@@ -157,21 +170,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.need_review = false;
             $scope.reviewer = "";
             $scope.content = "";
-            if ($(".redactor-box").length > 0) {
-                $("textarea#compose-content").redactor("core.destroy");
-            }
-            $("textarea#compose-content").redactor({
-                lang: "zh_cn",
-                imageUpload: "/api/attachments/upload",
-                fileUpload: "/api/attachments/upload",
-                imageUploadCallback: function (image, json) {
-                    $(image).attr("src", "/api/attachments/download?id=" + json.file);
-                },
-                fileUploadCallback: function (link, json) {
-                    $(link).attr("href", "/api/attachments/download?id=" + json.file);
-                }
-            });
-
+            $("textarea#compose-content").redactor(redactor_options);
         });
 
         $scope.$on("broadcast_show_reply", function () {
@@ -181,6 +180,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.need_review = false;
             $scope.reviewer = "";
             $scope.content = mailServices.selected_mail.income.html;
+            $("textarea#compose-content").redactor(redactor_options);
         });
 
         $scope.$on("broadcast_show_edit", function () {
@@ -188,6 +188,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.recipient = mailServices.selected_mail.reply.to[0].address;
             $scope.subject = mailServices.selected_mail.reply.subject;
             $scope.content = mailServices.selected_mail.reply.html;
+            $("textarea#compose-content").redactor(redactor_options);
         });
 
         $scope.switch_review = function () {
@@ -276,13 +277,6 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
     function ($scope, $http, $cookies, userServices, mailServices) {
         $scope.partial_load_status.popover_dispatch = true;
         $scope.check_partial_load_status();
-
-        $http.get("/api/user/list_workers")
-            .success(function (data) {
-                $scope.worker_list = data.workers;
-            }).error(function (data, status, headers, config) {
-                console.log(data);
-            });
 
         $scope.$on("broadcast_show_dispatch", function () {
             $scope.position_popover("dispatch");
@@ -399,7 +393,6 @@ SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", 
             $scope.position_popover("reject");
             $scope.show_popover = true;
         });
-
 
         $scope.review_refuse_confirm = function () {
             $scope.show_popover = false;
