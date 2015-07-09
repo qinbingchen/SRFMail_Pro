@@ -32,10 +32,6 @@
         .mail-section .body .mail .info .sender {
           margin-top: 6px;
           font-size: 15px; }
-        .mail-section .body .mail .info .deadline {
-          margin-top: 6px;
-          font-size: 15px;
-          color: #ff0000; }
       .mail-section .body .mail .original-income {
         padding: 10px 20px;
         border-top: 1px solid #cfcfd3;

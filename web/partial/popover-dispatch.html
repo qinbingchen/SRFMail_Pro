@@ -1,0 +1,13 @@
+<div id="popover-dispatch" class="popover" ng-controller="PopoverDispatchController">
+    <div class="outer-arrow"></div>
+    <div class="inner-arrow"></div>
+    <div class="body">
+            <select data-placeholder="选择处理人" class="select-workers" id="readreply" multiple="multiple">
+            </select>
+            <select data-placeholder="选择查看人" class="select-workers" id="readonly" multiple="multiple">
+            </select>
+            <input type="text" name="deadline" id="deadline" class="select-deadline"/>
+            <a class="btn" ng-click="show_dispatch()">取消</a>
+            <a class="btn" ng-click="sendDispatch()">确认</a>
+    </div>
+</div>

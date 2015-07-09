@@ -267,17 +267,42 @@ textarea {
 
 .popover {
   position: fixed;
-  top: 44px;
-  left: 300px;
-  width: 200px;
-  height: 200px;
+  top: 36px;
+  left: 600px;
+  overflow: visible;
 
-  .arrow {
+  .outer-arrow {
     width: 0;
     height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-bottom: 5px solid black;
+    margin: 0 auto;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #d7d7d7;
+    z-index: 50;
+  }
+
+  .inner-arrow {
+    position: relative;
+    top: -14px;
+    width: 0;
+    height: 0;
+    margin: 0 auto;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #fff;
+    z-index: 100;
+  }
+
+  .body {
+    position: relative;
+    top: -15px;
+    margin: 0 auto;
+    width: 250px;
+    height: 200px;
+    border: 1px solid #d7d7d7;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 5px 15px 0;
+    z-index: 0;
   }
 }
 
