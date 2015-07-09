@@ -236,27 +236,26 @@ var urge = function(req, res, next) {
 
 var list_label = function(req, res, next) {
     var list = {
+        code: 0,
+        message: 'success',
         labels: []
     };
-    Label.model.find({})
-        .populate("labels")
-        .exec(function(err, labels){
-            if(err){
-                return res.json({
-                    code: 1,
-                    message: "couldn't load labels!"
-                });
-            }
-            labels.forEach(function(label){
-                list.labels.push({
-                    name: label.name,
-                    color: label.color
-                })
-            })
-
-            res.json(list);
-        })
-}
+    Label.model.find({}, function(err, labels){
+        if(err){
+            return res.json({
+                code: 1,
+                message: "couldn't load labels!"
+            });
+        }
+        labels.forEach(function(label){
+            list.labels.push({
+                name: label.name,
+                color: label.color
+            });
+        });
+        res.json(list);
+    });
+};
 
 var is_valid_color = function(color_str){
     if(color_str.length != 7){
@@ -270,20 +269,20 @@ var is_valid_color = function(color_str){
         }
     }
     return true;
-}
+};
 
 var set_all_label = function(req, res, next){
     var labels = req.body.labels;
-    //try {
-    //    labels = JSON.parse(req.body.labels);
-    //} catch (e) {
-    //    return res.json({
-    //        code: 1,
-    //        message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
-    //        + ' ParseError: ' + e.toString()
-    //        + ' Labels: ' + req.body.labels
-    //    });
-    //}
+    try {
+        labels = JSON.parse(req.body.labels);
+    } catch (e) {
+        return res.json({
+            code: 1,
+            message: 'Error: Invalid JSON received, please ensure that the labels parameters hold valid JSON string representation.'
+            + ' ParseError: ' + e.toString()
+            + ' Labels: ' + req.body.labels
+        });
+    }
     Label.model.remove({}, function(err){
         if(err) {
             return res.json({
@@ -291,41 +290,39 @@ var set_all_label = function(req, res, next){
                 message: 'remove failed'
             })
         }
-        var cnt = 0;
-        labels.forEach(function(label){
+        var newLabels = [];
+        labels.forEach(function(label) {
             if(!label.name){
-                return res.json({
-                    code: 1,
-                    message: 'invalid name in labels'
-                })
+                return;
             }
             if(!label.color || !is_valid_color(label.color)){
                 label.color = '#C0C0C0'
             }
-            var newLabel = {
+            newLabels.push({
                 name: label.name,
                 color: label.color
+            });
+        });
+        if(newLabels.length < labels.length) {
+            return res.json({
+                code: 1,
+                message: 'invalid label name'
+            });
+        }
+        Label.model.create(newLabels, function(err) {
+            if(err) {
+                return res.json({
+                    code: 1,
+                    message: 'Internal error'
+                });
             }
-            newLabel = new Label.model(newLabel);
-
-            newLabel.save(function(err) {
-                if(err){
-                    return res.json({
-                        code: 1,
-                        message: 'cannot save label' + newLabel.name
-                    })
-                }
-                cnt ++;
-                if(cnt == labels.length){
-                    return res.json({
-                        code: 0,
-                        message: "success"
-                    })
-                }
+            res.json({
+                code: 0,
+                message: 'success'
             });
         });
     });
-}
+};
 
 var set_label = function(req, res, next) {
     var sessionId = req.body.id;
