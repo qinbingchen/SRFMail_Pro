@@ -261,9 +261,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
 SRFMailProControllers.controller("PopoverController", ["$scope",
     function ($scope) {
         $scope.position_popover = function (name) {
-            console.log(name);
             $button = $("#show-" + name);
-            console.log($button);
             var left = $button.offset().left + $button.width() / 2 - 110;
             $("#popover-" + name).css("left", left + "px");
         };
@@ -312,12 +310,13 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
         $scope.submit = function () {
             $http.post("/api/action/dispatcher/dispatch", {
                 id: mailServices.selected_mail_id,
-                readonly: JSON.stringify($("select#dispatch-readreply").val()),
-                readreply: JSON.stringify($("select#dispatch-readonly").val()),
+                readonly: JSON.stringify($("select#dispatch-readonly").val()),
+                readreply: JSON.stringify($("select#dispatch-readreply").val()),
                 deadline: $scope.deadline == "" ? new Date($scope.deadline).toISOString() : ""
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
+                    $scope.show_popover = false;
                 } else {
                     console.log(data);
                 }
