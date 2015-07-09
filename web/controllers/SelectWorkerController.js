@@ -32,7 +32,7 @@ SRFMailProControllers.controller("PopoverDispatchController", ["$scope", "$http"
             readonly="[]";
         }
 
-        var deadline = $("#deadline").val();
+        var deadline = $("#deadline-time").val();
 
         $http.post("/api/action/dispatcher/dispatch", {
             id: $scope.$parent.$parent.selected_mail_id,
