@@ -53,6 +53,23 @@ textarea {
   float: right;
 }
 
+.loading-mask {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.8;
+  z-index: 9999;
+}
+
+.loading-mask .container {
+  left: calc(50% - 28px);
+  top: calc(50vh - 50px);
+  position: relative;
+}
+
 /* select2 begin */
 
 .select2-selection,
@@ -211,12 +228,19 @@ textarea {
       border-top: 1px solid #1780fb;
     }
 
-    button {
+    .login-button {
       position: relative;
-      left: 370px;
+      left: 430px;
       top: -42px;
       background: none;
       border: none;
+      color: rgba(26, 26, 26, 0.7);
+    }
+
+    .login-loader {
+      position: relative;
+      left: 439px;
+      top: -38px;
       color: rgba(26, 26, 26, 0.7);
     }
   }

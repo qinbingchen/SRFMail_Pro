@@ -28,9 +28,20 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
                 if (userServices.current_user_type == USER_TYPE.NONE) {
                     $scope.show_modal("login");
                 } else {
+                    $scope.show_global_loader = true;
                     $scope.load_mail_list();
                 }
             }, 0);
+        };
+
+        $scope.login = function (username, password) {
+            $scope.show_login_loader = true;
+            userServices.login(username, password,
+                function() {
+                    $scope.load_mail_list();
+                },
+                function() {}
+            );
         };
 
         $scope.logout = function () {
@@ -45,6 +56,8 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.load_mail_list = function () {
             mailServices.load_mail_list(
                 function () {
+                    $scope.show_login_loader = false;
+                    $scope.show_global_loader = false;
                     $scope.dismiss_modal();
                     $scope.$broadcast("mail_list_did_load");
                     if (!$scope.reviewer_list) {
@@ -128,6 +141,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
         $scope.dismiss_modal = function () {
             $(".modal").removeClass("show");
             $(".modal-background").removeClass("show");
+            $scope.show_login_loader = false;
             if ($(".redactor-box").length > 0) {
                 $("textarea#compose-content").redactor("core.destroy");
             }
@@ -150,12 +164,7 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
         $scope.check_partial_load_status();
 
         $scope.submit = function () {
-            userServices.login($scope.username, $scope.password,
-                function() {
-                    $scope.load_mail_list();
-                },
-                function() {}
-            );
+            $scope.login($scope.username, $scope.password);
         }
     }
 ]);

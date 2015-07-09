@@ -81,7 +81,7 @@
               font-size: 11px;
               color: #fff; }
       .mail-list-section .body .mail-list .mail.selected {
-        background-color: #2b91e3;
+        background-color: #2b91e3 !important;
         color: #fff; }
         .mail-list-section .body .mail-list .mail.selected .right-section .info .sender {
           color: #fff; }
@@ -89,3 +89,5 @@
           color: #fff; }
         .mail-list-section .body .mail-list .mail.selected .right-section .subject {
           color: #fff; }
+      .mail-list-section .body .mail-list .mail.highlighted {
+        background-color: #fcf8e3; }
