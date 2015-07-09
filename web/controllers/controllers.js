@@ -186,28 +186,20 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
         $scope.add_label=function(){
             var label_text=$('#label_name').val();
             var label_color=$('.simple_color_custom_chooser_css').val();
+
+            var exist_labels_length=$scope.exist_labels.length;
+            $scope.exist_labels[exist_labels_length]=new Object();
+            $scope.exist_labels[exist_labels_length].name=label_text;
+            $scope.exist_labels[exist_labels_length].color=label_color;
+
+            $('#tags').addTag(label_text);
+            update_labels();
         }
 
            $(document).ready(function(){
                 $('.simple_color_custom_chooser_css').simpleColor({ 
                     chooserCSS: { 'background-color': 'black', 'opacity': '0.8' },
                     colors:['800000','8B0000','C71585','4B0882','800080','000080','D2691E','FF0000','FFC0CB','7B68EE','F5DEB3','FFFF00','32CD32','00BFFF','ADD8E6','D3D3D3'],
-                    onSelect: function(hex, element) {
-                        alert("You selected #" + hex + " for input #" + element.attr('class'));
-                        $scope.exist_labels[$scope.exist_labels.length]=new Object({"color":"#"+hex});
-                        var labels_id=0;
-                        $('.tag').each(function()
-          {
-            
-            
-            if(labels_id==$scope.exist_labels.length-1)
-                $scope.exist_labels[$scope.exist_labels.length-1].name=$(this).text().substr(0,$(this).text().length-3);
-            var tag_text=$(this).text().substr(0 ,$(this).text().length-3);
-            $(this).css("background-color",$scope.exist_labels[get_label_id(tag_text)].color);
-            labels_id++;
-          });  
-                      alert( JSON.stringify($scope.exist_labels));
-                    },
                     boxWidth:'20px',
                     boxHeight:'20px',
                     columns:18 });    
@@ -216,23 +208,11 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
          var url_labels = "/api/action/dispatcher/list_labels";
         $http.get(url_labels).success(function (data) {
                 $scope.theme_labels=data.labels;
-           //$scope.theme_labels=[{"name":"important", "color":"#FF0000"}];
+           $scope.theme_labels=[{"name":"important", "color":"#FF0000"}];
         }).error(function (data, status, headers, config) {
             console.log(data);
     });
         
-        $scope.set_tags_enable=function(command){
-            if(command==1)
-            {
-               $('#tags').attr("disabled",true); 
-                $('#colors').removeAttr("disabled"); 
-            }
-            else
-             {
-                $('#colors').disabled=false;
-                $('#tags').disabled=true;
-            }
-        }
         $scope.exist_labels=new Array();
         
         setTimeout(function()
@@ -251,35 +231,27 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
             $scope.exist_labels_name+=","+$scope.theme_labels[i].name;
         }
 
-
-
-            $('#tags').tagsInput({
-                onAddTag:function(tag){
-                    console.log('增加了'+tag);
-                     $scope.set_tags_enable(1);           
-                     $scope.whatEver = true;
-                },
+            $('#tags').tagsInput({                
                 onRemoveTag:function(tag){
                     $scope.exist_labels.splice(get_label_id(tag),1);
-                    $('.tag').each(function()
-          {
-            var tag_text=$(this).text().substr(0 ,$(this).text().length-3);
-            $(this).css("background-color",$scope.exist_labels[get_label_id(tag_text)].color);
-          });
-                }
-               });
+                    update_labels();
+}});
 
             $('#tags').importTags($scope.exist_labels_name);
 
             $scope.label_id=0;
-            $('.tag').each(function()
+            update_labels();
+            
+        },2000); 
+    
+    var update_labels=function(){
+$('.tag').each(function()
           {
             var tag_text=$(this).text().substr(0 ,$(this).text().length-3);
             $(this).css("background-color",$scope.exist_labels[get_label_id(tag_text)].color);
-            $scope.color_id++;
           });
-        },2000); 
-    
+    }
+
      var  get_label_id=function(label_text){
             
             for(j=0;j<$scope.exist_labels.length;j++)
@@ -288,6 +260,7 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
                     return j;
             }
     }
+    
 
     }]);
     
