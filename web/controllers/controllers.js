@@ -438,14 +438,25 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
         });
 
         $scope.submit = function () {
+            var readreply, readonly;
+            if ($("select#dispatch-readreply").val() == null) {
+                readreply = JSON.stringify([]);
+            } else {
+                readreply = JSON.stringify($("select#dispatch-readreply").val());
+            }
+            if ($("select#dispatch-readonly").val() == null) {
+                readonly = JSON.stringify([]);
+            } else {
+                readonly = JSON.stringify($("select#dispatch-readonly").val());
+            }
             var deadline = $scope.deadline;
-            if (deadline != "") {
+            if (deadline && deadline != "") {
                 deadline = new Date(deadline).toISOString();
             }
             $http.post("/api/action/dispatcher/dispatch", {
                 id: mailServices.selected_mail_id,
-                readonly: JSON.stringify($("select#dispatch-readonly").val()),
-                readreply: JSON.stringify($("select#dispatch-readreply").val()),
+                readreply: readreply,
+                readonly: readonly,
                 deadline: deadline
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
