@@ -13,11 +13,6 @@
 var SessionHistoryKit = SessionHistoryKit || {};
 
 SessionHistoryKit.SessionHistory = function(containerId, options) {
-	this.container = document.getElementById(containerId);
-	if (!this.container) {
-		console.error('Couldn\'t find HTML node with ID ' + containerId + '.');
-	}
-
 	this.operations = [];
 	this.dots = [];
 	this.height = 180;
@@ -65,6 +60,13 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 	};
 
 	this.initCanvas = function() {
+		this.container = document.getElementById(containerId);
+
+		if (!this.container) {
+			console.error('Couldn\'t find HTML node with ID ' + containerId + '.');
+			return null;
+		}
+
 		while (this.container && this.container.hasChildNodes()) {
 			var child = this.container.childNodes[0];
 			this.container.removeChild(child);
