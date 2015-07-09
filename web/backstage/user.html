@@ -318,7 +318,7 @@
         if (reviewer === null || typeof(reviewer) === 'undefined') {
             reviewer = 'undefined';
         }
-        return '<button class="button xs-button blue-button change-user-info" onclick="onChangeUserInfo(\'' + user + '\',\'' + name + '\',\'' + gender + '\',\'' + role + '\',\'' + reviewer + '\');" data-toggle="modal" data-target="#modal-user-edit"><i class="fa fa-pencil fa-fw"></i>  编辑用户信息</button> ' +
+        return '<button class="button xs-button blue-button change-user-info" onclick="onChangeUserInfo(\'' + user + '\',\'' + name + '\',\'' + gender + '\',\'' + role + '\',\'' + reviewer + '\');" data-toggle="modal" data-target="#modal-user-edit"><i class="fa fa-pencil fa-fw"></i>  编辑</button> ' +
         '<button class="button xs-button red-button delete-account" onclick="deleteUser(\'' + user + '\')"><i class="fa fa-trash fa-fw"></i>  删除</button>';
     };
     var onChangeUserInfo = function(user, name, gender, role, reviewer) {
