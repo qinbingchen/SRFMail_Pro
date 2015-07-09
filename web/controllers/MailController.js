@@ -10,6 +10,9 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.work_sendback_flag = false;// 当退回按钮点击一次之后 disable掉。
         $scope.selected_category = mailServices.selected_category;
 
+        $scope.show_dispatch = function () {
+            $scope.$emit("emit_show_dispatch");
+        };
 
         $scope.$on("broadcast_mail_did_select", function () {
             $scope.current_user_type = userServices.current_user_type;
@@ -58,7 +61,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
         $scope.review_refuse = function () {
             $scope.review_reject_show = !$scope.review_reject_show;
-
         };
 
         $scope.review_refuse_confirm = function () {
@@ -75,9 +77,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
         };
         $scope.review_refuse_cancel = function () {
-
             $scope.review_reject_show = false;
-
         };
 
         $scope.check = function () {
@@ -102,12 +102,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 console.log(data);
             });
         };
-
-        $scope.show_dispatch = function () {
-            $scope.dispatch_show = !$scope.dispatch_show;
-            $scope.label_show = false;
-        };
-        $scope.dispatch_show = false;
 
         $scope.show_label = function () {
             $scope.label_show = !$scope.label_show;
@@ -142,7 +136,6 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                 toastr.success('成功退回', '');
                 $scope.load_mail_list();
                 $scope.work_sendback_flag = !$scope.work_sendback_flag;
-
             }).error(function () {
                 toastr.error('退回失败，请重试', '');
                 $scope.work_sendback_flag = !$scope.work_sendback_flag;

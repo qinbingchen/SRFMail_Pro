@@ -278,7 +278,7 @@ textarea {
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-bottom: 15px solid #d7d7d7;
-    z-index: 50;
+    z-index: 5;
   }
 
   .inner-arrow {
@@ -290,20 +290,50 @@ textarea {
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-bottom: 15px solid #fff;
-    z-index: 100;
+    z-index: 10;
   }
 
   .body {
     position: relative;
     top: -15px;
     margin: 0 auto;
-    width: 250px;
-    height: 200px;
+    padding: 10px 10px 3px 10px;
+    width: 220px;
     border: 1px solid #d7d7d7;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.2) 0 5px 15px 0;
     z-index: 0;
+
+    .select2 {
+      margin-bottom: 5px;
+    }
+
+    button {
+      margin-left: 10px;
+    }
+
+    >input {
+      height: 34px;
+      width: 200px;
+      padding: 0 5px;
+      margin-bottom: 5px;
+      border: 1px solid #eaeaea !important;
+      font-size: 13px;
+      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s !important;
+    }
+
+    >input:focus {
+      border: 1px solid #a6c4db !important;
+    }
   }
 }
 
 /* popover end */
+
+.xdsoft_mounthpicker {
+  overflow: visible;
+
+  .xdsoft_label {
+    overflow: visible;
+  }
+}

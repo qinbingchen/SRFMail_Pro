@@ -57,7 +57,7 @@ SRFMailProApp.service("userServices", ["$http", "$cookies",
     }
 ]);
 
-SRFMailProApp.service("mailServices",  ["$http", "$cookies", "userServices",
+SRFMailProApp.service("mailServices", ["$http", "$cookies", "userServices",
     function($http, $cookies, userServices) {
         var that = this;
 

@@ -2,11 +2,14 @@
     <div class="header">
         <div class="toolbar">
             <!-- dispatcher -->
-            <button class="btn" ng-click="show_dispatch()"
-                    ng-show="current_user_type == 1 && selected_category.name == 'pending'"><i
-                    class="fa fa-mail-forward fa-lg"></i>分发
+            <button class="btn" id="show-dispatch"
+                    ng-show="current_user_type == 1 && selected_category.name == 'pending'"
+                    ng-click="show_dispatch()">
+                <i class="fa fa-mail-forward fa-lg"></i>分发邮件
             </button>
-            <button class="btn" ng-click="show_label()" ng-show="current_user_type == 1"><i class="fa fa-reply fa-lg"></i>主题标签</button>
+            <button class="btn" ng-click="show_label()" ng-show="current_user_type == 1">
+                <i class="fa fa-tags fa-lg"></i>主题标签
+            </button>
             <button class="btn" ng-click="remind()" ng-disabled="selected_mail.isUrged || selected_mail.status != 1"
                     ng-show="current_user_type == 1">提醒
             </button>
@@ -59,11 +62,6 @@
             <div class="tri"></div>
             <div class="tri-inner"></div>
             <ng-include src="'partial/select-fw-worker.html'"></ng-include>
-        </div>
-        <div class="bubble" ng-show="dispatch_show">
-            <div class="tri"></div>
-            <div class="tri-inner"></div>
-            <ng-include src="'partial/select-worker.html'"></ng-include>
         </div>
         <div class="bubble" ng-show="label_show">
             <div class="tri"></div>

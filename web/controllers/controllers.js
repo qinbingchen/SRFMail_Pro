@@ -7,7 +7,11 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             mail_list: false,
             mail: false,
             modal_login: false,
-            modal_compose: false
+            modal_compose: false,
+            popover_dispatch: false,
+            popover_label: false,
+            popover_forward: false,
+            popover_reject: false
         };
 
         $scope.check_partial_load_status = function () {
@@ -57,6 +61,14 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $scope.$broadcast("broadcast_mail_did_select");
         });
 
+        $scope.$on("emit_show_dispatch", function () {
+            $scope.$broadcast("broadcast_show_dispatch");
+        });
+
+        $scope.$on("emit_show_label", function () {
+            $scope.$broadcast("broadcast_show_label");
+        });
+
         $scope.$on("emit_show_compose", function() {
             $scope.$broadcast("broadcast_show_compose");
             $scope.show_modal("compose");
@@ -87,14 +99,17 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $(".modal").removeClass("show");
             $(".modal-background").removeClass("show");
         };
-    }]);
+
+    }
+]);
 
 SRFMailProControllers.controller("ModalController", ["$scope",
     function ($scope) {
         $scope.prevent_dismiss = function (e) {
             e.stopPropagation();
         };
-    }]);
+    }
+]);
 
 SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
     function ($scope, $http, $cookies, userServices, mailServices) {
@@ -110,7 +125,8 @@ SRFMailProControllers.controller("LoginModalController", ["$scope", "$http", "$c
                 }
             );
         }
-    }]);
+    }
+]);
 
 SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
     function ($scope, $http, $cookies, userServices, mailServices) {
@@ -224,6 +240,110 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                         break;
                 }
             }
+        }
+    }
+]);
 
+SRFMailProControllers.controller("PopoverController", ["$scope",
+    function ($scope) {
+        $scope.position_popover = function (name) {
+            $button = $("#show-" + name);
+            var left = $button.offset().left + $button.width() / 2 - 110;
+            $("#popover-" + name).css("left", left + "px");
+        };
+    }
+]);
+
+SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
+    function ($scope, $http, $cookies, userServices, mailServices) {
+        $scope.partial_load_status.popover_dispatch = true;
+        $scope.check_partial_load_status();
+
+        $http.get("/api/user/list_workers")
+            .success(function (data) {
+                $scope.worker_list = data.workers;
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
+
+        $scope.$on("broadcast_show_dispatch", function () {
+            $scope.position_popover("dispatch");
+            $("select#dispatch-readreply").select2({
+                placeholder: "选择处理人...",
+                data: $scope.worker_list
+            });
+            $("select#dispatch-readonly").select2({
+                placeholder: "选择查看人...",
+                data: $scope.worker_list
+            });
+            $("#dispatch-deadline").datetimepicker({
+                minDate: 0,
+                lang: "zh-cn",
+                i18n: {
+                    "zh-cn": {
+                        months: [
+                            "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"
+                        ],
+                        dayOfWeek: [
+                            "日", "一", "二", "三", "四", "五", "六"
+                        ]
+                    }
+                }
+            });
+            $scope.show_popover = true;
+        });
+
+        $scope.submit = function () {
+            $http.post("/api/action/dispatcher/dispatch", {
+                id: mailServices.selected_mail_id,
+                readonly: JSON.stringify($("select#dispatch-readreply").val()),
+                readreply: JSON.stringify($("select#dispatch-readonly").val()),
+                deadline: $scope.dispatch_deadline == "" ? new Date($scope.dispatch_deadline).toISOString() : ""
+            }).success(function (data, status, headers, config) {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                } else {
+                    console.log(data);
+                }
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+            });
         }
     }]);
+
+
+SRFMailProControllers.controller("LabelPopoverController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
+    function ($scope, $http, $cookies, userServices, mailServices) {
+        $scope.partial_load_status.popover_label = true;
+        $scope.check_partial_load_status();
+
+        $scope.$on("broadcast_show_label", function () {
+            $scope.position_popover("label");
+            $scope.show_popover = true;
+        });
+    }
+]);
+
+SRFMailProControllers.controller("ForwardPopoverController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
+    function ($scope, $http, $cookies, userServices, mailServices) {
+        $scope.partial_load_status.popover_forward = true;
+        $scope.check_partial_load_status();
+
+        $scope.$on("broadcast_show_forward", function () {
+            $scope.position_popover("forward");
+            $scope.show_popover = true;
+        });
+    }
+]);
+
+SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", "$cookies", "userServices", "mailServices",
+    function ($scope, $http, $cookies, userServices, mailServices) {
+        $scope.partial_load_status.popover_reject = true;
+        $scope.check_partial_load_status();
+
+        $scope.$on("broadcast_show_reject", function () {
+            $scope.position_popover("reject");
+            $scope.show_popover = true;
+        });
+    }
+]);
