@@ -242,3 +242,9 @@ textarea {
   overflow: visible; }
   .xdsoft_mounthpicker .xdsoft_label {
     overflow: visible; }
+
+.redactor-box {
+  margin: 0; }
+
+.redactor-editor {
+  height: calc(100vh - 310px) !important; }

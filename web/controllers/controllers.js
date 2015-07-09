@@ -149,10 +149,14 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.need_review = false;
             $scope.reviewer = "";
             $scope.content = "";
+            if ($(".redactor-box").length > 0) {
+                $("textarea#compose-content").redactor("core.destroy");
+            }
             $("textarea#compose-content").redactor({
-                lang: "zh-cn",
+                lang: "zh_cn",
                 imageUpload: "/api/attachments/upload"
             });
+
         });
 
         $scope.$on("broadcast_show_reply", function () {
