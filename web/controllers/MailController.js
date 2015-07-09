@@ -69,6 +69,22 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $scope.$emit("emit_show_reject");
         };
 
+        $scope.remind = function () {
+            $http.post("/api/action/dispatcher/urge", {
+                id: $scope.selected_mail_id
+            }).success(function (data, status, headers, config) {
+                if (data.code == 0) {
+                    $scope.load_mail_list();
+                    toastr.success("成功提醒");
+                } else {
+                    console.log(data);
+                }
+            }).error(function (data, status, headers, config) {
+                console.log(data);
+                toastr.error('提醒失败，请重试', '');
+            });
+        };
+
         $scope.pass = function () {
             $http.post("/api/action/worker/pass", {
                 id: mailServices.selected_mail_id
@@ -127,18 +143,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
 
 
 
-        $scope.remind = function () {
-            $http.post("/api/action/dispatcher/urge", {
-                id: $scope.selected_mail_id
-            }).success(function (data, status, headers, config) {
-                $scope.load_mail_list();
-                toastr.success('成功提醒', '');
-                console.log(data);
-            }).error(function (data, status, headers, config) {
-                toastr.success('提醒失败，请重试', '');
-                console.log(data);
-            });
-        };
+
 
         $scope.show_compose = function () {
             $scope.$emit("emit_show_compose");
