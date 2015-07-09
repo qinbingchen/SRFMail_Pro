@@ -110,8 +110,10 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
             $http.post("/api/action/worker/pass", {
                 id: $scope.selected_mail_id
             }).success(function (data, status, headers, config) {
-
+                if (data.code == 0)
+                    toastr.success('邮件已处理', '');
             }).error(function (data, status, headers, config) {
+                toastr.error('失败，请重试', '');
                 console.log(data);
             });
         };
