@@ -134,10 +134,6 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
         $scope.check_partial_load_status();
 
         $scope.edit_mode = EDIT_MODE.COMPOSE;
-        //var editor = new wysihtml5.Editor("editor", {
-        //    toolbar: "toolbar",
-        //    parserRules:  wysihtml5ParserRules
-        //});
 
         $http.get("/api/user/list_reviewers")
             .success(function (data, status, headers, config) {
@@ -153,7 +149,10 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
             $scope.need_review = false;
             $scope.reviewer = "";
             $scope.content = "";
-            $("select#reviewer").select2("destroy");
+            $("textarea#compose-content").redactor({
+                lang: "zh-cn",
+                imageUpload: "/api/attachments/upload"
+            });
         });
 
         $scope.$on("broadcast_show_reply", function () {
@@ -298,7 +297,7 @@ SRFMailProControllers.controller("DispatchPopoverController", ["$scope", "$http"
                 id: mailServices.selected_mail_id,
                 readonly: JSON.stringify($("select#dispatch-readreply").val()),
                 readreply: JSON.stringify($("select#dispatch-readonly").val()),
-                deadline: $scope.dispatch_deadline == "" ? new Date($scope.dispatch_deadline).toISOString() : ""
+                deadline: $scope.deadline == "" ? new Date($scope.deadline).toISOString() : ""
             }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
