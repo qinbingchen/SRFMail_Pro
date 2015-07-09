@@ -104,7 +104,14 @@
         dataType: 'json',
         success: function(data) {
             console.log(data);
-            if (data.code != 0) {
+            if (data.code == 10) {
+                //not logged in
+                toastr.error('您尚未作为管理员登录系统。','请登录');
+                setTimeout(function() {
+                    window.location = 'login.html';
+                }, 1000);
+                return;
+            } else if (data.code != 0) {
                 toastr.error(data.message);
                 //return;
             }

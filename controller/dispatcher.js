@@ -482,9 +482,9 @@ router.use(function(req, res, next) {
             });
         }
         req.session.user = user;
-        if (user.role != User.Role.Dispatcher) {
+        if (user.role != User.Role.Dispatcher && user.role != User.Role.System) {
             return res.json({
-                code: 1,
+                code: 10,
                 message: "Error: Unauthorized: User " + user.username + " with role " + user.role + " isn't a dispatcher."
             });
         }

@@ -246,9 +246,9 @@ router.use(function(req, res, next) {
             });
         }
         req.session.user = user;
-        if (user.role != User.Role.Reviewer) {
+        if (user.role != User.Role.Reviewer && user.role != User.Role.System) {
             return res.json({
-                code: 1,
+                code: 10,
                 message: "Unauthorized: User " + user.username + " with role " + user.role + " isn't a reviewer"
             });
         }
