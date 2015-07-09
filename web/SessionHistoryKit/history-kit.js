@@ -20,7 +20,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 
 	this.operations = [];
 	this.dots = [];
-	this.height = 150;
+	this.height = 180;
 
     options = options || {};
 
@@ -233,7 +233,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 		// combination of action and receiver
 		switch(operation.type) {
 			case 1: return "将邮件分发给 " + operation.receiver;
-			case 2: return operation.receiver ? "将邮件转发到 " + operation.receiver : "将邮件退回"
+			case 2: return operation.receiver ? "将邮件转发到 " + operation.receiver : "将邮件退回";
 			case 3: return "提交给 " + operation.receiver + " 审核";
 			case 4: return "拒绝 " + operation.receiver + " 的邮件";
 			case 5: return "审核通过";
@@ -241,7 +241,7 @@ SessionHistoryKit.SessionHistory = function(containerId, options) {
 			case 7: return "重试发送邮件";
 			case 8: return "放弃操作";
 			case 9: return "发送邮件";
-			case 10: return "发送失败";
+			case 10: return "因为网络原因发送失败";
 			case 11: return "所有操作完成";
 		}
 	};

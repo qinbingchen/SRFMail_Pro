@@ -11,7 +11,7 @@
                 <i class="fa fa-tags fa-lg"></i>主题标签
             </button>
             <button class="btn" ng-click="remind()" ng-disabled="selected_mail.isUrged || selected_mail.status != 1"
-                    ng-show="current_user_type == 1">提醒
+                    ng-show="current_user_type == 1"><i class="fa fa-bell fa-lg"></i>提醒
             </button>
 
             <!-- worker -->
@@ -21,7 +21,7 @@
             </button>
             <button class="btn" ng-click="show_reply()" ng-disabled="selected_mail_id=='' || selected_mail.readonly"
                     ng-show="current_user_type == 2  &&(selected_category.name == 'pending'||selected_category.name == 'rejected')">
-                <i class="fa fa-edit fa-lg"></i>回复
+                <i class="fa fa-reply fa-lg"></i>回复
             </button>
             <button class="btn" ng-click="check()"
                     ng-show="current_user_type == 2 && selected_category.name == 'pending'"><i
@@ -30,27 +30,27 @@
             <button id="show-forward" class="btn" ng-disabled="selected_mail_id=='' || selected_mail.readonly"
                     ng-show="current_user_type == 2  &&(selected_category.name == 'pending'||selected_category.name == 'rejected')"
                     ng-click="show_forward()">
-                <i class="fa fa-edit fa-lg"></i>转发
+                <i class="fa fa-send fa-lg"></i>转发
             </button>
             <button class="btn" ng-click="worker_sendback()"
                     ng-disabled="selected_mail_id=='' || work_sendback_flag || selected_mail.readonly"
                     ng-show="current_user_type == 2  &&(selected_category.name == 'pending'||selected_category.name == 'rejected')">
-                <i class="fa fa-edit fa-lg"></i>退回
+                <i class="fa fa-caret-left fa-lg"></i>退回
             </button>
 
             <!-- reviewer -->
             <button class="btn" ng-click="review_pass()" ng-disabled="selected_mail_id=='' || review_pass_flag "
                     ng-show="current_user_type == 3 &&  selected_category.name == 'pending'"><i
-                    class="fa fa-lg"></i>通过
+                    class="fa fa-thumbs-up fa-lg"></i>通过
             </button>
             <button id="show-reject" class="btn" ng-disabled="selected_mail_id==''"
                     ng-show="current_user_type == 3 && selected_category.name == 'pending'"
                     ng-click="show_reject()">
-                <i class="fa fa-lg"></i>拒绝
+                <i class="fa fa-thumbs-down fa-lg"></i>拒绝
             </button>
             <button class="btn" ng-click="show_edit()" ng-disabled="selected_mail_id==''"
                     ng-show="current_user_type == 3 && selected_category.name == 'pending'"><i
-                    class="fa fa-lg"></i>修改
+                    class="fa fa-edit fa-lg"></i>修改
             </button>
 
             <button class="btn right" ng-hide="current_user_type == -1" ng-click="logout()">登出</button>
