@@ -185,7 +185,7 @@ var update = function(req, res) {
             }
         },
         function(cb) {
-            if(typeof req.body.defaultReviewer != 'undefined') {
+            if(typeof req.body.defaultReviewer != 'undefined' && req.body.defaultReviewer != 'undefined') {
                 User.model.findOne({
                     username: req.body.defaultReviewer
                 }, function(err, user) {
@@ -218,7 +218,7 @@ var update = function(req, res) {
                 updates.name = req.body.name;
             }
             if(req.body.defaultReviewer) {
-                updates.defaultReviewer = req.body.defaultReviewer;
+                updates.defaultReviewer = req.body.defaultReviewer == 'undefined' ? null : req.body.defaultReviewer;
             }
             User.model.findOneAndUpdate({
                 username: req.body.user

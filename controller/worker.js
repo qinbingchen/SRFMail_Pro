@@ -4,6 +4,7 @@
 
 var mongoose = require('mongoose');
 var Session = require('../model').session;
+var System = require('../model').system;
 var Mail = require('../model').mail;
 var User = require('../model').user;
 var Attachment = require('../model').attachment;
@@ -25,6 +26,7 @@ var submit = function(req, res, next) {
     var reviewerUsername = req.body.reviewer;
     var recipients = req.body.recipients;
     var attachments = req.body.attachments;
+    var sender;
 
     try {
         if (recipients) {
@@ -118,6 +120,18 @@ var submit = function(req, res, next) {
                 attachments = [];
                 callback();
             }
+        },
+        function(callback) {
+            System.model.findOne({
+                key: 'sender'
+            }, function(err, val) {
+                if(err) {
+                    Log.e(err);
+                    return cb(err);
+                }
+                sender = val.value;
+                callback();
+            });
         }
     ], function(err) {
         if (err) {
@@ -129,10 +143,7 @@ var submit = function(req, res, next) {
 
         var repliedMail = new Mail.model({
             to: [],
-            from: [{
-                address: '15652915887@163.com',
-                name: 'SRFMail'
-            }],
+            from: [sender],
             subject: subject,
             html: html,
             time: new Date(),
@@ -365,7 +376,7 @@ var redirect = function(req, res, next) {
                     operations: {
                         type: Session.Type.Redirect,
                         operator: req.session.user._id,
-                        receiver: session.dispatcher,
+                        receiver: null,
                         time: new Date(),
                         mail: session.income
                     }

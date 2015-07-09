@@ -30,12 +30,17 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     if ($scope.selected_mail_id != "") {
                         if ($scope.selected_mail.income) {
                             var time = new Date($scope.selected_mail.income.time);
-                            $scope.income_time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate()
+                            $scope.income_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
                                 + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
                         }
                         if ($scope.selected_mail.reply) {
                             var time = new Date($scope.selected_mail.reply.time);
-                            $scope.reply_time = time.getFullYear() + "/" + time.getMonth() + "/" + time.getDate()
+                            $scope.reply_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
+                                + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+                        }
+                        if ($scope.selected_mail.income.deadline) {
+                            var time = new Date($scope.selected_mail.income.deadline);
+                            $scope.deadline_time = time.getFullYear() + "/" + (time.getMonth() + 1) + "/" + time.getDate()
                                 + " " + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
                         }
                     }
