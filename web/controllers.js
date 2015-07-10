@@ -168,6 +168,7 @@ SRFMailProControllers.controller("GlobalController", ["$scope", "$http", "$cooki
             $(".modal-background").removeClass("show");
             $scope.show_login_loader = false;
             if ($(".redactor-box").length > 0) {
+                $("textarea#compose-content").redactor("code.set", "");
                 $("textarea#compose-content").redactor("core.destroy");
             }
         };
