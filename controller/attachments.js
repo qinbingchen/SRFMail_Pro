@@ -23,7 +23,12 @@ var download = function(req, res, next) {
                 return res.status(404).send('');
             }
             var fileStream = fs.createReadStream(path.join(__dirname, '../attachments', file.saveId));
+            var date = new Date(Date.now() + 24*60*60*1000);
+            var date1 = new Date();
             res.header('Content-Type', file.contentType);
+            res.header('Cache-Control', 'max-age=604800');
+            res.header('Date', date1.toUTCString());
+            res.header('Expires', date.toUTCString());
             res.header('Content-Disposition', 'attachment;filename=' + file.name);
             fileStream.pipe(res);
         });
