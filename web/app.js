@@ -192,9 +192,9 @@ var redactor_options = {
     imageUpload: "/api/attachments/upload",
     fileUpload: "/api/attachments/upload",
     imageUploadCallback: function (image, json) {
-        $(image).attr("src", "/api/attachments/download?id=" + json.file);
+        $(image).attr("src", "http://srf.deanyu.cn/api/attachments/download?id=" + json.file);
     },
     fileUploadCallback: function (link, json) {
-        $(link).attr("href", "/api/attachments/download?id=" + json.file);
+        $(link).attr("href", "http://srf.deanyu.cn/api/attachments/download?id=" + json.file);
     }
 };
