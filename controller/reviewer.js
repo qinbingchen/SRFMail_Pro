@@ -102,6 +102,7 @@ var pass = function(req, res, next) {
     var attachments = req.body.attachments;
     var newMail;
 
+    console.log('1\n');
     var session, mail;
 
     if (!mongoose.Types.ObjectId.isValid(sessionId)) {
@@ -114,12 +115,7 @@ var pass = function(req, res, next) {
     try {
         attachments = JSON.parse(attachments);
     } catch (e) {
-        return res.json({
-            code: 1,
-            message: 'Error: Invalid JSON received, please ensure that the attachments parameters hold valid JSON string representation.'
-            + ' ParseError: ' + e.toString()
-            + ' Attachments: ' + attachments
-        });
+        attachments = [];
     }
 
     async.series([
