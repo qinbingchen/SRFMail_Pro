@@ -452,7 +452,6 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
         $scope.submit = function () {
            $scope.labels_updated=$scope.exist_labels;
             var url_labels_update = "/api/action/dispatcher/set_all_labels";
-            alert( JSON.stringify($scope.labels_updated));
         $http.post(url_labels_update, {
                             labels:JSON.stringify($scope.labels_updated)
                         }).success(function (data, status, headers, config) {
@@ -484,69 +483,69 @@ SRFMailProControllers.controller("LabelmanageModalController", ["$scope", "$http
           update_labels();
         };
 
-//           $(document).ready(function(){
-//                $('.simple_color_custom_chooser_css').simpleColor({
-//                    chooserCSS: { 'background-color': 'black', 'opacity': '0.8' },
-//                    colors:['800000','8B0000','C71585','4B0882','800080','000080','D2691E','FF0000','FFC0CB','7B68EE','F5DEB3','FFFF00','32CD32','00BFFF','ADD8E6','D3D3D3'],
-//                    boxWidth:'200px',
-//                    boxHeight:'20px',
-//                    columns:18 });
-//            });
-//
-//         var url_labels = "/api/action/dispatcher/list_labels";
-//        $http.get(url_labels).success(function (data) {
-//                $scope.theme_labels=data.labels;
-//        }).error(function (data, status, headers, config) {
-//            console.log(data);
-//    });
-//
-//        $scope.exist_labels=new Array();
-//
-//        setTimeout(function()
-//        {
-//            $scope.exist_labels[0]=new Object();
-//            $scope.exist_labels[0].name=$scope.theme_labels[0].name;
-//            $scope.exist_labels[0].color=$scope.theme_labels[0].color;
-//            $scope.exist_labels_name=$scope.theme_labels[0].name;
-//
-//        for(i=1;i<$scope.theme_labels.length;i++)
-//        {
-//            $scope.exist_labels[i]=new Object();
-//            $scope.exist_labels[i].name=$scope.theme_labels[i].name;
-//            $scope.exist_labels[i].color=$scope.theme_labels[i].color;
-//            $scope.exist_labels_name+=","+$scope.theme_labels[i].name;
-//        }
-//
-//            $('#tags').tagsInput({
-//                onRemoveTag:function(tag){
-//                    $scope.exist_labels.splice(get_label_id(tag),1);
-//                    update_labels();
-//}});
-//
-//            $('#tags').importTags($scope.exist_labels_name);
-//
-//            $scope.label_id=0;
-//            update_labels();
-//
-//        },2000);
-//
-//    var update_labels=function(){
-//$('.tag').each(function()
-//          {
-//            var tag_text=$(this).text().substr(0 ,$(this).text().length-3);
-//            $(this).css("background-color",$scope.exist_labels[get_label_id(tag_text)].color);
-//          });
-//    }
-//
-//     var  get_label_id=function(label_text){
-//
-//            for(j=0;j<$scope.exist_labels.length;j++)
-//            {
-//                if($scope.exist_labels[j].name==label_text)
-//                    return j;
-//            }
-//    }
-//
+          $(document).ready(function(){
+               $('.simple_color_custom_chooser_css').simpleColor({
+                   chooserCSS: { 'background-color': 'black', 'opacity': '0.8' },
+                   colors:['800000','8B0000','C71585','4B0882','800080','000080','D2691E','FF0000','FFC0CB','7B68EE','F5DEB3','FFFF00','32CD32','00BFFF','ADD8E6','D3D3D3'],
+                   boxWidth:'200px',
+                   boxHeight:'20px',
+                   columns:18 });
+           });
+
+        var url_labels = "/api/action/dispatcher/list_labels";
+       $http.get(url_labels).success(function (data) {
+               $scope.theme_labels=data.labels;
+       }).error(function (data, status, headers, config) {
+           console.log(data);
+   });
+
+       $scope.exist_labels=new Array();
+
+       setTimeout(function()
+       {
+           $scope.exist_labels[0]=new Object();
+           $scope.exist_labels[0].name=$scope.theme_labels[0].name;
+           $scope.exist_labels[0].color=$scope.theme_labels[0].color;
+           $scope.exist_labels_name=$scope.theme_labels[0].name;
+
+       for(i=1;i<$scope.theme_labels.length;i++)
+       {
+           $scope.exist_labels[i]=new Object();
+           $scope.exist_labels[i].name=$scope.theme_labels[i].name;
+           $scope.exist_labels[i].color=$scope.theme_labels[i].color;
+           $scope.exist_labels_name+=","+$scope.theme_labels[i].name;
+       }
+
+           $('#tags').tagsInput({
+               onRemoveTag:function(tag){
+                   $scope.exist_labels.splice(get_label_id(tag),1);
+                   update_labels();
+}});
+
+           $('#tags').importTags($scope.exist_labels_name);
+
+           $scope.label_id=0;
+           update_labels();
+
+       },2000);
+
+   var update_labels=function(){
+$('.tag').each(function()
+         {
+           var tag_text=$(this).text().substr(0 ,$(this).text().length-3);
+           $(this).css("background-color",$scope.exist_labels[get_label_id(tag_text)].color);
+         });
+   }
+
+    var  get_label_id=function(label_text){
+
+           for(j=0;j<$scope.exist_labels.length;j++)
+           {
+               if($scope.exist_labels[j].name==label_text)
+                   return j;
+           }
+   }
+
 
     }]);
 
