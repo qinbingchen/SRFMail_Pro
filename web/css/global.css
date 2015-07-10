@@ -269,6 +269,15 @@ textarea {
       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s !important; }
     .popover .body > input:focus {
       border: 1px solid #a6c4db !important; }
+    .popover .body > textarea {
+      height: 200px;
+      width: 200px;
+      padding: 5px;
+      border: 1px solid #eaeaea !important;
+      font-size: 13px;
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s !important; }
+    .popover .body > textarea:focus {
+      border: 1px solid #a6c4db !important; }
 
 /* popover end */
 .xdsoft_mounthpicker {

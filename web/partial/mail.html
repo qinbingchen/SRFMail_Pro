@@ -4,96 +4,113 @@
             <!-- dispatcher -->
             <button class="btn" id="show-dispatch"
                     ng-show="current_user_type == 1 && selected_category.name == 'pending'"
-                    ng-disabled="selected_mail_id = ''"
+                    ng-disabled="selected_mail_id == ''"
                     ng-click="show_dispatch()">
                 <i class="fa fa-mail-forward fa-lg"></i>分发邮件
             </button>
-            <button id="show-label" class="btn" ng-click="show_label()" ng-show="current_user_type == 1">
+            <button id="show-label" class="btn"
+                    ng-show="current_user_type == 1"
+                    ng-disabled="selected_mail_id == ''"
+                    ng-click="show_label()" >
                 <i class="fa fa-tags fa-lg"></i>添加标签
             </button>
-            <button class="btn" ng-click="remind()" ng-disabled="selected_mail.isUrged || selected_mail.status != 1"
-                    ng-show="current_user_type == 1"><i class="fa fa-bell fa-lg"></i>提醒
+            <button class="btn"
+                    ng-show="current_user_type == 1 && selected_category.name == 'dispatched'"
+                    ng-disabled="selected_mail_id == '' || selected_mail.isUrged"
+                    ng-click="remind()">
+                <i class="fa fa-bell fa-lg"></i>提醒
             </button>
 
             <!-- worker -->
-            <button class="btn" ng-click="show_compose()"
-                    ng-show="current_user_type == 2 && selected_category.name != 'success'"><i
-                    class="fa fa-edit fa-lg"></i>撰写
+            <button class="btn"
+                    ng-show="current_user_type == 2"
+                    ng-click="show_compose()">
+                <i class="fa fa-edit fa-lg"></i>撰写
             </button>
-            <button class="btn" ng-click="show_reply()" ng-disabled="selected_mail_id=='' || selected_mail.readonly"
-                    ng-show="current_user_type == 2  &&(selected_category.name == 'pending'||selected_category.name == 'rejected')">
+            <button class="btn"
+                    ng-show="current_user_type == 2 && (selected_category.name == 'pending' || selected_category.name == 'rejected')"
+                    ng-disabled="selected_mail_id == '' || selected_mail.readonly"
+                    ng-click="show_reply()">
                 <i class="fa fa-reply fa-lg"></i>回复
             </button>
-            <button class="btn" ng-click="check()"
-                    ng-show="current_user_type == 2 && selected_category.name == 'pending'"><i
-                    class="fa fa-check-circle-o fa-lg"></i>标记处理
+            <button class="btn" ng-click="pass()"
+                    ng-show="current_user_type == 2 && (selected_category.name == 'pending' || selected_category.name == 'rejected')"
+                    ng-disabled="selected_mail_id == ''">
+                <i class="fa fa-check-circle-o fa-lg"></i>标记处理
             </button>
-            <button id="show-forward" class="btn" ng-disabled="selected_mail_id=='' || selected_mail.readonly"
-                    ng-show="current_user_type == 2  &&(selected_category.name == 'pending'||selected_category.name == 'rejected')"
+            <button id="show-forward" class="btn"
+                    ng-show="current_user_type == 2 && (selected_category.name == 'pending' || selected_category.name == 'rejected')"
+                    ng-disabled="selected_mail_id == '' || selected_mail.readonly"
                     ng-click="show_forward()">
-                <i class="fa fa-send fa-lg"></i>转发
+                <i class="fa fa-mail-forward fa-lg"></i>转发
             </button>
-            <button class="btn" ng-click="worker_sendback()"
-                    ng-disabled="selected_mail_id=='' || work_sendback_flag || selected_mail.readonly"
-                    ng-show="current_user_type == 2  &&(selected_category.name == 'pending'||selected_category.name == 'rejected')">
-                <i class="fa fa-caret-left fa-lg"></i>退回
+            <button class="btn" ng-click="send_back()"
+                    ng-show="current_user_type == 2  &&(selected_category.name == 'pending' || selected_category.name == 'rejected')"
+                    ng-disabled="selected_mail_id == '' || selected_mail.readonly">
+                <i class="fa fa-sign-out fa-lg"></i>退回
             </button>
 
             <!-- reviewer -->
-            <button class="btn" ng-click="review_pass()" ng-disabled="selected_mail_id=='' || review_pass_flag "
-                    ng-show="current_user_type == 3 &&  selected_category.name == 'pending'"><i
-                    class="fa fa-thumbs-up fa-lg"></i>通过
-            </button>
-            <button id="show-reject" class="btn" ng-disabled="selected_mail_id==''"
+            <button class="btn"
                     ng-show="current_user_type == 3 && selected_category.name == 'pending'"
-                    ng-click="show_reject()">
-                <i class="fa fa-thumbs-down fa-lg"></i>拒绝
+                    ng-disabled="selected_mail_id == ''"
+                    ng-click="review_pass()">
+                <i class="fa fa-thumbs-o-up fa-lg"></i>通过
             </button>
-            <button class="btn" ng-click="show_edit()" ng-disabled="selected_mail_id==''"
-                    ng-show="current_user_type == 3 && selected_category.name == 'pending'"><i
-                    class="fa fa-edit fa-lg"></i>修改
+            <button id="show-reject" class="btn"
+                    ng-show="current_user_type == 3 && selected_category.name == 'pending'"
+                    ng-disabled="selected_mail_id == ''"
+                    ng-click="show_reject()">
+                <i class="fa fa-thumbs-o-down fa-lg"></i>拒绝
+            </button>
+            <button class="btn"
+                    ng-show="current_user_type == 3 && selected_category.name == 'pending'"
+                    ng-disabled="selected_mail_id == ''"
+                    ng-click="show_edit()">
+                <i class="fa fa-edit fa-lg"></i>修改
             </button>
 
             <button class="btn right" ng-hide="current_user_type == -1" ng-click="logout()">登出</button>
-            <span class="user-name right">{{current_user_name}}</span>
+            <span class="user-name right" ng-if="current_user_type != -1">{{current_user_display_name}} ({{current_user_name}})</span>
         </div>
     </div>
 
     <div class="body">
         <div class="mail" ng-if="selected_mail_id != ''">
             <section class="section-review">
-                <div class="worker" ng-if="selected_mail.worker && current_user_type == 3" style="border-radius: 5px">
+                <div class="worker" ng-if="selected_mail.worker && current_user_type == 3" style="">
                     该邮件由 {{selected_mail.worker}} 于 {{selected_mail.operations[0].displayTime}} 处理。
                 </div>
-                <div class="reviewer" ng-if="selected_mail.reviewer && selected_mail.isRejected && current_user_type == 2" style="padding: 15px 20px;border-radius: 4px;">
-                    <div style="display: inline-block; margin-right: 15px; margin-top: 3px; vertical-align: top">
-                        <i class="fa fa-2x fa-exclamation-triangle"></i>
-                    </div>
-                    <div style="display: inline-block;">
-                        <span style="font-weight: 700">审核意见</span>
-                        <div>{{selected_mail.reviewer}}</div>
+                <div class="reviewer" ng-if="selected_mail.reviewer && selected_mail.isRejected && current_user_type == 2">
+                    <div class="alert-sign"><i class="fa fa-2x fa-exclamation-triangle"></i></div>
+                    <div class="alert-content">
+                        <div><strong>审核意见</strong></div>
+                        <div>{{selected_mail.operations[0].message}}</div>
                         <div>— {{selected_mail.reviewer}} {{selected_mail.operations[0].displayTime}}</div>
                     </div>
                 </div>
             </section>
 
             <section class="section-info" ng-if="selected_mail.reply">
-                <div class="status urged right" ng-if="selected_mail.deadline"><i class="fa fa-clock-o"></i>时限：{{deadline_time}}</div>
+                <div class="status urged right" ng-if="selected_mail.income && selected_mail.income.deadline">
+                    <i class="fa fa-clock-o"></i>时限：{{deadline_time}}
+                </div>
                 <div class="status readonly right" ng-if="selected_mail.readonly"><i class="fa fa-lock"></i>只读</div>
                 <div class="subject">{{selected_mail.reply.subject}}</div>
-                <!--<div class="time">{{reply_time}}</div>-->
+                <div class="time">{{reply_time}}</div>
                 <div class="recipient">收件人：{{selected_mail.reply.to[0].name}} <{{selected_mail.reply.to[0].address}}></div>
             </section>
 
             <section class="section-info" ng-if="!selected_mail.reply">
-                <div class="status urged right" ng-if="selected_mail.deadline"><i class="fa fa-clock-o"></i>时限：{{deadline_time}}</div>
+                <div class="status urged right" ng-if="selected_mail.income && selected_mail.income.deadline">
+                    <i class="fa fa-clock-o"></i>时限：{{deadline_time}}
+                </div>
                 <div class="status readonly right" ng-if="selected_mail.readonly"><i class="fa fa-lock"></i>只读</div>
                 <div class="subject">{{selected_mail.income.subject}}</div>
                 <div class="time">{{income_time}}</div>
                 <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
-                <div class="label-list">标签：
-                    <span class="label">label1</span>
-                    <span class="label">label2</span>
+                <div class="label-list" ng-if="selected_mail.income.labels.length > 0">
+                    <span class="label" ng-repeat="label in selected_mail.income.labels" style="background-color: {{label.color}}">{{label.name}}</span>
                 </div>
             </section>
 
@@ -109,31 +126,18 @@
                     <div class="subject">主题：{{selected_mail.income.subject}}</div>
                     <div class="time">时间：{{income_time}}</div>
                     <div class="sender">发件人：{{selected_mail.income.from[0].name}} <{{selected_mail.income.from[0].address}}></div>
+                    <div class="label-list" ng-if="selected_mail.income.labels.length > 0">标签：
+                        <span class="label" ng-repeat="label in selected_mail.income.labels">[{{label.name}}] </span>
+                    </div>
                     <div class="content" ng-bind-html="selected_mail.income.html"></div>
                 </div>
             </section>
 
-            <section class="section-history" ng-if="selected_mail.operations.length > 0">
+            <section class="section-history" ng-show="selected_mail.operations.length > 0">
                 <div class="divider"></div>
                 <div class="section-title">邮件历史记录</div>
                 <div id="operation-history"></div>
             </section>
-
-
-            <style>
-                .section-content {
-                    margin-top: 20px;
-                }
-                .section-income .subject {
-                    margin-bottom: 0;
-                }
-                .mail-section .body .mail .original-income {
-                    padding: 0;
-                    border: 0;
-                    color: inherit;
-                }
-            </style>
-
         </div>
 
         <div class="mail-empty" ng-if="selected_mail_id == ''">

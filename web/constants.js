@@ -77,7 +77,7 @@ var CATEGORY_LIST = [
                 display_name: "未审核",
                 hint: "表示尚未被审核的邮件列表"
             }, {
-                name: "sent",
+                name: "passed",
                 display_name: "已通过",
                 hint: "表示通过审核的邮件列表"
             }, {

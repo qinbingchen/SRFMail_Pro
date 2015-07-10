@@ -366,6 +366,19 @@ textarea {
     >input:focus {
       border: 1px solid #a6c4db !important;
     }
+
+    >textarea {
+      height: 200px;
+      width: 200px;
+      padding: 5px;
+      border: 1px solid #eaeaea !important;
+      font-size: 13px;
+      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s !important;
+    }
+
+    >textarea:focus {
+      border: 1px solid #a6c4db !important;
+    }
   }
 }
 

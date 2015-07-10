@@ -51,15 +51,31 @@
       .section-review {
         .reviewer {
           margin-bottom: 10px;
-          padding: 5px 10px;
+          padding: 15px 20px;
+          border-radius: 4px;
           color: #8a6d3b;
           background-color: #fcf8e3;
           border: 1px solid #faebcc;
+
+          .alert-sign {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 15px;
+            margin-top: 3px;
+            height: 100%;
+          }
+
+          .alert-content {
+            display: inline-block;
+            vertical-align: top;
+            max-width: calc(100vw - 690px);
+          }
         }
 
         .worker {
           margin-bottom: 10px;
-          padding: 5px 10px;
+          padding: 15px 20px;
+          border-radius: 4px;
           color: #31708f;
           background-color: #d9edf7;
           border: 1px solid #bce8f1;
@@ -125,9 +141,11 @@
         }
       }
 
+      .section-content {
+        padding-top: 20px;
+      }
+
       .original-income {
-        padding: 10px 20px;
-        border-top: 1px solid #cfcfd3;
         color: #888;
       }
     }
@@ -147,78 +165,5 @@
         font-size: 19px;
       }
     }
-  }
-}
-
-.mail-section .bubble .tri {
-  display: block;
-  bottom: 100%;
-  left: calc(50% - 15px);
-  position: absolute;
-  height: 0px;
-  width: 0px;
-  border-width: 15px;
-  border-style: solid;
-  border-color: transparent  transparent  #a9a9a9 transparent; }
-
-.mail-section .bubble .tri-inner {
-  display: block;
-  bottom: 100%;
-  left: calc(49.8% - 14px);
-  position: absolute;
-  height: 0px;
-  width: 0px;
-  border-width: 14px;
-  border-style: solid;
-  border-color: transparent  transparent  #ffffff transparent; }
-
-.mail-section .bubble {
-  overflow: visible;
-  position: fixed;
-  top: 20px;
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #ffffff;
-  border: 1px solid #a9a9a9;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 1px 3px 0; }
-
-.mail-section .reject-bubble {
-  overflow: visible;
-  position: fixed;
-  top: 54px;
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #ffffff;
-  border: 1px solid #a9a9a9;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 1px 3px 0;
-}
-
-.mail-section .review-bubble label {
-  color: #a9a9a9;
-  font-size: 1em;
-}
-
-.mail-section .review-bubble textarea {
-  font-size: 1em;
-  border-color: #888;
-  height: 80px;
-  width: 400px;
-}
-
-.mail-section .review-bubble {
-  button {
-    margin-left: 10px;
-    border: none;
-    background: none;
-    color: #2674ff;
-  }
-
-  button:not(:disabled):hover {
-    cursor: pointer;
-    color: #1d5fcc;
-  }
-
-  button:disabled {
-    color: #bbd3fd;
   }
 }

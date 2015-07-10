@@ -3,12 +3,8 @@
         <div class="outer-arrow"></div>
         <div class="inner-arrow"></div>
         <div class="body">
-            <select id="dispatch-readreply" multiple>
-                <option></option>
-            </select>
-            <select id="dispatch-readonly" multiple>
-                <option></option>
-            </select>
+            <select id="dispatch-readreply" multiple><option></option></select>
+            <select id="dispatch-readonly" multiple><option></option></select>
             <input type="text" id="dispatch-deadline" placeholder="选择截止日期...(可选)" ng-model="deadline"/>
             <button class="btn right" ng-click="show_popover = false">取消</button>
             <button class="btn right" ng-click="submit()">确认</button>
@@ -21,11 +17,8 @@
         <div class="outer-arrow"></div>
         <div class="inner-arrow"></div>
         <div class="body">
-            <select data-placeholder="添加主题标签" id="label-select" multiple>
-                <option></option>
-            </select>
+            <select id="label-select" multiple><option></option></select>
             <!--<a class="btn" ng-click="show_labelmanage()">管理标签</a>-->
-
             <button class="btn right" ng-click="show_popover = false">取消</button>
             <button class="btn right" ng-click="submit()">确认</button>
         </div>
@@ -37,9 +30,7 @@
         <div class="outer-arrow"></div>
         <div class="inner-arrow"></div>
         <div class="body">
-            <select data-placeholder="选择处理人" class="select-workers" id="select-worker">
-            </select>
-
+            <select data-placeholder="选择处理人" id="forward-select"><option></option></select>
             <button class="btn right" ng-click="show_popover = false">取消</button>
             <button class="btn right" ng-click="confirm_fw()">确认</button>
         </div>
@@ -51,10 +42,7 @@
         <div class="outer-arrow"></div>
         <div class="inner-arrow"></div>
         <div class="body">
-            <label>拒绝意见</label>
-            <br/>
-            <textarea ng-model="review_comment_textarea"></textarea>
-            <br/>
+            <textarea placeholder="请输入审核意见" ng-model="review_comment"></textarea>
             <button class="btn right" ng-click="show_popover = false">取消</button>
             <button class="btn right" ng-click="review_refuse_confirm()">确认</button>
         </div>

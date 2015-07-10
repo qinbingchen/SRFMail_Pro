@@ -1,9 +1,9 @@
 <div class="mail-list-section" ng-controller="MailListController">
     <div class="header">
-        <div class="search">
-            <i class="fa fa-search "></i>
-            <input type="search" placeholder="搜索邮件" />
-        </div>
+        <!--<div class="search">-->
+            <!--<i class="fa fa-search "></i>-->
+            <!--<input type="search" placeholder="搜索邮件" />-->
+        <!--</div>-->
     </div>
     <div class="body">
         <ul class="mail-list">
@@ -11,8 +11,8 @@
                 ng-class="{'selected': mail.id == selected_mail_id, 'highlighted': mail.isUrged}"
                 ng-click="select_mail(mail)">
                 <div class="left-section">
-                    <i class="fa fa-clock-o fa-fw urged" ng-show="mail.deadline && current_user_type == 2"></i>
-                    <i class="fa fa-lock fa-fw readonly" ng-show="mail.readonly && current_user_type == 2"></i>
+                    <i class="fa fa-clock-o fa-fw urged" ng-show="mail.income && mail.income.deadline"></i>
+                    <i class="fa fa-lock fa-fw readonly" ng-show="mail.readonly"></i>
                 </div><div class="right-section">
                     <div class="info">
                         <div class="sender">{{mail.reply ? mail.reply.from[0].name : mail.income.from[0].name}}</div>

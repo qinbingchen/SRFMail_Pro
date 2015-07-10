@@ -131,7 +131,7 @@ var detail = function(req, res, next) {
                     type: row.type,
                     message: row.message,
                     time: row.time,
-                    displayTime: displayDate.getFullYear() + '/' + (displayDate.getMonth() + 1) + '/' + displayDate.getDate() + ' ' + displayDate.getHours() + ':' + ('0' + displayDate.getMinutes()).slice(-2) + ':' + ('0' + displayDate.getMinutes()).slice(-2)
+                    displayTime: displayDate.getFullYear() + '/' + (displayDate.getMonth() + 1) + '/' + displayDate.getDate() + ' ' + ('0' + displayDate.getHours()).slice(-2) + ':' + ('0' + displayDate.getMinutes()).slice(-2) + ':' + ('0' + displayDate.getSeconds()).slice(-2)
                 };
                 if(row.mail) {
                     op.mail = row.mail;
