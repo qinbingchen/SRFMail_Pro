@@ -32,7 +32,7 @@
         <div class="body">
             <select data-placeholder="选择处理人" id="forward-select"><option></option></select>
             <button class="btn right" ng-click="show_popover = false">取消</button>
-            <button class="btn right" ng-click="confirm_fw()">确认</button>
+            <button class="btn right" ng-click="submit()">确认</button>
         </div>
     </div>
 </div>
@@ -44,7 +44,7 @@
         <div class="body">
             <textarea placeholder="请输入审核意见" ng-model="review_comment"></textarea>
             <button class="btn right" ng-click="show_popover = false">取消</button>
-            <button class="btn right" ng-click="review_refuse_confirm()">确认</button>
+            <button class="btn right" ng-click="submit()">确认</button>
         </div>
     </div>
 </div>

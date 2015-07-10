@@ -848,7 +848,7 @@ SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", 
             $scope.show_popover = true;
         });
 
-        $scope.review_refuse_confirm = function () {
+        $scope.submit = function () {
             $scope.show_popover = false;
             $http.post("/api/action/reviewer/reject", {
                 id: mailServices.selected_mail_id,
