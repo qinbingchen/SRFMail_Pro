@@ -329,7 +329,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
         $scope.send_back = function () {
             $http.post('/api/action/worker/redirect', {
                 id: mailServices.selected_mail_id
-            }).success(function () {
+            }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
                     toastr.success("退回成功");
@@ -337,7 +337,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     console.log(data);
                     toastr.error("退回失败");
                 }
-            }).error(function () {
+            }).error(function (data, status, headers, config) {
                 console.log(data);
                 toastr.error("退回失败");
             });
@@ -357,7 +357,7 @@ SRFMailProControllers.controller("MailController", ["$scope", "$http", "$cookies
                     console.log(data);
                     toastr.error("出现错误");
                 }
-            }).error(function () {
+            }).error(function (data, status, headers, config) {
                 console.log(data);
                 toastr.error("出现错误");
             });
@@ -659,7 +659,7 @@ SRFMailProControllers.controller("ComposeModalController", ["$scope", "$http", "
                                 console.log(data);
                                 toastr.error("发送失败");
                             }
-                        }).error(function () {
+                        }).error(function (data, status, headers, config) {
                             console.log(data);
                             toastr.error("发送失败");
                         });
@@ -820,7 +820,7 @@ SRFMailProControllers.controller("ForwardPopoverController", ["$scope", "$http",
             $http.post('/api/action/worker/redirect', {
                 id: mailServices.selected_mail_id,
                 user: $("#forward-select").select2("val")
-            }).success(function () {
+            }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
                     $scope.show_popover = false;
@@ -829,7 +829,7 @@ SRFMailProControllers.controller("ForwardPopoverController", ["$scope", "$http",
                     console.log(data);
                     toastr.error("转发失败");
                 }
-            }).error(function () {
+            }).error(function (data, status, headers, config) {
                 console.log(data);
                 toastr.error("转发失败");
             });
@@ -853,7 +853,7 @@ SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", 
             $http.post("/api/action/reviewer/reject", {
                 id: mailServices.selected_mail_id,
                 message: $scope.review_comment
-            }).success(function () {
+            }).success(function (data, status, headers, config) {
                 if (data.code == 0) {
                     $scope.load_mail_list();
                     $scope.show_popover = false;
@@ -862,7 +862,7 @@ SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", 
                     console.log(data);
                     toastr.error("转发失败");
                 }
-            }).error(function () {
+            }).error(function (data, status, headers, config) {
                 console.log(data);
                 toastr.error("转发失败");
             });
