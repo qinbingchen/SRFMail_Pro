@@ -857,14 +857,14 @@ SRFMailProControllers.controller("RejectPopoverController", ["$scope", "$http", 
                 if (data.code == 0) {
                     $scope.load_mail_list();
                     $scope.show_popover = false;
-                    toastr.success("转发成功");
+                    toastr.success("退回成功");
                 } else {
                     console.log(data);
-                    toastr.error("转发失败");
+                    toastr.error("退回失败");
                 }
             }).error(function (data, status, headers, config) {
                 console.log(data);
-                toastr.error("转发失败");
+                toastr.error("退回失败");
             });
 
         };
