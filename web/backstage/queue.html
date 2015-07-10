@@ -59,6 +59,7 @@
                     <th>分发者</th>
                     <th>处理/撰写者</th>
                     <th>发送状态</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -75,6 +76,21 @@
     </div>
 </div>
 <script>
+    var forceResend = function(sessionId) {
+        $.ajax('/api/system/resend', {
+            method: 'POST',
+            data: {
+                id: sessionId
+            },
+            success: function(data) {
+                if (data.code == 0) {
+                    toastr.success('已尝试发送','成功');
+                } else {
+                    toastr.error(data.message, '失败');
+                }
+            }
+        });
+    };
     var table = $('#queue-table').DataTable({
         order: [[ 4, "desc" ]],
         aoColumnDefs: [{
@@ -98,6 +114,12 @@
                 return '<span class="status label gray-label">发送失败（等待自动重试）</span>';
         }
         return '<span class="status label gray-label">未知</span>';
+    };
+    var buttonFromStatus = function(status, session) {
+        if (status == '3' || status == '5' || status == '6')
+            return '<button class="button xs-button blue-button" onclick="forceResend(\'' + session + '\')"><i class="fa fa-send fa-fw"></i>  重新发送</button>';
+        else
+            return '';
     };
     $.ajax(SB_HOST + '/api/session/get_list', {
         method: 'GET',
@@ -128,7 +150,8 @@
                             session.reply.subject || '无主题',
                             session.dispatcher || '无（新邮件）',
                             session.worker || '无',
-                            labelFromStatus(session.status)
+                            labelFromStatus(session.status),
+                            buttonFromStatus(session.status, session.id)
                     ]).draw();
                 }
             });
