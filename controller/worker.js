@@ -45,16 +45,16 @@ var submit = function(req, res, next) {
         });
     }
 
-    if (recipients) {
-        for(var i = 0; i < recipients.length; i++) {
-            if(!EmailRegex.test(recipients[i])) {
-                return res.json({
-                    code: 1,
-                    message: 'Invalid Email Address: ' + recipients[i]
-                })
-            }
-        }
-    }
+    //if (recipients) {
+    //    for(var i = 0; i < recipients.length; i++) {
+    //        if(!EmailRegex.test(recipients[i])) {
+    //            return res.json({
+    //                code: 1,
+    //                message: 'Invalid Email Address: ' + recipients[i]
+    //            })
+    //        }
+    //    }
+    //}
 
     var reviewer, session;
 
